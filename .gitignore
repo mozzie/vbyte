@@ -1,6 +1,7 @@
 # custom
+compile
 generate
-num_*
+numbers_*
 # Prerequisites
 *.d
 

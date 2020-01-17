@@ -2,6 +2,7 @@
 #include <time.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #if RAND_MAX/256 >= 0xFFFFFFFFFFFFFF
   #define LOOP_COUNT 1
@@ -29,10 +30,21 @@ int main(int argc, char *argv[]) {
     exit(1);
  }
   int arg1 = atoi(argv[1]);
-  srand ( time(NULL) );
-  int i;
-  for (i = 0; i < arg1; i++) {
-      printf("%" PRIu64 "\n", rand_uint64());
+  if(arg1 == 0) {
+    exit(1);
   }
+  char filename[30];
+  strcpy(filename, "numbers_");
+  strcat(filename, argv[1]);
+  srand ( time(NULL) );
+  FILE* fout;
+  fout = fopen(filename, "wb");
+  int i;
+  uint64_t u64;
+  for (i = 0; i < arg1; i++) {
+      u64 = rand_uint64();
+      fwrite(&u64, sizeof(u64), 1, fout);
+  }
+  fclose(fout);
   return 0;
 }
