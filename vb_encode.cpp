@@ -1,4 +1,5 @@
 #include <sdsl/bit_vectors.hpp>
+#include <sdsl/int_vector.hpp>
 #include <sdsl/util.hpp>
 #include <string>
 #include <vector>
@@ -12,15 +13,12 @@ vector<uint8_t> vb_encode_number(uint64_t number) {
   while(1) {
     cout << number << std::endl;
     v.push_back(number%cap);
-//    cout << (int)*v.end() << ": ";
     if(number < cap) {
       break;
     }
     number/=cap;
   }
-  //cout << (int)*v.end();
   *v.begin() += cap;
-  //cout << " " << (int)*v.end() << std::endl;
   return v;
 }
 
@@ -30,11 +28,7 @@ int main(int argc, char *argv[]) {
     cerr << "Give uint64_t file as parameter" << endl;
     return 1;
   }
-//  int_vector_buffer<> ivb(argv[1]);
-//  if (!ivb.is_open()) {
-//    std::cerr << "ERROR: ivb could not be opend with file " << argv[1] << std::endl;
-//    return 1;
-//  }
+
   size_t fsize = util::file_size(argv[1]);
   if(fsize%8) {
     cout << "Wrong sized file" << endl;
@@ -55,15 +49,15 @@ int main(int argc, char *argv[]) {
   }
   idt.close();
   bit_vector b(data.size(), 0);
-  b[3] = 1;
-  int index = 0;
+  int_vector<> iv(data.size(), 0, 7);
+  size_t index = 0;
   for (vector<uint8_t>::const_iterator i = data.begin(); i != data.end(); ++i) {
-    b[4] = 1;
-    b[index] = 1;
+    b[index] = (*i>>7) & 1;
+    iv[index] = *i;
+//    std::cout << index << ' ';
+//    std::cout << (int)*i << ' ';
+//    std::cout << iv[index] << "," << b[index] << std::endl;
     index++;
-    std::cout << index << ' ';
-    std::cout << (int)*i << ' ';
-    std::cout << ((*i>>7) & 1) << "==?" << b[index] << std::endl;
   }
   return 0;
 }
