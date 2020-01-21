@@ -42,16 +42,20 @@ int main(int argc, char *argv[]) {
   while( idt ) {
       uint32_t val[2] = {0};
       if (idt.read((char*)val, sizeof(val))) {
-          original[index++] = (uint64_t)(val[0]) << 32 | (uint64_t)(val[1]);
+        cout << val[0] << " " << val[1];
+          original[index] = (uint64_t)(val[1]) << 32 | (uint64_t)(val[0]);
+          cout << " " << original[index] << endl;
+          index++;
+
       }
   }
   idt.close();
 
   //following for trimming out gaps
-  sort(original.begin(), original.end());
-  for(std::vector<uint64_t>::size_type i = original.size()-1; i > 1; i--) {
-    original[i] -= original[i-1];
-  }
+//  sort(original.begin(), original.end());
+//  for(std::vector<uint64_t>::size_type i = original.size()-1; i > 1; i--) {
+//    original[i] -= original[i-1];
+//  }
   //
 
   for(vector<uint64_t>::const_iterator i = original.begin(); i != original.end(); i++) {
@@ -94,7 +98,7 @@ int main(int argc, char *argv[]) {
     }
 
     cout << ", decompressed value: " << val << endl;
-    
+
     // DEBUG if fails
     if(val != original[index]) {
       val = 0;
