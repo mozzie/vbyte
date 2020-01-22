@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2020.1.22)  22 JAN 2020 20:34
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2020.1.22)  22 JAN 2020 22:33
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1564,7 +1564,11 @@ File: swedish.lbx 2017/12/19 v3.10 biblatex localization (PK/JW/AB)
 
 LaTeX Warning: Label `page.abstract.english' multiply defined.
 
-(./msc_english_contents.aux))
+(./msc_english_contents.aux
+
+LaTeX Warning: Label `table:results' multiply defined.
+
+))
 \openout1 = `gradu.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 182.
@@ -1582,8 +1586,7 @@ LaTeX Font Info:    ... okay on input line 182.
 LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 182.
 LaTeX Font Info:    Try loading font information for TS1+cmr on input line 182.
 
-
-(/usr/share/texlive/texmf-dist/tex/latex/base/ts1cmr.fd
+ (/usr/share/texlive/texmf-dist/tex/latex/base/ts1cmr.fd
 File: ts1cmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    ... okay on input line 182.
@@ -1814,42 +1817,45 @@ Package pdftex.def Info: HY-logo-ml.png  used on input line 14.
 (pdftex.def)             Requested size: 137.34285pt x 129.62141pt.
 [2
 
-]
+] [3]
 Chapter 3.
 
-Overfull \hbox (17.67036pt too wide) in paragraph at lines 69--69
+Overfull \hbox (17.67036pt too wide) in paragraph at lines 85--85
 []    \OT1/lmtt/m/n/12 author    = "Michel Goossens and Frank Mittelbach and Al
 exander Samarin",[] 
  []
 
-[3
+[4
 
 ]
-LaTeX Font Info:    Try loading font information for OMS+lmtt on input line 73.
+LaTeX Font Info:    Try loading font information for OMS+lmtt on input line 89.
 
-LaTeX Font Info:    No file OMSlmtt.fd. on input line 73.
+LaTeX Font Info:    No file OMSlmtt.fd. on input line 89.
 
 
 LaTeX Font Warning: Font shape `OMS/lmtt/m/n' undefined
 (Font)              using `OMS/cmsy/m/n' instead
-(Font)              for symbol `textbackslash' on input line 73.
+(Font)              for symbol `textbackslash' on input line 89.
 
 
-LaTeX Warning: Citation 'einstein' on page 4 undefined on input line 73.
+LaTeX Warning: Citation 'einstein' on page 5 undefined on input line 89.
 
 
-LaTeX Warning: Citation 'latexcompanion' on page 4 undefined on input line 73.
+LaTeX Warning: Citation 'latexcompanion' on page 5 undefined on input line 89.
 
 
-LaTeX Warning: Citation 'knuthwebsite' on page 4 undefined on input line 73.
+LaTeX Warning: Citation 'knuthwebsite' on page 5 undefined on input line 89.
 
-[4]
+[5]
 Chapter 4.
-[5
+[6
 
 ]
 Chapter 5.
-) [6
+) [7
+
+] [8
+
 
 ]
 
@@ -1876,8 +1882,6 @@ Overfull \hbox (8.20934pt too wide) in paragraph at lines 34--35
 [1
 
 
-
-
 ])
 ***appendixPagesCounter 1
 [2]
@@ -1893,14 +1897,14 @@ l.271 \end{document}
 
 ]
 ***AED Number of Appendices 3
-***AED Number of pages 7\translate {pp}
+***AED Number of pages 9\translate {pp}
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 271.
 Package atveryend Info: Empty hook `AfterLastShipout' on input line 271.
 (./gradu.aux (./msc_english_contents.aux))
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 271.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 271.
 Package rerunfilecheck Info: File `gradu.out' has not changed.
-(rerunfilecheck)             Checksum: 8F6CBAF97FBD775259F96EAB05428014;1413.
+(rerunfilecheck)             Checksum: F84FA4FBD3DF8AE019E855D4158E84FE;1413.
 
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
@@ -1921,10 +1925,10 @@ Package logreq Info: Writing requests to 'gradu.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 30986 strings out of 494340
- 540985 string characters out of 6164410
- 986801 words of memory out of 5000000
- 33752 multiletter control sequences out of 15000+600000
+ 30991 strings out of 494340
+ 541041 string characters out of 6164410
+ 988828 words of memory out of 5000000
+ 33754 multiletter control sequences out of 15000+600000
  68108 words of font info for 69 fonts, out of 8000000 for 9000
  350 hyphenation exceptions out of 8191
  62i,9n,56p,808b,1993s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -1937,13 +1941,14 @@ ype1/public/lm/lmbx10.pfb></usr/share/texmf/fonts/type1/public/lm/lmbx12.pfb></
 usr/share/texmf/fonts/type1/public/lm/lmcsc10.pfb></usr/share/texmf/fonts/type1
 /public/lm/lmmi12.pfb></usr/share/texmf/fonts/type1/public/lm/lmr10.pfb></usr/s
 hare/texmf/fonts/type1/public/lm/lmr12.pfb></usr/share/texmf/fonts/type1/public
-/lm/lmr6.pfb></usr/share/texmf/fonts/type1/public/lm/lmro12.pfb></usr/share/tex
-mf/fonts/type1/public/lm/lmsy10.pfb></usr/share/texmf/fonts/type1/public/lm/lmt
-t10.pfb></usr/share/texmf/fonts/type1/public/lm/lmtt12.pfb>
-Output written on gradu.pdf (15 pages, 298928 bytes).
+/lm/lmr6.pfb></usr/share/texmf/fonts/type1/public/lm/lmr8.pfb></usr/share/texmf
+/fonts/type1/public/lm/lmro12.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy1
+0.pfb></usr/share/texmf/fonts/type1/public/lm/lmtt10.pfb></usr/share/texmf/font
+s/type1/public/lm/lmtt12.pfb>
+Output written on gradu.pdf (17 pages, 321926 bytes).
 PDF statistics:
- 218 PDF objects out of 1000 (max. 8388607)
- 185 compressed objects within 2 object streams
- 32 named destinations out of 1000 (max. 500000)
+ 231 PDF objects out of 1000 (max. 8388607)
+ 195 compressed objects within 2 object streams
+ 35 named destinations out of 1000 (max. 500000)
  114 words of extra memory for PDF output out of 10000 (max. 10000000)
 

@@ -1,4 +1,5 @@
 # custom
+logs/*
 callgrind*
 log_*
 compile

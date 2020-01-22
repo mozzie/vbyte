@@ -66,9 +66,11 @@ int main(int argc, char *argv[]) {
   cout << "Original data size: " << fsize << endl;
 
   bit_vector b(vdata.size(), 0);
-  uint8_t iv [vdata.size()];
-  index = 0;
 
+  cout << "got here, vdata=" <<vdata.size() << endl;
+  uint8_t *iv  = new uint8_t[vdata.size()];
+  cout << "got here" << endl;
+  index = 0;
   for (vector<uint32_t>::const_iterator i = vdata.begin(); i != vdata.end(); i++, index++) {
     b[index] = (*i>>7) & 1;
     iv[index] = *i%cap;

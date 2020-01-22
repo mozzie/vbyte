@@ -1,5 +1,5 @@
 #/bin/bash
-for i in numbers_100000_*
+for i in numbers_1000000_*
 do
   ./run_all $i
 done
