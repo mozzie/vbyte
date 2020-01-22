@@ -1,0 +1,9 @@
+#!/bin/bash
+files=( "vb_encode" "vb_encode_8bit" "vb_encode_8bit_byteoptimized" "vb_encode_7bit_byteoptimized")
+for f in "${files[@]}"
+do
+  for run in {1..100}
+  do
+    ./$f.o $1 >> "log_${f}_$1"
+  done
+done

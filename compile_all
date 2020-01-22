@@ -1,0 +1,6 @@
+#!/bin/bash
+files=( "vb_encode" "vb_encode_8bit" "vb_encode_8bit_byteoptimized" "vb_encode_7bit_byteoptimized")
+for f in "${files[@]}"
+do
+  sh compile $f
+done

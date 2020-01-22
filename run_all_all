@@ -1,0 +1,5 @@
+#/bin/bash
+for i in numbers_100000_*
+do
+  ./run_all $i
+done

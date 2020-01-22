@@ -1,0 +1,10 @@
+#!/bin/bash
+amounts=( 100000 1000000 10000000 )
+bits=( 128 256 32768 65536 )
+for a in "${amounts[@]}"
+do
+  for b in "${bits[@]}"
+  do
+    ./generate.o $a $b
+  done
+done

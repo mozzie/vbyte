@@ -9,11 +9,11 @@
 using namespace std;
 using namespace sdsl;
 
-const uint8_t cap = (uint8_t) 128;
+const uint32_t cap = (uint32_t) 256;
 
 
-vector<uint8_t> vb_encode_number(uint64_t number) {
-  vector<uint8_t> v;
+vector<uint32_t> vb_encode_number(uint64_t number) {
+  vector<uint32_t> v;
   while(1) {
     v.push_back(number%cap);
     if(number < cap) {
@@ -37,7 +37,7 @@ int main(int argc, char *argv[]) {
     cout << "Wrong sized file" << endl;
     return 1;
   }
-  vector<uint8_t> data;
+  vector<uint32_t> data;
   vector<uint64_t> original(fsize/8, 0);
   ifstream idt;
   idt.open(argv[1], ios::in|ios::binary);
@@ -60,19 +60,19 @@ int main(int argc, char *argv[]) {
   //
 
   for(vector<uint64_t>::const_iterator i = original.begin(); i != original.end(); i++) {
-    vector<uint8_t> v = vb_encode_number(*i);
+    vector<uint32_t> v = vb_encode_number(*i);
     data.insert(data.end(), v.rbegin(), v.rend());
   }
 
   cout << "Original data size: " << fsize << endl;
-  cout << "VByte data vector size: " << sizeof(std::vector<uint8_t>) + sizeof(uint8_t)*data.size() << endl;
+  cout << "VByte data vector size: " << sizeof(std::vector<uint32_t>) + sizeof(uint32_t)*data.size() << endl;
 
   bit_vector b(data.size(), 0);
-  int_vector<> iv(data.size(), 0, 7);
+  int_vector<> iv(data.size(), 0, 8);
   index = 0;
 
-  for (vector<uint8_t>::const_iterator i = data.begin(); i != data.end(); i++, index++) {
-    b[index] = (*i>>7) & 1;
+  for (vector<uint32_t>::const_iterator i = data.begin(); i != data.end(); i++, index++) {
+    b[index] = (*i>>8) & 1;
     iv[index] = *i;
   }
 
@@ -102,12 +102,11 @@ int main(int argc, char *argv[]) {
 //    cout << "Compressed data is between indices " << begin << "-" << end << endl;
     uint64_t val = 0;
     for(int j = begin; j <= end; j++) {
-      val = (val << 7) + iv[j];
+      val = (val << 8) + iv[j];
     }
     z = z^val;
   }
   cout << "making sure optimizer doesn't steal our code: " << z << endl;
-
   std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
   std::cout << "Time taken: " << std::chrono::duration_cast<std::chrono::milliseconds> (end - begin).count() << "[ms]" << std::endl;
   return 0;
