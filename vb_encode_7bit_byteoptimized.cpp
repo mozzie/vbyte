@@ -74,8 +74,7 @@ int main(int argc, char *argv[]) {
     iv[index] = *i%cap;
   }
   cout << "VByte data vector size: " << sizeof(std::vector<uint32_t>) + sizeof(uint32_t)*vdata.size() << endl;
-  rank_support_v<> rb(&b);
-  cout << "rank " << rb(vdata.size()) << endl;
+
   select_support_mcl<> sls(&b);
 
   cout << "continue-stop vector memory size: " << size_in_bytes(b) + sizeof(bit_vector) << "bytes" <<endl;
@@ -105,8 +104,8 @@ int main(int argc, char *argv[]) {
     }
     z = z^val;
   }
-  cout << "making sure optimizer doesn't steal our code: " << z << endl;
   std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+  cout << "making sure optimizer doesn't steal our code: " << z << endl;
   std::cout << "Time taken: " << std::chrono::duration_cast<std::chrono::milliseconds> (end - begin).count() << "[ms]" << std::endl;
   return 0;
 }

@@ -106,8 +106,8 @@ int main(int argc, char *argv[]) {
 
     z = z^val;
   }
-  cout << "making sure optimizer doesn't steal our code: " << z << endl;
   std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+  cout << "making sure optimizer doesn't steal our code: " << z << endl;
   std::cout << "Time taken: " << std::chrono::duration_cast<std::chrono::milliseconds> (end - begin).count() << "[ms]" << std::endl;
   return 0;
 }
