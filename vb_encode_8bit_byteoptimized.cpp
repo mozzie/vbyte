@@ -66,7 +66,7 @@ int main(int argc, char *argv[]) {
   cout << "Original data size: " << fsize << endl;
 
   bit_vector b(vdata.size(), 0);
-  uint8_t iv [vdata.size()];
+  uint8_t *iv  = new uint8_t[vdata.size()];
   index = 0;
 
   for (vector<uint32_t>::const_iterator i = vdata.begin(); i != vdata.end(); i++, index++) {
@@ -89,7 +89,9 @@ int main(int argc, char *argv[]) {
   for(vector<uint64_t>::size_type i = 0; i < indices.size(); i++) {
     indices[i] = rand()%original.size();
   }
-  std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
+
+
+  std::chrono::steady_clock::time_point time_begin = std::chrono::steady_clock::now();
   uint64_t z = 0;
   for (vector<unsigned int>::const_iterator i = indices.begin(); i != indices.end(); i++) {
     index = *i;
@@ -106,8 +108,9 @@ int main(int argc, char *argv[]) {
 
     z = z^val;
   }
-  std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+  std::chrono::steady_clock::time_point time_end = std::chrono::steady_clock::now();
   cout << "making sure optimizer doesn't steal our code: " << z << endl;
-  std::cout << "Time taken: " << std::chrono::duration_cast<std::chrono::milliseconds> (end - begin).count() << "[ms]" << std::endl;
+  std::cout << "Time taken: " << std::chrono::duration_cast<std::chrono::milliseconds> (time_end - time_begin).count() << "[ms]" << std::endl;
+
   return 0;
 }
