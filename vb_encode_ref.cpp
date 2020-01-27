@@ -11,6 +11,7 @@ using namespace sdsl;
 
 uint32_t bit_length = 7;
 unsigned int random_accesses = 1000000;
+uint32_t cap = 1<<bit_length;
 
 int main(int argc, char *argv[]) {
   if(argc<=1) {
@@ -23,7 +24,8 @@ int main(int argc, char *argv[]) {
   vector<uint32_t> data;
 
   for(vector<uint64_t>::const_iterator i = original.begin(); i != original.end(); i++) {
-    vector<uint32_t> v = vb_encode_number(*i, 1<<bit_length);
+    vector<uint32_t> v = vb_encode_number(*i, cap);
+    *v.begin() += cap;
     data.insert(data.end(), v.rbegin(), v.rend());
   }
 
@@ -31,7 +33,7 @@ int main(int argc, char *argv[]) {
   int_vector<> iv(data.size(), 0, bit_length);
   size_t index = 0;
   //unsigned int block_len = ((int)sqrt(original.size()-1))+1;
-  unsigned int block_len = 1024;
+  unsigned int block_len = 128;
   unsigned int block_amount = original.size()/block_len +1;
   cout << "block_len" << block_len << endl;
   int* blocks = new int[block_amount];

@@ -8,3 +8,8 @@ length  runtime(ms) size
 512     1611ms      7.8kB
 1024    3063ms      3.9kB
 4096    12416ms     980 bytes
+
+8bit with SLS:
+mod         runtime(ms) size
+MCL 2sls Q  90ms        39kB
+MCLiterator 100ms       39kB

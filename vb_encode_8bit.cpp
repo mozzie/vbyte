@@ -11,7 +11,7 @@ using namespace sdsl;
 
 uint32_t bit_length = 8;
 unsigned int random_accesses = 1000000;
-
+uint32_t cap = 1<<bit_length;
 int main(int argc, char *argv[]) {
   if(argc<=1) {
     cerr << "Give uint64_t file as parameter" << endl;
@@ -23,7 +23,8 @@ int main(int argc, char *argv[]) {
   vector<uint32_t> data;
 
   for(vector<uint64_t>::const_iterator i = original.begin(); i != original.end(); i++) {
-    vector<uint32_t> v = vb_encode_number(*i, 1<<bit_length);
+    vector<uint32_t> v = vb_encode_number(*i, cap);
+    *v.begin() += cap;
     data.insert(data.end(), v.rbegin(), v.rend());
   }
 

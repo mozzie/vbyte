@@ -13,7 +13,6 @@ vector<uint32_t> vb_encode_number(uint64_t number, uint32_t cap = 128) {
     }
     number/=cap;
   }
-  *v.begin() += cap;
   return v;
 }
 
