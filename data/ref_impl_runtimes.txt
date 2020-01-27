@@ -1,0 +1,10 @@
+data: 1M numbers, evenly distributed between maximums of 2^7,2^8,2^15,2^16
+1M random accesses
+
+below is array length, random access runtime, size of index vector
+
+length  runtime(ms) size
+128     507ms       31kB
+512     1611ms      7.8kB
+1024    3063ms      3.9kB
+4096    12416ms     980 bytes

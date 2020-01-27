@@ -30,9 +30,11 @@ int main(int argc, char *argv[]) {
   bit_vector b(data.size(), 0);
   int_vector<> iv(data.size(), 0, bit_length);
   size_t index = 0;
-  unsigned int block_len = ((int)sqrt(original.size()-1))+1;
+  //unsigned int block_len = ((int)sqrt(original.size()-1))+1;
+  unsigned int block_len = 1024;
+  unsigned int block_amount = original.size()/block_len +1;
   cout << "block_len" << block_len << endl;
-  int* blocks = new int[block_len];
+  int* blocks = new int[block_amount];
 
   for (vector<uint32_t>::const_iterator i = data.begin(); i != data.end(); i++, index++) {
     b[index] = (*i>>bit_length) & 1;
@@ -41,10 +43,10 @@ int main(int argc, char *argv[]) {
 
   select_support_mcl<> sls(&b);
   blocks[0] = 0; // because first data begins at 0
-  for(int b_i = 1; b_i < block_len; b_i++) {
+  for(int b_i = 1; b_i < block_amount; b_i++) {
     blocks[b_i] = sls(b_i*block_len)+1;
   }
-
+  cout << "index vector size: " << sizeof(int)*block_amount << "bytes" << endl;
   cout << "continue-stop vector memory size: " << size_in_bytes(b) + sizeof(bit_vector) << "bytes" <<endl;
   cout << "data vector memory size: " << size_in_bytes(iv) + sizeof(int_vector<>) << "bytes" << endl;
   cout << "select support vector memory size: " << size_in_bytes(sls) + sizeof(select_support_mcl<>) << "bytes" << endl;
