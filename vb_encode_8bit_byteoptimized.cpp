@@ -7,6 +7,7 @@
 #include <iterator>
 #include <iostream>
 #include "vbyte_helpers.hpp"
+#include <valgrind/callgrind.h>
 
 using namespace std;
 using namespace sdsl;
@@ -57,31 +58,37 @@ int main(int argc, char *argv[]) {
 
   chrono::steady_clock::time_point time_begin = chrono::steady_clock::now();
   uint64_t z = 0;
+  bit_vector::iterator iter;
+  CALLGRIND_START_INSTRUMENTATION;
   for (vector<unsigned int>::const_iterator i = indices.begin(); i != indices.end(); i++) {
     index = *i;
 
 
     int begin = index == 0 ? 0 : sls(index)+1;
+
 //    bit_vector::iterator iter = b.begin()+begin;
 //    while(*iter == 0) {
 //      iter++;
 //    }
+//    uint8_t diff = std::distance(b.begin()+begin, iter);
 
     uint64_t *test = (uint64_t *)&iv[begin];
 
-//    uint8_t diff = std::distance(b.begin()+begin, iter);
     int end = sls(index+1);
     uint8_t diff = end-begin;
+
     uint64_t val = *test%(256<<(8*diff));
 
     z = z^val;
 
 
-    if(val != original[index]) {
+    if(0 && val != original[index]) {
       cout << "Did not match: " << val << " vs " << original[index] << endl;
       cout << "index " << index << endl;
     }
   }
+  CALLGRIND_STOP_INSTRUMENTATION;
+  CALLGRIND_DUMP_STATS;
 
   chrono::steady_clock::time_point time_end = chrono::steady_clock::now();
   cout << "checksum: " << z << endl;

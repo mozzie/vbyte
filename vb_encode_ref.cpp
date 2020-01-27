@@ -83,7 +83,8 @@ int main(int argc, char *argv[]) {
       iter++;
     } while (((v>>bit_length) & 1) == 0);
     z = z^val;
-    if(val != original[index]) {
+
+    if(0 && val != original[index]) {
       cout << "Did not match: " << val << " vs " << original[index] << endl;
       cout << "index " << index << endl;
     }
