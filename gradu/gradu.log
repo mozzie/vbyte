@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2020.1.22)  28 JAN 2020 19:23
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2020.1.22)  30 JAN 2020 00:34
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1806,11 +1806,23 @@ l.227 \mytableofcontents
 
  (./msc_english_contents.tex
 Chapter 1.
+
+LaTeX Warning: Citation 'Zob95' on page 1 undefined on input line 3.
+
+
+LaTeX Warning: Citation 'Sal99' on page 1 undefined on input line 5.
+
 [1
 
 
 ]
 Chapter 2.
+
+LaTeX Warning: Citation 'Wil99' on page 2 undefined on input line 15.
+
+
+LaTeX Warning: Citation 'Bri09' on page 2 undefined on input line 18.
+
 [2
 
 ]
@@ -1825,14 +1837,14 @@ Chapter 4.
 Chapter 5.
 File: HY-logo-ml.png Graphic file (type png)
 <use HY-logo-ml.png>
-Package pdftex.def Info: HY-logo-ml.png  used on input line 20.
+Package pdftex.def Info: HY-logo-ml.png  used on input line 34.
 (pdftex.def)             Requested size: 137.34285pt x 129.62141pt.
 [5
 
 ] [6]
 Chapter 6.
 
-Overfull \hbox (17.67036pt too wide) in paragraph at lines 91--91
+Overfull \hbox (17.67036pt too wide) in paragraph at lines 106--106
 []    \OT1/lmtt/m/n/12 author    = "Michel Goossens and Frank Mittelbach and Al
 exander Samarin",[] 
  []
@@ -1840,23 +1852,24 @@ exander Samarin",[]
 [7
 
 ]
-LaTeX Font Info:    Try loading font information for OMS+lmtt on input line 95.
-
-LaTeX Font Info:    No file OMSlmtt.fd. on input line 95.
+LaTeX Font Info:    Try loading font information for OMS+lmtt on input line 110
+.
+LaTeX Font Info:    No file OMSlmtt.fd. on input line 110.
 
 
 LaTeX Font Warning: Font shape `OMS/lmtt/m/n' undefined
 (Font)              using `OMS/cmsy/m/n' instead
-(Font)              for symbol `textbackslash' on input line 95.
+(Font)              for symbol `textbackslash' on input line 110.
 
 
-LaTeX Warning: Citation 'einstein' on page 8 undefined on input line 95.
+LaTeX Warning: Citation 'einstein' on page 8 undefined on input line 110.
 
 
-LaTeX Warning: Citation 'latexcompanion' on page 8 undefined on input line 95.
+LaTeX Warning: Citation 'latexcompanion' on page 8 undefined on input line 110.
 
 
-LaTeX Warning: Citation 'knuthwebsite' on page 8 undefined on input line 95.
+
+LaTeX Warning: Citation 'knuthwebsite' on page 8 undefined on input line 110.
 
 [8]
 Chapter 7.
@@ -1938,7 +1951,7 @@ Package logreq Info: Writing requests to 'gradu.run.xml'.
 Here is how much of TeX's memory you used:
  31002 strings out of 494340
  541160 string characters out of 6164410
- 988869 words of memory out of 5000000
+ 988915 words of memory out of 5000000
  33760 multiletter control sequences out of 15000+600000
  68108 words of font info for 69 fonts, out of 8000000 for 9000
  350 hyphenation exceptions out of 8191
@@ -1956,10 +1969,10 @@ hare/texmf/fonts/type1/public/lm/lmr12.pfb></usr/share/texmf/fonts/type1/public
 /fonts/type1/public/lm/lmro12.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy1
 0.pfb></usr/share/texmf/fonts/type1/public/lm/lmtt10.pfb></usr/share/texmf/font
 s/type1/public/lm/lmtt12.pfb>
-Output written on gradu.pdf (19 pages, 324053 bytes).
+Output written on gradu.pdf (19 pages, 326339 bytes).
 PDF statistics:
- 259 PDF objects out of 1000 (max. 8388607)
- 220 compressed objects within 3 object streams
+ 258 PDF objects out of 1000 (max. 8388607)
+ 219 compressed objects within 3 object streams
  40 named destinations out of 1000 (max. 500000)
  138 words of extra memory for PDF output out of 10000 (max. 10000000)
 

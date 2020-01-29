@@ -21,11 +21,12 @@ int main(int argc, char *argv[]) {
   filename.append(argv[1]);
   filename.append("_");
   filename.append(argv[2]);
-//  int maxvalues [4] = {128,256,32768,65536};
+  int maxvalues [8] = {1<<7,1<<8,1<<15,1<<16,1<<23,1<<24,1<<30,1<<31};
   ofstream file(filename, ios::out | ios::binary);
   for (int n=0; n<amount; ++n) {
-//    uint64_t i = dis(gen)%maxvalues[rand];
-    uint64_t i = dis(gen)%max;
+    int rand = dis(gen)%8;
+    uint64_t i = dis(gen)%maxvalues[rand];
+//    uint64_t i = dis(gen)%max;
     file.write(reinterpret_cast<const char *>(&i), sizeof(uint64_t));
   }
   file.close();

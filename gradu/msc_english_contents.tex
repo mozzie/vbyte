@@ -1,11 +1,25 @@
 \chapter{Introduction}
+Enormous datasets are a common case in today's applications. Compressing the datasets is beneficial, because they 
+naturally decrease memory requirements but also are faster when compressed data is read from disk \citep{Zob95}.
 
-The following gives some superficial instructions for using this template for a Master's thesis. For guidelines on thesis writing you can consult various sources, for example, the Bachelor thesis template.
+One of the leading methods of data compression is variable-length coding \citep{Sal99}, where frequent sequences of data
+are represented with shorter codewords. Because the sequences of data have different lenghts when compressed, it is 
+not trivial to determine the exact location of a certain element. If this is required, the usual data compression algorithms are
+inefficient. Fortunately this is not a requirement compression algorithms usually need to fulfill. 
 
-The thesis should have an introduction chapter. Other chapters can be named according to the topic. In the end, some summary chapter is needed; see Chapter~\ref{chapter:conclusions} for an example.
+However, random access of compressed data is needed in compressed data structures. In most compression methods, the only way 
+to this is to decompress data from the beginning. An integer compressing method with fast random access is explained and compared
+existing state-of-the-art methods.
 
 \chapter{Basic Concepts}
-blblblblbl
+Variable-byte encoding \citep{Wil99} is a method of compressing integers. It splits an integer into blocks of $b$ bits and then encodes
+the block as $b + c$. $c$ is a bit denoting whether $b$ has the most significant bits of the number or not. A good dataset for variable-byte encoding
+is a set with both very small and very large numbers, since he compression comes from omitting the leading zeros in the bit array. This method 
+loses in compression performance to other methods \citep{Bri09}, but they are very fast to decode and allow fast random access.
+
+- Explain rank / select
+
+
 \chapter{Previous Work}
 bl
 \chapter{Algorithm}
@@ -63,6 +77,7 @@ $8bit VByte encoding with array$ & 36.13 & 36.83 & 50.58 & 50.73 & 56.93 & 103.1
 
 References are listed in a separate .bib-file. In this case it is named \texttt{bibliography.bib} including the following content:
 \begin{verbatim}
+
 @article{einstein,
     author =       "Albert Einstein",
     title =        "{Zur Elektrodynamik bewegter K{\"o}rper}. ({German})

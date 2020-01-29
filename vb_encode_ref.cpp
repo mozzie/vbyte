@@ -25,7 +25,7 @@ int main(int argc, char *argv[]) {
 
   for(vector<uint64_t>::const_iterator i = original.begin(); i != original.end(); i++) {
     vector<uint32_t> v = vb_encode_number(*i, cap);
-    *v.begin() += cap;
+    *v.front() += cap;
     data.insert(data.end(), v.rbegin(), v.rend());
   }
 
