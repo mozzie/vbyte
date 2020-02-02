@@ -14,19 +14,23 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {chapter}{\numberline {5}Results}{5}{chapter.5}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {5.1}Figures}{5}{section.5.1}
+\contentsline {chapter}{\numberline {6}Conclusion}{6}{chapter.6}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {5.2}Tables}{5}{section.5.2}
+\contentsline {chapter}{\numberline {7}Future work}{7}{chapter.7}
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{\numberline {6}Citations}{7}{chapter.6}
+\contentsline {section}{\numberline {7.1}Figures}{7}{section.7.1}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {6.1}Citations to literature}{7}{section.6.1}
+\contentsline {section}{\numberline {7.2}Tables}{7}{section.7.2}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {6.2}Crossreferences}{8}{section.6.2}
+\contentsline {chapter}{\numberline {8}Citations}{9}{chapter.8}
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{\numberline {7}From tex to pdf}{9}{chapter.7}
+\contentsline {section}{\numberline {8.1}Citations to literature}{9}{section.8.1}
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{\numberline {8}Conclusions}{10}{chapter.8}
+\contentsline {section}{\numberline {8.2}Crossreferences}{10}{section.8.2}
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{\numberline {9}From tex to pdf}{11}{chapter.9}
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{\numberline {10}Conclusions}{12}{chapter.10}
 \defcounter {refsection}{0}\relax 
 \contentsline {chapter}{Bibliography}{i}{section*.4}
 \defcounter {refsection}{0}\relax 

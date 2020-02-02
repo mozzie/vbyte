@@ -13,19 +13,38 @@ existing state-of-the-art methods.
 
 \chapter{Basic Concepts}
 Variable-byte encoding \citep{Wil99} is a method of compressing integers. It splits an integer into blocks of $b$ bits and then encodes
-the block as $b + c$. $c$ is a bit denoting whether $b$ has the most significant bits of the number or not. A good dataset for variable-byte encoding
-is a set with both very small and very large numbers, since he compression comes from omitting the leading zeros in the bit array. This method 
-loses in compression performance to other methods \citep{Bri09}, but they are very fast to decode and allow fast random access.
+the block as $b + c$. $c$ is a bit denoting whether $b$ has the most significant bits of the number or not. (example?) A good dataset for variable-byte encoding
+is a set with both very small and very large numbers, since the compression comes from omitting the leading zeros in the bit array. This method 
+loses in compression performance to other methods \citep{Bri09}, but decoding is fast.
 
-- Explain rank / select
+Rank and select are two functions that work on bit arrays. Rank(i) gives the sum of 1 bits from the beginning of the bit array and select(i) gives
+the index of ith 1 bit in the bit array. Both functions work in constant time (citation?) and they require only a few percents of extra space over
+the data. The extra bits $c$ added by variable-byte encoding conveniently create a bit array, where 1's represent the endings of numbers. An effective
+version of random access has already been introduced \citep{Bri09}. It uses one rank call for each block after the first which makes the fetching very
+fast if the number in question fits to one block.
 
+An effective version with select is also possible. The index of the block where ith number starts is obtainable with select(i-1)+1, when i > 0 and 0 when i=0.
+By separating the $c$ bit array and $b$ block array, $b$ now contains variable-byte integers in readable form. Another upside is that functions 
+next(i) and previous(i) are conveniently available without any extra calculation and the runtime is not dependent on the size of the value.
+
+- explain how random access is good 
 
 \chapter{Previous Work}
 bl
+
 \chapter{Algorithm}
-here
+ - modifications to basic implementation
+ 
 \chapter{Results}
-hmll
+ - comparison to basic implementation + Bri09
+ - 
+\chapter{Conclusion}
+ - here
+
+\chapter{Future work}
+ - something to improve / research?
+
+
 \section{Figures}
 Figure~\ref{fig:logo} gives an example how to add figures to the document. Remember always to cite the figure in the main text.
 
@@ -122,3 +141,4 @@ In Linux, run \texttt{pdflatex filename.tex} and \texttt{bibtex filename.tex} re
 \chapter{Conclusions\label{chapter:conclusions}}
 
 It is good to conclude with a summary of findings. You can also use separate chapter for discussion and future work. These details you can negotiate with your supervisor.
+

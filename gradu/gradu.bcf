@@ -1928,9 +1928,10 @@
     <bcf:citekey order="2">Sal99</bcf:citekey>
     <bcf:citekey order="3">Wil99</bcf:citekey>
     <bcf:citekey order="4">Bri09</bcf:citekey>
-    <bcf:citekey order="5">einstein</bcf:citekey>
-    <bcf:citekey order="6">latexcompanion</bcf:citekey>
-    <bcf:citekey order="6">knuthwebsite</bcf:citekey>
+    <bcf:citekey order="5">Bri09</bcf:citekey>
+    <bcf:citekey order="6">einstein</bcf:citekey>
+    <bcf:citekey order="7">latexcompanion</bcf:citekey>
+    <bcf:citekey order="7">knuthwebsite</bcf:citekey>
   </bcf:section>
   <!-- SORTING TEMPLATES -->
   <bcf:sortingtemplate name="nyt">
