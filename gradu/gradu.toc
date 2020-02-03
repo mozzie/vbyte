@@ -6,33 +6,35 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {chapter}{\numberline {1}Introduction}{1}{chapter.1}
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{\numberline {2}Basic Concepts}{2}{chapter.2}
+\contentsline {chapter}{\numberline {2}Variable-byte encoding}{2}{chapter.2}
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{\numberline {3}Previous Work}{3}{chapter.3}
+\contentsline {chapter}{\numberline {3}Directly addressable codes?}{3}{chapter.3}
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{\numberline {4}Algorithm}{4}{chapter.4}
+\contentsline {chapter}{\numberline {4}Previous Work}{4}{chapter.4}
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{\numberline {5}Results}{5}{chapter.5}
+\contentsline {chapter}{\numberline {5}Algorithm}{5}{chapter.5}
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{\numberline {6}Conclusion}{6}{chapter.6}
+\contentsline {chapter}{\numberline {6}Results}{6}{chapter.6}
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{\numberline {7}Future work}{7}{chapter.7}
+\contentsline {chapter}{\numberline {7}Conclusion}{8}{chapter.7}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {7.1}Figures}{7}{section.7.1}
+\contentsline {chapter}{\numberline {8}Future work}{9}{chapter.8}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {7.2}Tables}{7}{section.7.2}
+\contentsline {section}{\numberline {8.1}Figures}{9}{section.8.1}
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{\numberline {8}Citations}{9}{chapter.8}
+\contentsline {section}{\numberline {8.2}Tables}{9}{section.8.2}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {8.1}Citations to literature}{9}{section.8.1}
+\contentsline {chapter}{\numberline {9}Citations}{10}{chapter.9}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {8.2}Crossreferences}{10}{section.8.2}
+\contentsline {section}{\numberline {9.1}Citations to literature}{10}{section.9.1}
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{\numberline {9}From tex to pdf}{11}{chapter.9}
+\contentsline {section}{\numberline {9.2}Crossreferences}{11}{section.9.2}
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{\numberline {10}Conclusions}{12}{chapter.10}
+\contentsline {chapter}{\numberline {10}From tex to pdf}{12}{chapter.10}
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{Bibliography}{i}{section*.4}
+\contentsline {chapter}{\numberline {11}Conclusions}{13}{chapter.11}
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{Bibliography}{i}{section*.5}
 \defcounter {refsection}{0}\relax 
 \cftpagenumbersoff {chapter}
 \defcounter {refsection}{0}\relax 
