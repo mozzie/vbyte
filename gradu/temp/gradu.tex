@@ -66,7 +66,7 @@
 
 %% Reference style: select one 
 %% for APA = Harvard style = authoryear -> (Einstein, 1905) use:
-\usepackage[style=authoryear,bibstyle=authoryear,backend=bibtex,natbib=true,maxnames=99,maxcitenames=2,giveninits=true,uniquename=init]{biblatex}
+\usepackage[style=authoryear,bibstyle=authoryear,backend=biber,natbib=true,maxnames=99,maxcitenames=2,giveninits=true,uniquename=init]{biblatex}
 %% for numeric = Vancouver style -> [1] use:
 %\usepackage[style=numeric,bibstyle=numeric,backend=biber,natbib=true,maxbibnames=99,giveninits=true,uniquename=init]{biblatex}
 %% for alpahbetic -> [Ein05] use:
@@ -98,12 +98,8 @@
 \usepackage{tikz}            % For making vector graphics (hard to learn but powerful)
 %\usepackage{wrapfig}        % For nice text-wrapping figures (use at own discretion)
 \usepackage{amsmath, amssymb} % For better math
-\usepackage{algorithm}  
-\usepackage[noend]{algpseudocode}
+\usepackage[figure]{algorithm2e}
 \singlespacing               %line spacing options; normally use single
-
-\algnewcommand\algorithmicforeach{\textbf{for each}}
-\algdef{S}[FOR]{ForEach}[1]{\algorithmicforeach\ #1\ \algorithmicdo}
 
 \fussy
 %\sloppy                      % sloppy and fussy commands can be used to avoid overlong text lines
@@ -120,7 +116,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Set up personal information for the title page and the abstract form.
 %% Replace parameters with your information.
-\title{something about variable-byte encoding}
+\title{Tutkielman otsikko}
 
 % TM: Contributors to template editors now listed in the beginning of the file in comments
 \author{Jussi Timonen}
@@ -198,6 +194,20 @@
 %% language as well, in between the abstract definitions.
 
 \begin{abstract}
+
+Tämä dokumentti on tarkoitettu Helsingin yliopiston tietojenkäsittelytieteen osaston opin\-näyt\-teiden ja harjoitustöiden ulkoasun ohjeeksi ja mallipohjaksi. Ohje soveltuu kanditutkielmiin, ohjelmistotuotantoprojekteihin, seminaareihin ja maisterintutkielmiin. Tämän ohjeen lisäksi on seurattava niitä ohjeita, jotka opastavat valitsemaan kuhunkin osioon tieteellisesti kiinnostavaa, syvällisesti pohdittua sisältöä.
+
+
+Työn aihe luokitellaan  
+ACM Computing Classification System (CCS) mukaisesti, 
+ks.\ \url{https://www.acm.org/about-acm/class},
+käyttäen komentoa \verb+\classification{}+. 
+Käytä muutamaa termipolkua (1--3), jotka alkavat juuritermistä ja joissa polun tarkentuvat luokat erotetaan toisistaan oikealle osoittavalla nuolella.
+
+\end{abstract}
+
+\begin{otherlanguage}{english}
+\begin{abstract}
 Use this otherlanguage environment to write your abstract in another language if needed.
 
 Topics are classified according to the ACM Computing Classification System
@@ -210,7 +220,7 @@ by the use of bold face for high importance or italics for intermediate
 level. The combination of individual boldface terms may give the reader
 additional insight. 
 \end{abstract}
-
+\end{otherlanguage}
 
 % Place ToC
 \newpage
@@ -242,12 +252,20 @@ additional insight.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \backmatter
-%\begin{appendices}
+\begin{appendices}
 
 %\input{instructions_english}
 %\input{instructions_finnish}
 
-%\end{appendices}
+\appendix{Sample Appendix\label{appendix:model}}
+usually starts on its own page, with the name and number of the appendix at the top. 
+The appendices here are just models of the table of contents and the presentation. Each appendix
+Each appendix is paginated separately.
+
+In addition to complementing the main document, each appendix is also its own, independent entity.
+This means that an appendix cannot be just an image or a piece of programming, but the appendix must explain its contents and meaning.
+
+\end{appendices}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \end{document}

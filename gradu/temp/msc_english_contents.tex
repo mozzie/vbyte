@@ -1,0 +1,173 @@
+\chapter{Introduction}
+Enormous datasets are a common case in today's applications. Compressing the datasets is beneficial, because they 
+naturally decrease memory requirements but also are faster when compressed data is read from disk \citep{Zob95}.
+
+One of the leading methods of data compression is variable-length coding \citep{Sal99}, where frequent sequences of data
+are represented with shorter codewords. Because the sequences of data have different lenghts when compressed, it is 
+not trivial to determine the exact location of a certain element. If this is required, the usual data compression algorithms are
+inefficient. Fortunately this is not a requirement compression algorithms usually need to fulfill. 
+
+However, random access of compressed data is needed in compressed data structures. In most compression methods, the only way 
+to this is to decompress data from the beginning. An integer compressing method with fast random access is explained and compared
+existing state-of-the-art methods.
+
+\chapter{Variable-byte encoding}
+
+Variable-byte encoding \citep{Wil99} (VB) is a method of compressing integers via omitting leading zero bits. A good data set for 
+VB encoding is a list of different sized numbers. As an example, an inverted index used by document search engine stores word frequencies and 
+locations in documents. VB saves space here because index numbers need to support large values, but are usually significantly smaller. 
+It is also proven to improve search speed, because less bytes need to be read from a hard drive \citep{Sch02}.
+
+VB splits an integer into blocks of $b$ bits. A continuation bit is added to the block to form a chunk $c$ and then chunk non-empty chunks are stored.
+The continuation bit is set to 1 for the last block of the integer. During decoding, chunks are read and their blocks are joined until a continuation 
+bit is set to 1. An example implementation is showcased in Figure~\ref{fig:vbyte}.
+
+
+\begin{algorithm}
+\KwData{this text}
+\KwResult{how to write algorithm with \LaTeX2e}
+\LinesNumbered
+\While{not at end of this document}{read current\;
+  \eIf{understand}{
+  go to next section\;
+  current section becomes this one\;
+  }{
+    go back to the beginning of current section\;
+  }
+}
+\caption{VB encoding.\label{fig:vbyte}}
+\end{algorithm}
+
+
+Small lengths of $c$ can yield better
+compression rate at the cost of more bit manipulation, while longer chunks need less bit manipulation and offer less effective compression. 
+Generally chunk length of 8 has been used because it gives a good average and handling bytes is convenient \citep{IRbook}.
+
+bl 
+It splits an integer into blocks of $b$ bits and then encodes
+the block as $b + c$ where $c$ is a bit denoting whether $b$ has the most significant bits of the number or not. 
+
+This method loses in compression performance to other methods \citep{Bri09}, but decoding is fast.
+
+
+
+\chapter{Directly addressable codes?}
+Rank and select are two functions that work on bit arrays. Rank(i) gives the sum of 1 bits from the beginning of the bit array and select(i) gives
+the index of ith 1 bit in the bit array. Both functions work in constant time (citation?) and they require only a few percents of extra space over
+the data. The extra bits $c$ added by variable-byte encoding conveniently create a bit array, where 1's represent the endings of numbers. An effective
+version of random access has already been introduced \citep{Bri09}. 
+
+Random access with select query is also possible.  By separating the $c$ bit array and $b$ block array, $b$ contains variable-byte integers 
+in readable form. Another upside is that functions next(i) and previous(i) are conveniently available. Rank implementation has 
+
+- explain how random access is good 
+
+\chapter{Previous Work}
+bl
+
+\chapter{Algorithm}
+
+ - modifications to basic implementation
+ 
+\chapter{Results}
+ - comparison to basic implementation + Bri09
+\begin{table}
+\centering
+\caption{Results with 100k entries (in milliseconds).\label{table:results}}
+\begin{tabular}{l||l c c c c r} 
+Experiment & 128 & 256 & 32768 & 65536 & $2^{24}$ & $2^{32} -1$\\ 
+\hline \hline 
+$7bit VByte encoding$ & 34.97 & 49 & 53.04 & 52.18 & 53.08 & 76.21\\
+$8bit VByte encoding$ & 33.57 & 32.47 & 42.96 & 43.11 & 46.15 & 65.14\\
+$7bit VByte encoding with array$ & 33.39 & 46.85 & 51.24 & 49.03 & 48.93 & 66.84 \\
+$8bit VByte encoding with array$ & 32.52 & 31.88 & 41.54 & 39.94 & 41.15 & 52.86 \\
+
+\hline
+%
+\end{tabular}
+\end{table}
+
+\begin{table}
+\centering
+\caption{Results with 1M entries (in milliseconds).\label{table:results}}
+\begin{tabular}{l||l c c c c r} 
+Experiment & 128 & 256 & 32768 & 65536 & $2^{24}$ & $2^{32} -1$ \\ 
+\hline \hline 
+$7bit VByte encoding$ & 38.17 & 55.09 & 64.38 & 65.36 & 68.08 & 159 \\
+$8bit VByte encoding$ & 37.09 & 37.75 & 53.44 & 54.6 & 59.32 & 148.7\\
+$7bit VByte encoding with array$ & 38.09 & 55.42 & 62.22 & 61.25 & 71.72 & 135.01\\
+$8bit VByte encoding with array$ & 36.13 & 36.83 & 50.58 & 50.73 & 56.93 & 103.18\\
+
+\hline
+%
+\end{tabular}
+\end{table}
+
+\chapter{Conclusion}
+ - here
+
+\chapter{Future work}
+ - something to improve / research?
+
+
+\section{Figures}
+Figure gives an example how to add figures to the document. Remember always to cite the figure in the main text.
+
+
+\section{Tables}
+
+Table~\ref{table:results} gives an example how to report experimental results. Remember always to cite the table in the main text. 
+
+
+\chapter{Citations}
+
+\section{Citations to literature}
+
+References are listed in a separate .bib-file. In this case it is named \texttt{bibliography.bib} including the following content:
+\begin{verbatim}
+
+@article{einstein,
+    author =       "Albert Einstein",
+    title =        "{Zur Elektrodynamik bewegter K{\"o}rper}. ({German})
+        [{On} the electrodynamics of moving bodies]",
+    journal =      "Annalen der Physik",
+    volume =       "322",
+    number =       "10",
+    pages =        "891--921",
+    year =         "1905",
+    DOI =          "http://dx.doi.org/10.1002/andp.19053221004"
+}
+ 
+@book{latexcompanion,
+    author    = "Michel Goossens and Frank Mittelbach and Alexander Samarin",
+    title     = "The \LaTeX\ Companion",
+    year      = "1993",
+    publisher = "Addison-Wesley",
+    address   = "Reading, Massachusetts"
+}
+ 
+@misc{knuthwebsite,
+    author    = "Donald Knuth",
+    title     = "Knuth: Computers and Typesetting",
+    url       = "http://www-cs-faculty.stanford.edu/%7Eknuth/abcde.html"
+}
+\end{verbatim}
+
+In the last reference url field the code \verb+%7E+ will translate into \verb+~+ once clicked in the final pdf.
+
+References are created using command \texttt{\textbackslash cite\{einstein\}}, showing as \citep{einstein}. Other examples: \citep{latexcompanion,knuthwebsite}.
+
+Citation style can be negotiated with the supervisor. See some options in \url{https://www.sharelatex.com/learn/Bibtex_bibliography_styles}.
+
+\section{Crossreferences}
+
+Appendix~\ref{appendix:model} on page~\pageref{appendix:model} contains some additional material.
+
+\chapter{From tex to pdf}
+
+In Linux, run \texttt{pdflatex filename.tex} and \texttt{bibtex filename.tex} repeatedly until no more warnings are shown. This process can be automised using make-command.
+ 
+\chapter{Conclusions\label{chapter:conclusions}}
+
+It is good to conclude with a summary of findings. You can also use separate chapter for discussion and future work. These details you can negotiate with your supervisor.
+

@@ -8,37 +8,130 @@ not trivial to determine the exact location of a certain element. If this is req
 inefficient. Fortunately this is not a requirement compression algorithms usually need to fulfill. 
 
 However, random access of compressed data is needed in compressed data structures. In most compression methods, the only way 
-to this is to decompress data from the beginning. An integer compressing method with fast random access is explained and compared
+to this is to decompress data from the beginning. An integer compressing method with fast random access is explained later and compared
 existing state-of-the-art methods.
 
 \chapter{Variable-byte encoding}
 
-Variable-byte encoding \citep{Wil99} (VB) is a method of compressing integers via omitting leading zero bits. A good data set for 
-VB encoding is a list of different sized numbers. As an example, an inverted index used by document search engine stores word frequencies and 
-locations in documents. VB saves space here because index numbers need to support large values, but are usually significantly smaller. 
-It is also proven to improve search speed, because less bytes need to be read from a hard drive \citep{Sch02}.
+Variable-byte encoding \citep{Wil99} (VB) is a method of compressing integers via omitting leading zero bits. In normal data sets, it loses in 
+compression performance to generic algorithms like Huffman encoding or Lempel-Ziv encoding, but in comparison it's faster to decode \citep{Bri09} 
+and allows constant time random access (TODO: link to later chapters). A good data set for VB encoding is a list of mostly small numbers with a 
+need to support larger ones. 
 
-VB splits an integer into blocks of $b$ bits. A continuation bit is added to the block to form a chunk $c$ and then chunk non-empty chunks are stored.
-The continuation bit is set to 1 for the last block of the integer. During decoding, chunks are read and their blocks are joined until a continuation 
-bit is set to 1. An example implementation is showcased in Figure~\ref{fig:vbyte}.
+A search engine may use an inverted index of words in documents. For each word, a list of document IDs where the word appears is stored. 
+It may also store locations of the word in document for advanced search purposes. Usually these lists are preprocessed and stored 
+as gaps, storing the difference to previous number instead of the actual number \citep{Man08}. Common words have a lot of entries in these lists, 
+but because of gap storing the numbers are small. In contrast, rare words have only a few entries but the numbers stored are larger. These lists 
+are excellent data sets for VB. Apache Lucene has variable bytes as vInt and IBM DB2 has them as Variable Byte). 
 
-\begin{figure}[h!] 
-\centering 
-blblblblb
-testataan
-tätä
-\caption{VB encoding and decoding.\label{fig:vbyte}}
+
+TODO: a chapter about existing work
+Usage of VB to compress inverted 
+index lists was first experimented in \citep{Sch02}. (TODO: find better examples or find references to these)
+
+VB splits each integer into blocks of $b$ bits and adds a continuation bit to the block to form chunks of length $1+b$. The extra bit is set to 1 only
+on the block containing the least significant bits of the integer. This information is used in decoding to signal if next chunk continues the current 
+integer. For example, let's assume $b = 4$ and let $n = 42$ be a 16 bit unsigned integer. The standard 8-bit representation of $n$ is 
+\texttt{00000000 00101000}. When split to blocks of $b$ bits, it becomes \texttt{0000 0000 0010 1000}. Empty blocks are omitted and continuation bits 
+are added to the remaining blocks. The result is \texttt{00010 11000}, which is the compressed data.
+
+\medskip
+\noindent\begin{minipage}{.5\textwidth}
+\begin{algorithmic}
+\Function{VBEncodeNumber}{$n$}
+\State $bytes\gets $ list
+\While{true}
+\State $bytes$.prepend($n \bmod 128$)
+\If{$n < 128$} \State break \EndIf
+\State $n\gets n$ div $128$
+\EndWhile
+\State $bytes$.last() += $128$
+\State \textbf{return} bytes
+\EndFunction
+\captionof{figure}{VByte encoding} \label{vbyte_enc}
+\end{algorithmic}
+\end{minipage}%
+\begin{minipage}{.5\textwidth}
+\begin{algorithmic}
+\Function{VBEncode}{$numbers$}
+\State $bytestream\gets $ list
+\ForEach {$n \in numbers$}
+\State $bytes \gets$ VBEncodeNumber($n$)
+\State $bytestream$.extend($bytes$)
+\EndFor
+\State \textbf{return} bytestream
+\EndFunction
+\end{algorithmic}
+\end{minipage}
+\medskip 
+
+Decoding is essentially just reversing the encoding steps: chunks are read until a chunk with 1 as continuation bit is found. Continuation bits 
+are removed from all the chunks and the blocks are concatenated to form the original number. As in the previous example, $b = 4$, encoded message 
+is \texttt{00010 11000} and $n = 0$. Block from the first chunk is extracted and added to $n$, making $n = $\texttt{10}. A bitwise shift to left 
+equal to $b$ is applied to $n$, changing $n = $\texttt{100000}. Then the block is extracted from the next chunk. This block is added  $n$, making 
+$n = 42$. Because the previous continuous bit was 1, decoding this number has finished. An example implementation of encode and decode with block 
+length of 7 is shown in Figure~\ref{vbyte_enc} and Figure~\ref{vbyte_dec}.
+
+Small lengths of $c$ can yield better compression rate at the cost of more bit manipulation, while longer chunks need less bit manipulation and 
+offer less effective compression. Generally block length of 7 has been used because it gives a good average and handling chunks as bytes is 
+convenient \citep{Man08}.
+
+
+\begin{figure}[ht]
+\begin{algorithmic}
+\Function{VBDecode}{$bytestream$}
+\State $numbers\gets $ list
+\State $n\gets 0$
+\ForEach {$b \in bytestream$}
+\If{$b < 128$}
+\State $n\gets 128\times n $ + $b$
+\Else
+\State $n\gets 128\times n $ + $b$ - $128$
+\State $numbers$.append($n$)
+\State $n\gets 0$
+\EndIf
+\EndFor
+\State \textbf{return} numbers
+\EndFunction
+\end{algorithmic}
+\caption{VByte decoding} \label{vbyte_dec}
 \end{figure}
 
-Small lengths of $c$ can yield better
-compression rate at the cost of more bit manipulation, while longer chunks need less bit manipulation and offer less effective compression. 
-Generally chunk length of 8 has been used because it gives a good average and handling bytes is convenient \citep{IRbook}.
 
-bl 
-It splits an integer into blocks of $b$ bits and then encodes
-the block as $b + c$ where $c$ is a bit denoting whether $b$ has the most significant bits of the number or not. 
++description
 
-This method loses in compression performance to other methods \citep{Bri09}, but decoding is fast.
+\medskip
+-motivation (see papers below)
+
+\medskip
++pseudocode
+
+\medskip
++a few examples (1)
+
+\medskip
+-a review of related work should include:
+
+\medskip
+---the text book from which the initial description I sent you comes from
+
+\medskip
+---First use for inverted index compression (at least that I'm aware of):
+
+\medskip
+https://dl.acm.org/doi/10.1145/564376.564416
+
+\medskip
+---More recent incarnations of vbyte (just mention them):
+
+\medskip
+https://arxiv.org/abs/1709.08990
+
+\medskip
+https://arxiv.org/abs/1503.07387
+
+\medskip
+
 
 
 
@@ -64,7 +157,7 @@ bl
  - comparison to basic implementation + Bri09
 \begin{table}
 \centering
-\caption{Results with 100k entries (in milliseconds).\label{table:results}}
+\caption{Results with 100k entries (in milliseconds).\label{table:results1}}
 \begin{tabular}{l||l c c c c r} 
 Experiment & 128 & 256 & 32768 & 65536 & $2^{24}$ & $2^{32} -1$\\ 
 \hline \hline 
@@ -80,7 +173,7 @@ $8bit VByte encoding with array$ & 32.52 & 31.88 & 41.54 & 39.94 & 41.15 & 52.86
 
 \begin{table}
 \centering
-\caption{Results with 1M entries (in milliseconds).\label{table:results}}
+\caption{Results with 1M entries (in milliseconds).\label{table:results2}}
 \begin{tabular}{l||l c c c c r} 
 Experiment & 128 & 256 & 32768 & 65536 & $2^{24}$ & $2^{32} -1$ \\ 
 \hline \hline 
@@ -102,62 +195,13 @@ $8bit VByte encoding with array$ & 36.13 & 36.83 & 50.58 & 50.73 & 56.93 & 103.1
 
 
 \section{Figures}
-Figure~\ref{fig:logo} gives an example how to add figures to the document. Remember always to cite the figure in the main text.
+Figure gives an example how to add figures to the document. Remember always to cite the figure in the main text.
 
-\begin{figure}[h!] 
-\centering 
-\includegraphics[width=0.3\textwidth]{HY-logo-ml.png}
-\caption{University of Helsinki flame-logo for Faculty of Science.\label{fig:logo}}
-\end{figure}
 
 \section{Tables}
 
-Table~\ref{table:results} gives an example how to report experimental results. Remember always to cite the table in the main text. 
+Table gives an example how to report experimental results. Remember always to cite the table in the main text. 
 
-
-\chapter{Citations}
-
-\section{Citations to literature}
-
-References are listed in a separate .bib-file. In this case it is named \texttt{bibliography.bib} including the following content:
-\begin{verbatim}
-
-@article{einstein,
-    author =       "Albert Einstein",
-    title =        "{Zur Elektrodynamik bewegter K{\"o}rper}. ({German})
-        [{On} the electrodynamics of moving bodies]",
-    journal =      "Annalen der Physik",
-    volume =       "322",
-    number =       "10",
-    pages =        "891--921",
-    year =         "1905",
-    DOI =          "http://dx.doi.org/10.1002/andp.19053221004"
-}
- 
-@book{latexcompanion,
-    author    = "Michel Goossens and Frank Mittelbach and Alexander Samarin",
-    title     = "The \LaTeX\ Companion",
-    year      = "1993",
-    publisher = "Addison-Wesley",
-    address   = "Reading, Massachusetts"
-}
- 
-@misc{knuthwebsite,
-    author    = "Donald Knuth",
-    title     = "Knuth: Computers and Typesetting",
-    url       = "http://www-cs-faculty.stanford.edu/%7Eknuth/abcde.html"
-}
-\end{verbatim}
-
-In the last reference url field the code \verb+%7E+ will translate into \verb+~+ once clicked in the final pdf.
-
-References are created using command \texttt{\textbackslash cite\{einstein\}}, showing as \citep{einstein}. Other examples: \citep{latexcompanion,knuthwebsite}.
-
-Citation style can be negotiated with the supervisor. See some options in \url{https://www.sharelatex.com/learn/Bibtex_bibliography_styles}.
-
-\section{Crossreferences}
-
-Appendix~\ref{appendix:model} on page~\pageref{appendix:model} contains some additional material.
 
 \chapter{From tex to pdf}
 

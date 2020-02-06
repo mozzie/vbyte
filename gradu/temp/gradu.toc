@@ -1,0 +1,42 @@
+\babel@toc {english}{}
+\boolfalse {citerequest}\boolfalse {citetracker}\boolfalse {pagetracker}\boolfalse {backtracker}\relax 
+\babel@toc {english}{}
+\babel@toc {english}{}
+\babel@toc {english}{}
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{\numberline {1}Introduction}{1}{chapter.1}
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{\numberline {2}Variable-byte encoding}{2}{chapter.2}
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{\numberline {3}Directly addressable codes?}{4}{chapter.3}
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{\numberline {4}Previous Work}{5}{chapter.4}
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{\numberline {5}Algorithm}{6}{chapter.5}
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{\numberline {6}Results}{7}{chapter.6}
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{\numberline {7}Conclusion}{9}{chapter.7}
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{\numberline {8}Future work}{10}{chapter.8}
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {8.1}Figures}{10}{section.8.1}
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {8.2}Tables}{10}{section.8.2}
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{\numberline {9}Citations}{11}{chapter.9}
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {9.1}Citations to literature}{11}{section.9.1}
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {9.2}Crossreferences}{12}{section.9.2}
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{\numberline {10}From tex to pdf}{13}{chapter.10}
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{\numberline {11}Conclusions}{14}{chapter.11}
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{Bibliography}{i}{section*.4}
+\defcounter {refsection}{0}\relax 
+\cftpagenumbersoff {chapter}
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{\numberline {A}Sample Appendix}{i}{appendix.A}
+\contentsfinish 

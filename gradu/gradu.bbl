@@ -1,0 +1,211 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 2.9 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated as
+% required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+\datalist[entry]{nyt/global//global/global}
+  \entry{Bri09}{article}{}
+    \name{author}{3}{}{%
+      {{hash=BNR}{%
+         family={Brisaboa},
+         familyi={B\bibinitperiod},
+         given={Nieves\bibnamedelima R.},
+         giveni={N\bibinitperiod\bibinitdelim R\bibinitperiod},
+      }}%
+      {{hash=LS}{%
+         family={Ladra},
+         familyi={L\bibinitperiod},
+         given={Susana},
+         giveni={S\bibinitperiod},
+      }}%
+      {{hash=NG}{%
+         family={Navarro},
+         familyi={N\bibinitperiod},
+         given={Gonzalo},
+         giveni={G\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{BNR+1}
+    \strng{fullhash}{BNRLSNG1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{labelyear}{2009}
+    \field{labeldatesource}{year}
+    \field{sortinit}{B}
+    \field{sortinithash}{B}
+    \field{title}{Directly Addressable Variable-Length Codes}
+    \field{year}{2009}
+  \endentry
+
+  \entry{Man08}{book}{}
+    \name{author}{3}{}{%
+      {{hash=MCD}{%
+         family={Manning},
+         familyi={M\bibinitperiod},
+         given={Christopher\bibnamedelima D.},
+         giveni={C\bibinitperiod\bibinitdelim D\bibinitperiod},
+      }}%
+      {{hash=RP}{%
+         family={Raghavan},
+         familyi={R\bibinitperiod},
+         given={Prabhakar},
+         giveni={P\bibinitperiod},
+      }}%
+      {{hash=SH}{%
+         family={Schütze},
+         familyi={S\bibinitperiod},
+         given={Hinrich},
+         giveni={H\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{MCD+1}
+    \strng{fullhash}{MCDRPSH1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{labelyear}{2008}
+    \field{labeldatesource}{year}
+    \field{sortinit}{M}
+    \field{sortinithash}{M}
+    \field{title}{Introduction to Information Retrieval}
+    \field{year}{2008}
+  \endentry
+
+  \entry{Sal99}{book}{}
+    \name{author}{1}{}{%
+      {{hash=SD}{%
+         family={Salomon},
+         familyi={S\bibinitperiod},
+         given={David},
+         giveni={D\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {Springer, Heidelberg}%
+    }
+    \strng{namehash}{SD1}
+    \strng{fullhash}{SD1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{labelyear}{2007}
+    \field{labeldatesource}{year}
+    \field{sortinit}{S}
+    \field{sortinithash}{S}
+    \field{title}{Variable-length codes for data compression}
+    \field{year}{2007}
+  \endentry
+
+  \entry{Sch02}{article}{}
+    \name{author}{4}{}{%
+      {{hash=SF}{%
+         family={Scholer},
+         familyi={S\bibinitperiod},
+         given={Falk},
+         giveni={F\bibinitperiod},
+      }}%
+      {{hash=WHE}{%
+         family={Williams},
+         familyi={W\bibinitperiod},
+         given={Hugh\bibnamedelima E.},
+         giveni={H\bibinitperiod\bibinitdelim E\bibinitperiod},
+      }}%
+      {{hash=YJ}{%
+         family={Yiannis},
+         familyi={Y\bibinitperiod},
+         given={John},
+         giveni={J\bibinitperiod},
+      }}%
+      {{hash=ZJ}{%
+         family={Zobel},
+         familyi={Z\bibinitperiod},
+         given={Justin},
+         giveni={J\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{SF+1}
+    \strng{fullhash}{SFWHEYJZJ1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{labelyear}{2002}
+    \field{labeldatesource}{year}
+    \field{sortinit}{S}
+    \field{sortinithash}{S}
+    \field{title}{Compression of Inverted Indexes For Fast Query Evaluation}
+    \field{year}{2002}
+  \endentry
+
+  \entry{Wil99}{article}{}
+    \name{author}{2}{}{%
+      {{hash=WHE}{%
+         family={Williams},
+         familyi={W\bibinitperiod},
+         given={Hugh\bibnamedelima E.},
+         giveni={H\bibinitperiod\bibinitdelim E\bibinitperiod},
+      }}%
+      {{hash=ZJ}{%
+         family={Zobel},
+         familyi={Z\bibinitperiod},
+         given={Justin},
+         giveni={J\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{WHEZJ1}
+    \strng{fullhash}{WHEZJ1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{labelyear}{1999}
+    \field{labeldatesource}{year}
+    \field{sortinit}{W}
+    \field{sortinithash}{W}
+    \field{number}{3}
+    \field{pages}{193\bibrangedash 201}
+    \field{title}{Compressing Integers for Fast File Access}
+    \field{volume}{42}
+    \field{journaltitle}{COMPJ: The Computer Journal}
+    \field{year}{1999}
+  \endentry
+
+  \entry{Zob95}{article}{}
+    \name{author}{2}{}{%
+      {{hash=ZJ}{%
+         family={Zobel},
+         familyi={Z\bibinitperiod},
+         given={Justin},
+         giveni={J\bibinitperiod},
+      }}%
+      {{hash=MA}{%
+         family={Moffat},
+         familyi={M\bibinitperiod},
+         given={Alistair},
+         giveni={A\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{ZJMA1}
+    \strng{fullhash}{ZJMA1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{labelyear}{1995}
+    \field{labeldatesource}{year}
+    \field{sortinit}{Z}
+    \field{sortinithash}{Z}
+    \field{number}{8}
+    \field{pages}{891\bibrangedash 903}
+    \field{title}{Adding Compression to a Full-text Retrieval System}
+    \field{volume}{25}
+    \field{journaltitle}{Software-practice and experience}
+    \field{year}{1995}
+  \endentry
+\enddatalist
+\endinput
