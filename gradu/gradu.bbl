@@ -17,6 +17,28 @@
 \endgroup
 
 \datalist[entry]{nyt/global//global/global}
+  \entry{Mid96}{article}{}
+    \name{author}{1}{}{%
+      {{hash=ATMM}{%
+         family={Association},
+         familyi={A\bibinitperiod},
+         given={The Midi\bibnamedelima Manufacturers},
+         giveni={T\bibinitperiod\bibinitdelim M\bibinitperiod\bibinitdelim
+  M\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{ATMM1}
+    \strng{fullhash}{ATMM1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{labelyear}{1996}
+    \field{labeldatesource}{year}
+    \field{sortinit}{A}
+    \field{sortinithash}{A}
+    \field{title}{The Complete MIDI 1.0 Detailed Specification}
+    \field{year}{1996}
+  \endentry
+
   \entry{Bri09}{article}{}
     \name{author}{3}{}{%
       {{hash=BNR}{%

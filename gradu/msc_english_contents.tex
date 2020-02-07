@@ -13,23 +13,17 @@ existing state-of-the-art methods.
 
 \chapter{Variable-byte encoding}
 
-Variable-byte encoding \citep{Wil99} (VB) is a method of compressing integers via omitting leading zero bits. In normal data sets, it loses in 
+Variable-byte (VB) encoding \citep{Wil99} is a method of compressing integers via omitting leading zero bits. In normal data sets, it loses in 
 compression performance to generic algorithms like Huffman encoding or Lempel-Ziv encoding, but in comparison it's faster to decode \citep{Bri09} 
-and allows constant time random access (TODO: link to later chapters). A good data set for VB encoding is a list of mostly small numbers with a 
-need to support larger ones. 
+and allows constant time random access. This is later explained in (TODO: link to later chapter). 
 
-A search engine may use an inverted index of words in documents. For each word, a list of document IDs where the word appears is stored. 
-It may also store locations of the word in document for advanced search purposes. Usually these lists are preprocessed and stored 
-as gaps, storing the difference to previous number instead of the actual number \citep{Man08}. Common words have a lot of entries in these lists, 
-but because of gap storing the numbers are small. In contrast, rare words have only a few entries but the numbers stored are larger. These lists 
-are excellent data sets for VB. Apache Lucene has variable bytes as vInt and IBM DB2 has them as Variable Byte). 
+A good data set for VB encoding is a list of mostly small numbers with a need to support larger ones. A search engine may use an inverted index of 
+words in documents. For each word, a list of document IDs where the word appears is stored. It may also store locations of the word in document for 
+advanced search purposes. Usually these lists are preprocessed and stored as gaps, storing the difference to previous number instead of the actual 
+number \citep{Man08}. Common words have a lot of entries in these lists, but because of gap storing the numbers are small. In contrast, rare words 
+have only a few entries but the numbers stored are larger. These lists are excellent data sets for VB encoding. 
 
-
-TODO: a chapter about existing work
-Usage of VB to compress inverted 
-index lists was first experimented in \citep{Sch02}. (TODO: find better examples or find references to these)
-
-VB splits each integer into blocks of $b$ bits and adds a continuation bit to the block to form chunks of length $1+b$. The extra bit is set to 1 only
+VB encoding splits each integer into blocks of $b$ bits and adds a continuation bit to the block to form chunks of length $1+b$. The extra bit is set to 1 only
 on the block containing the least significant bits of the integer. This information is used in decoding to signal if next chunk continues the current 
 integer. For example, let's assume $b = 4$ and let $n = 42$ be a 16 bit unsigned integer. The standard 8-bit representation of $n$ is 
 \texttt{00000000 00101000}. When split to blocks of $b$ bits, it becomes \texttt{0000 0000 0010 1000}. Empty blocks are omitted and continuation bits 
@@ -72,11 +66,6 @@ equal to $b$ is applied to $n$, changing $n = $\texttt{100000}. Then the block i
 $n = 42$. Because the previous continuous bit was 1, decoding this number has finished. An example implementation of encode and decode with block 
 length of 7 is shown in Figure~\ref{vbyte_enc} and Figure~\ref{vbyte_dec}.
 
-Small lengths of $c$ can yield better compression rate at the cost of more bit manipulation, while longer chunks need less bit manipulation and 
-offer less effective compression. Generally block length of 7 has been used because it gives a good average and handling chunks as bytes is 
-convenient \citep{Man08}.
-
-
 \begin{figure}[ht]
 \begin{algorithmic}
 \Function{VBDecode}{$bytestream$}
@@ -97,41 +86,21 @@ convenient \citep{Man08}.
 \caption{VByte decoding} \label{vbyte_dec}
 \end{figure}
 
+Small lengths of $c$ can yield better compression rate at the cost of more bit manipulation, while longer chunks need less bit manipulation and 
+offer less effective compression. Generally block length of 7 has been used because it gives a good average and handling chunks as bytes is 
+convenient \citep{Man08}.
 
-+description
+VB encoding is a well known compression algorithm. It's origins date back to 1980's and the famous MIDI music file format. It stored some of the numbers
+in a "variable-length quantity" form, which was a 7-bit block VB structure \citep{Mid96}. Similar data types have existed for example in Apache Lucene 
+(as vInt) and IBM DB2 database (as Variable Byte). Later, VB encoding was found efficient in compressing integer lists. It was first used to compress
+lists of word locations in documents \citep{Sch02}. It yielded excellent records, and since then many different approaches have been introduced. 
 
-\medskip
--motivation (see papers below)
 
-\medskip
-+pseudocode
 
-\medskip
-+a few examples (1)
+history and current implementations etc here
+ - mainitse IR book, Lem15, Pla18
 
-\medskip
--a review of related work should include:
-
-\medskip
----the text book from which the initial description I sent you comes from
-
-\medskip
----First use for inverted index compression (at least that I'm aware of):
-
-\medskip
-https://dl.acm.org/doi/10.1145/564376.564416
-
-\medskip
----More recent incarnations of vbyte (just mention them):
-
-\medskip
-https://arxiv.org/abs/1709.08990
-
-\medskip
-https://arxiv.org/abs/1503.07387
-
-\medskip
-
+TODO: a chapter about existing work
 
 
 
