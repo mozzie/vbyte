@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2020.2.4)  8 FEB 2020 00:51
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2020.2.4)  8 FEB 2020 22:01
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1572,6 +1572,7 @@ Document Style algorithmicx 1.2 - a greatly improved `algorithmic' style
 )
 Document Style - pseudocode environments for use with the `algorithmicx' style
 )
+   defining Unicode char U+202F (decimal 8239)
 Package hyperref Info: Option `unicode' set `true' on input line 182.
  (/usr/share/texlive/texmf-dist/tex/latex/hyperref/puenc.def
 File: puenc.def 2018/02/06 v6.86b Hyperref: PDF Unicode definition (HO)
@@ -1727,13 +1728,18 @@ Package biblatex Info: Data encoding 'utf8' specified.
 
 Package biblatex Info: Trying to load bibliographic data...
 Package biblatex Info: ... file 'gradu.bbl' found.
- (./gradu.bbl)
+ (./gradu.bbl
+
+Package biblatex Warning: BibTeX reported the following issues
+(biblatex)                with 'Lem18':
+(biblatex)                - Invalid format of field 'month'.
+
+)
 Package biblatex Info: Reference section=0 on input line 186.
 Package biblatex Info: Reference segment=0 on input line 186.
 \AtBeginShipoutBox=\box44
 Package hyperref Info: Link coloring ON on input line 186.
-
-(/usr/share/texlive/texmf-dist/tex/latex/hyperref/nameref.sty
+ (/usr/share/texlive/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2016/05/21 v2.44 Cross-referencing by name of section
 
 (/usr/share/texlive/texmf-dist/tex/generic/oberdiek/gettitlestring.sty
@@ -1914,10 +1920,10 @@ Package logreq Info: Writing requests to 'gradu.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 31644 strings out of 494267
- 550684 string characters out of 6162829
- 852641 words of memory out of 5000000
- 34393 multiletter control sequences out of 15000+600000
+ 31660 strings out of 494267
+ 550980 string characters out of 6162829
+ 852644 words of memory out of 5000000
+ 34407 multiletter control sequences out of 15000+600000
  71496 words of font info for 68 fonts, out of 8000000 for 9000
  395 hyphenation exceptions out of 8191
  62i,11n,56p,808b,1822s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -1932,10 +1938,10 @@ nts/type1/public/lm/lmr10.pfb></usr/share/texmf/fonts/type1/public/lm/lmr12.pfb
 /public/lm/lmr8.pfb></usr/share/texmf/fonts/type1/public/lm/lmri12.pfb></usr/sh
 are/texmf/fonts/type1/public/lm/lmsy10.pfb></usr/share/texmf/fonts/type1/public
 /lm/lmtt10.pfb></usr/share/texmf/fonts/type1/public/lm/lmtt12.pfb>
-Output written on gradu.pdf (22 pages, 308704 bytes).
+Output written on gradu.pdf (22 pages, 314703 bytes).
 PDF statistics:
- 258 PDF objects out of 1000 (max. 8388607)
- 217 compressed objects within 3 object streams
- 43 named destinations out of 1000 (max. 500000)
+ 267 PDF objects out of 1000 (max. 8388607)
+ 226 compressed objects within 3 object streams
+ 45 named destinations out of 1000 (max. 500000)
  122 words of extra memory for PDF output out of 10000 (max. 10000000)
 

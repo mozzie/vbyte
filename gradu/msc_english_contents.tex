@@ -15,11 +15,11 @@ existing state-of-the-art methods.
 
 Variable-byte (VB) encoding \citep{Wil99} is a method of compressing integers via omitting leading zero bits. In normal data sets, it loses in 
 compression performance to generic algorithms like Huffman encoding or Lempel-Ziv encoding, but in comparison it's faster to decode \citep{Bri09} 
-and allows constant time random access. This is later explained in (TODO: link to later chapter). 
+and sometimes preferred due to it's simplicity. allows constant time random access. This is later explained in (TODO: link to later chapter). 
 
 A good data set for VB encoding is a list of mostly small numbers with a need to support larger ones. A search engine may use an inverted index of 
 words in documents. For each word, a list of document IDs where the word appears is stored. It may also store locations of the word in document for 
-advanced search purposes. Usually these lists are preprocessed and stored as gaps, storing the difference to previous number instead of the actual 
+advanced search purposes. Usually these lists are preprocessed and stored as an inverted index or gaps, storing the difference to previous number instead of the actual 
 number \citep{Man08}. Common words have a lot of entries in these lists, but because of gap storing the numbers are small. In contrast, rare words 
 have only a few entries but the numbers stored are larger. These lists are excellent data sets for VB encoding. 
 
@@ -92,19 +92,33 @@ convenient \citep{Man08}.
 
 VB encoding is a well known compression algorithm. It's origins date back to 1980's and the famous MIDI music file format. It stored some of the numbers
 in a "variable-length quantity" form, which was a 7-bit block VB structure \citep{Mid96}. Similar data types have existed for example in Apache Lucene 
-(as vInt) and IBM DB2 database (as Variable Byte). Later, VB encoding was found efficient in compressing integer lists. It was first used to compress
-lists of word locations in documents \citep{Sch02}. It yielded excellent records, and since then many different approaches have been introduced. 
+(as vInt) and IBM DB2 database (as Variable Byte). Later, VB encoding was found efficient in compressing integer lists. It was first experimented in 
+compressing inverted index lists of word locations in documents \citep{Sch02}. That yielded excellent records, and since then many different approaches 
+have been introduced. 
 
+Modern studies have looked into machine code for VB and applied SIMD (Single instruction, multiple data) architecture to VB \citep{Lem18,Pla15}. The bit 
+operations in VB are simple and therefore modifying the code to use SIMD instructions is simple and the speed improvements are significant. 
 
-
-history and current implementations etc here
- - mainitse IR book, Lem15, Pla18
-
-TODO: a chapter about existing work
-
+TODO: might need 1-2 more chapters
 
 
 \chapter{Directly addressable codes?}
+
+Ability to handle large amounts of data fast is one of the key challenges in the field of search engines. Compressed data structures are applied to fit the 
+data into cache, memory or even hard drive. Direct access to any element is one of the usual requirements in compressed data strutures. It is not possible
+to decode i-th element in known well-performing compression algorithms like Huffman or Lempel-Ziv, because the position of the element depends on the data 
+before it. While VB encoding doesn't natively support direct access, it is achievable with two succinct data structure operations: rank and select.
+
+<explain rank>
+
+<explain select>
+
+<introduce Bri09>
+
+<example of Bri09>
+
+- TODO: find out where rank+select initially come from.
+
 Rank and select are two functions that work on bit arrays. Rank(i) gives the sum of 1 bits from the beginning of the bit array and select(i) gives
 the index of ith 1 bit in the bit array. Both functions work in constant time (citation?) and they require only a few percents of extra space over
 the data. The extra bits $c$ added by variable-byte encoding conveniently create a bit array, where 1's represent the endings of numbers. An effective
@@ -115,14 +129,10 @@ in readable form. Another upside is that functions next(i) and previous(i) are c
 
 - explain how random access is good 
 
-\chapter{Previous Work}
+\chapter{Rearranged VB codes}
 bl
 
-\chapter{Algorithm}
-
- - modifications to basic implementation
- 
-\chapter{Results}
+\chapter{Experimental results}
  - comparison to basic implementation + Bri09
 \begin{table}
 \centering

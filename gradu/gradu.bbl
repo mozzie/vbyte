@@ -39,7 +39,7 @@
     \field{year}{1996}
   \endentry
 
-  \entry{Bri09}{article}{}
+  \entry{Bri09}{inproceedings}{}
     \name{author}{3}{}{%
       {{hash=BNR}{%
          family={Brisaboa},
@@ -60,6 +60,29 @@
          giveni={G\bibinitperiod},
       }}%
     }
+    \name{editor}{3}{}{%
+      {{hash=KJ}{%
+         family={Karlgren},
+         familyi={K\bibinitperiod},
+         given={Jussi},
+         giveni={J\bibinitperiod},
+      }}%
+      {{hash=TJ}{%
+         family={Tarhio},
+         familyi={T\bibinitperiod},
+         given={Jorma},
+         giveni={J\bibinitperiod},
+      }}%
+      {{hash=HH}{%
+         family={Hyyrö},
+         familyi={H\bibinitperiod},
+         given={Heikki},
+         giveni={H\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {Springer Berlin Heidelberg}%
+    }
     \strng{namehash}{BNR+1}
     \strng{fullhash}{BNRLSNG1}
     \field{labelnamesource}{author}
@@ -68,8 +91,61 @@
     \field{labeldatesource}{year}
     \field{sortinit}{B}
     \field{sortinithash}{B}
+    \field{booktitle}{String Processing and Information Retrieval}
+    \field{isbn}{978-3-642-03784-9}
+    \field{pages}{122\bibrangedash 130}
     \field{title}{Directly Addressable Variable-Length Codes}
+    \list{location}{1}{%
+      {Berlin, Heidelberg}%
+    }
     \field{year}{2009}
+  \endentry
+
+  \entry{Lem18}{article}{}
+    \name{author}{3}{}{%
+      {{hash=LD}{%
+         family={Lemire},
+         familyi={L\bibinitperiod},
+         given={Daniel},
+         giveni={D\bibinitperiod},
+      }}%
+      {{hash=KN}{%
+         family={Kurz},
+         familyi={K\bibinitperiod},
+         given={Nathan},
+         giveni={N\bibinitperiod},
+      }}%
+      {{hash=RC}{%
+         family={Rupp},
+         familyi={R\bibinitperiod},
+         given={Christoph},
+         giveni={C\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {Elsevier BV}%
+    }
+    \strng{namehash}{LD+1}
+    \strng{fullhash}{LDKNRC1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{labelyear}{2018}
+    \field{labeldatesource}{year}
+    \field{sortinit}{L}
+    \field{sortinithash}{L}
+    \verb{doi}
+    \verb 10.1016/j.ipl.2017.09.011
+    \endverb
+    \field{issn}{0020-0190}
+    \field{pages}{1–6}
+    \field{title}{Stream VByte: Faster byte-oriented integer compression}
+    \verb{url}
+    \verb http://dx.doi.org/10.1016/j.ipl.2017.09.011
+    \endverb
+    \field{volume}{130}
+    \field{journaltitle}{Information Processing Letters}
+    \field{year}{2018}
+    \warn{\item Invalid format of field 'month'}
   \endentry
 
   \entry{Man08}{book}{}
@@ -103,6 +179,44 @@
     \field{sortinithash}{M}
     \field{title}{Introduction to Information Retrieval}
     \field{year}{2008}
+  \endentry
+
+  \entry{Pla15}{misc}{}
+    \name{author}{3}{}{%
+      {{hash=PJ}{%
+         family={Plaisance},
+         familyi={P\bibinitperiod},
+         given={Jeff},
+         giveni={J\bibinitperiod},
+      }}%
+      {{hash=KN}{%
+         family={Kurz},
+         familyi={K\bibinitperiod},
+         given={Nathan},
+         giveni={N\bibinitperiod},
+      }}%
+      {{hash=LD}{%
+         family={Lemire},
+         familyi={L\bibinitperiod},
+         given={Daniel},
+         giveni={D\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{PJ+1}
+    \strng{fullhash}{PJKNLD1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{labelyear}{2015}
+    \field{labeldatesource}{year}
+    \field{sortinit}{P}
+    \field{sortinithash}{P}
+    \verb{eprint}
+    \verb 1503.07387
+    \endverb
+    \field{title}{Vectorized VByte Decoding}
+    \field{eprinttype}{arXiv}
+    \field{eprintclass}{cs.IR}
+    \field{year}{2015}
   \endentry
 
   \entry{Sal99}{book}{}
