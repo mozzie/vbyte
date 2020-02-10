@@ -105,35 +105,55 @@ TODO: might need 1-2 more chapters
 \chapter{Directly addressable codes?}
 
 Ability to handle large amounts of data fast is one of the key challenges in the field of search engines. Compressed data structures are applied to fit the 
-data into cache, memory or even hard drive. Direct access to any element is one of the usual requirements in compressed data strutures. It is not possible
-to decode i-th element in known well-performing compression algorithms like Huffman or Lempel-Ziv, because the position of the element depends on the data 
-before it. While VB encoding doesn't natively support direct access, it is achievable with two succinct data structure operations: rank and select.
+data into cache, memory or even hard drive. Direct access to any element is one of the usual requirements in compressed data strutures. It is not natively
+possible to decode the i-th element in variable-byte compression algorithms, because the position of the element depends on the preceding data. Direct access 
+is achievable with supporting data structures. An obvious solution is to store each element's location, but that adds a very large overhead which removes the 
+benefit of compression, but for some compression techniques it adds a very large overhead and thus is not applicable.
 
-<explain rank>
+Rank and select are two succinct data structure operations which operate on a bit array B. $Rank_1$(B, i) gives the sum of 1 bits between B[0] and B[i] and 
+$select_1$(b, i) gives the index of i-th 1 bit in B. Both operations work in constant time (citation?) and they require only a few percents of extra 
+space over the bit array B (citation?). Locations of 1 bits in B should represent locations of the items in the encoded data. For most compression algorithms, 
+this requires B to be created in addition to the existing data and the length of B usually has to be close to the length of the data. 
 
-<explain select>
+VB encoding has several advantages with search and rank: it's data is compressed in blocks of equal length which significantly shrinks the length of B. Also 
+the bit array C formed from the continuation bits already stores the locations of items. In this case, $rank_1$(C, i) would give the sum of end bytes up to 
+i-th index and $select_1$(C, i) would give the location of the ending byte of i-th compressed element.
 
-<introduce Bri09>
+\section{DAC via rank}
+Directly addressable codes in VB was first introduced by \citep{Bri09} in 2009. Their solution was to divide chunks in encoded bytes to separate arrays $A_1$ to 
+$A_n$ and then use $rank_1$ to get direct access. For example, if an element needed 3 chunks when encoded, the least significant bits would go to $A_1$, second 
+least significant bits to $A_2$ and the most significant bits would go to $A_3$. When fetching i-th element, getting the first chunk is just fetching $A_1$[i]. 
+If the continuation bit is set at 0 (meaning there are more chunks to this element), getting the correct index for $A_2$ is calculated with $rank_1$($A_1$, i). 
+Small values benefit from this reordering, because the first chunk does not need any calculation. This method causes a small overhead on the data, because each 
+continuation bit array needs a support data structure for rank. 
+
+
+(TODO: check if actually first introduced or just first with rank) 
+
+do rank/select need to be explained better? (or just referenced to)
+
+<introduce Bri09 better?>
 
 <example of Bri09>
 
 - TODO: find out where rank+select initially come from.
 
-Rank and select are two functions that work on bit arrays. Rank(i) gives the sum of 1 bits from the beginning of the bit array and select(i) gives
-the index of ith 1 bit in the bit array. Both functions work in constant time (citation?) and they require only a few percents of extra space over
-the data. The extra bits $c$ added by variable-byte encoding conveniently create a bit array, where 1's represent the endings of numbers. An effective
+ An effective
 version of random access has already been introduced \citep{Bri09}. 
 
-Random access with select query is also possible.  By separating the $c$ bit array and $b$ block array, $b$ contains variable-byte integers 
-in readable form. Another upside is that functions next(i) and previous(i) are conveniently available. Rank implementation has 
+- explain how random access is good ?
 
-- explain how random access is good 
+\chapter{DAC with select query}
 
-\chapter{Rearranged VB codes}
-bl
+Using $select_1$ on the continuation bit array to achieve direct access is more intuitive than using $rank_1$. The element locations are already marked with 1's 
+in $B$ and a single $select_1$ query gets the desired starting point. 
+    
 
 \chapter{Experimental results}
  - comparison to basic implementation + Bri09
+
+ - do we need to support search()?
+
 \begin{table}
 \centering
 \caption{Results with 100k entries (in milliseconds).\label{table:results1}}
@@ -182,10 +202,6 @@ Figure gives an example how to add figures to the document. Remember always to c
 Table gives an example how to report experimental results. Remember always to cite the table in the main text. 
 
 
-\chapter{From tex to pdf}
-
-In Linux, run \texttt{pdflatex filename.tex} and \texttt{bibtex filename.tex} repeatedly until no more warnings are shown. This process can be automised using make-command.
- 
 \chapter{Conclusions\label{chapter:conclusions}}
 
 It is good to conclude with a summary of findings. You can also use separate chapter for discussion and future work. These details you can negotiate with your supervisor.
