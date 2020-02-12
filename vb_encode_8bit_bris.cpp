@@ -7,7 +7,7 @@
 #include <iterator>
 #include <iostream>
 #include "vbyte_helpers.hpp"
-#include <valgrind/callgrind.h>
+//#include <valgrind/callgrind.h>
 
 using namespace std;
 using namespace sdsl;
@@ -83,10 +83,12 @@ int main(int argc, char *argv[]) {
 
   chrono::steady_clock::time_point time_begin = chrono::steady_clock::now();
   uint64_t z = 0;
+  int level = 0;
+  uint64_t val = 0;
   for (vector<unsigned int>::const_iterator i = indices.begin(); i != indices.end(); i++) {
     index = *i;
-    int level = 0;
-    uint64_t val = 0;
+    level = 0;
+    val = 0;
     while(b[level][index] == 0) {
 //      cout << "orig:" << original[*i] << endl;
 //      cout << "l:" <<level << " " << index << endl;
@@ -121,7 +123,7 @@ int main(int argc, char *argv[]) {
     z = z^val;
 
 
-    if(val != original[*i]) {
+    if(0 && val != original[*i]) {
       cout << "Did not match: " << val << " vs " << original[*i] << endl;
       cout << original[*i]%cap << " " << original[*i]/cap << endl;
 //      cout << "index " << index << endl;

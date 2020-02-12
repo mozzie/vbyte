@@ -8,23 +8,19 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {chapter}{\numberline {3}Directly addressable codes?}{5}{chapter.3}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {3.1}DAC via rank}{5}{section.3.1}
+\contentsline {section}{\numberline {3.1}DAC via rank}{6}{section.3.1}
 \defcounter {refsection}{0}\relax 
 \contentsline {chapter}{\numberline {4}DAC with select query}{7}{chapter.4}
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{\numberline {5}Experimental results}{8}{chapter.5}
+\contentsline {chapter}{\numberline {5}Experimental results}{9}{chapter.5}
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{\numberline {6}Conclusion}{10}{chapter.6}
+\contentsline {chapter}{\numberline {6}Conclusion}{11}{chapter.6}
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{\numberline {7}Future work}{11}{chapter.7}
+\contentsline {chapter}{\numberline {7}Future work}{12}{chapter.7}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {7.1}Figures}{11}{section.7.1}
+\contentsline {chapter}{\numberline {8}Conclusions}{13}{chapter.8}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {7.2}Tables}{11}{section.7.2}
-\defcounter {refsection}{0}\relax 
-\contentsline {chapter}{\numberline {8}Conclusions}{12}{chapter.8}
-\defcounter {refsection}{0}\relax 
-\contentsline {chapter}{Bibliography}{13}{section*.4}
+\contentsline {chapter}{Bibliography}{15}{section*.6}
 \defcounter {refsection}{0}\relax 
 \cftpagenumbersoff {chapter}
 \contentsfinish 

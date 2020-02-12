@@ -1,4 +1,5 @@
 # custom
+backups/
 logs/*
 callgrind*
 log_*

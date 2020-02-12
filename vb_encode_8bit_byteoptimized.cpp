@@ -6,6 +6,7 @@
 #include <chrono>
 #include <iterator>
 #include <iostream>
+#include <bitset>
 #include "vbyte_helpers.hpp"
 #include <valgrind/callgrind.h>
 
@@ -41,13 +42,12 @@ int main(int argc, char *argv[]) {
   }
 
   bit_vector::select_1_type sls(&b);
-  
+
   //select_support_mcl<> sls(&b);
 
   cout << "continue-stop vector memory size: " << size_in_bytes(b) + sizeof(bit_vector) << "bytes" <<endl;
   cout << "select support vector memory size: " << size_in_bytes(sls) + sizeof(select_support_mcl<>) << "bytes" << endl;
   cout << "Data vector memory size: " << sizeof(uint8_t) * data.size() << "bytes" << endl;
-
   srand((unsigned) time(0));
 
   cout << "number of numbers: " << original.size() << endl;
@@ -57,34 +57,56 @@ int main(int argc, char *argv[]) {
     indices[i] = rand()%original.size();
   }
 
-  chrono::steady_clock::time_point time_begin = chrono::steady_clock::now();
   uint64_t z = 0;
-  bit_vector::iterator iter;
-  CALLGRIND_START_INSTRUMENTATION;
+//  CALLGRIND_START_INSTRUMENTATION;
+uint64_t *test;
+int end;
+uint8_t diff;
+uint64_t val;
+int begin;
+int bsize = sizeof(b.data()) * 8;
+cout << "bsize" << bsize << endl;
+int shiftamt;
+uint64_t maxuint = 0-1;
+cout << maxuint << endl;
+chrono::steady_clock::time_point time_begin = chrono::steady_clock::now();
+CALLGRIND_START_INSTRUMENTATION;
   for (vector<unsigned int>::const_iterator i = indices.begin(); i != indices.end(); i++) {
     index = *i;
 
-
-    int begin = index == 0 ? 0 : sls(index)+1;
-
+//TODO CALLGRIND THIS
+    begin = index == 0 ? 0 : sls(index)+1;
+    test = (uint64_t *)&iv[begin];
+//    while(*(b.begin()+begin+diff)==0) diff++;
 //    bit_vector::iterator iter = b.begin()+begin;
 //    while(*iter == 0) {
 //      iter++;
 //    }
 //    uint8_t diff = std::distance(b.begin()+begin, iter);
-
-    uint64_t *test = (uint64_t *)&iv[begin];
-
-    int end = sls(index+1);
-    uint8_t diff = end-begin;
-
-    uint64_t val = *test%(256<<(8*diff));
+// TODO: try out with builtin_clz
+//    test = (uint64_t *)&iv[begin];
+    int offset = (begin)%bsize;
+    int block = (begin)/bsize;
+    uint64_t blokki = *(b.data()+block);
+    val = blokki >> offset;
+    if(offset) {
+      uint64_t blokki2 = *(b.data()+block+1);
+      val = val | (blokki2 <<(64-offset));
+    }
+    diff = 1;
+    if ((val & 0x0000000F) == 0) {diff = diff + 4; val = val >> 4;}
+    if ((val & 0x00000003) == 0) {diff = diff + 2; val = val >> 2;}
+    diff = diff -(val & 1);
+//    uint8_t *nro = (uint8_t *)&b[begin];
+//      end = sls(index+1); //TODO this has to be optimized
+//      diff = 1;//end-begin;
+    shiftamt = 56-8*diff;
+    val = *test<<(shiftamt)>>shiftamt;
 
     z = z^val;
 
-
     if(0 && val != original[index]) {
-      cout << "Did not match: " << val << " vs " << original[index] << endl;
+      cout << "Did not match: " << val << " vs "  << original[index]   << endl;
       cout << "index " << index << endl;
     }
   }

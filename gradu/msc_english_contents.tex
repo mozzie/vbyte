@@ -112,12 +112,27 @@ benefit of compression, but for some compression techniques it adds a very large
 
 Rank and select are two succinct data structure operations which operate on a bit array B. $Rank_1$(B, i) gives the sum of 1 bits between B[0] and B[i] and 
 $select_1$(b, i) gives the index of i-th 1 bit in B. Both operations work in constant time (citation?) and they require only a few percents of extra 
-space over the bit array B (citation?). Locations of 1 bits in B should represent locations of the items in the encoded data. For most compression algorithms, 
-this requires B to be created in addition to the existing data and the length of B usually has to be close to the length of the data. 
+space over the bit array B. See Table~\ref{supportsize} for $rank$ and $select$ size requirement approximations on different sizes of bit arrays. 
 
-VB encoding has several advantages with search and rank: it's data is compressed in blocks of equal length which significantly shrinks the length of B. Also 
-the bit array C formed from the continuation bits already stores the locations of items. In this case, $rank_1$(C, i) would give the sum of end bytes up to 
-i-th index and $select_1$(C, i) would give the location of the ending byte of i-th compressed element.
+Locations of 1 bits in B should represent locations of the items in the encoded data. For most compression algorithms, this requires B to be created in addition 
+to the existing data and the length of B usually has to be close to the length of the data. VB encoding has several advantages with search and rank: it's data 
+is compressed in blocks of equal length which significantly shrinks the length of B. Also the bit array C formed from the continuation bits already stores the 
+locations of items. In this case, $rank_1$(C, i) would give the sum of end bytes up to i-th index and $select_1$(C, i) would give the location of the ending 
+byte of i-th compressed element.
+
+\begin{table}
+\centering
+\caption{Size of support structure with SDSL-lite library}
+\begin{tabular}{l||c c c c c c} 
+Structure & TODO & get & multiple & size & calculations & here\\ 
+\hline \hline 
+$rank$ & 34.97 & 49 & 53.04 & 52.18 & 53.08 & 76.21\\
+$select$ & 33.57 & 32.47 & 42.96 & 43.11 & 46.15 & 65.14\\
+\hline
+%
+\end{tabular}
+\label{supportsize}
+\end{table}
 
 \section{DAC via rank}
 Directly addressable codes in VB was first introduced by \citep{Bri09} in 2009. Their solution was to divide chunks in encoded bytes to separate arrays $A_1$ to 
@@ -127,32 +142,69 @@ If the continuation bit is set at 0 (meaning there are more chunks to this eleme
 Small values benefit from this reordering, because the first chunk does not need any calculation. This method causes a small overhead on the data, because each 
 continuation bit array needs a support data structure for rank. 
 
-
-(TODO: check if actually first introduced or just first with rank) 
-
-do rank/select need to be explained better? (or just referenced to)
+do rank/select algorithms + data structures need to be explained better? (or just referenced to)
 
 <introduce Bri09 better?>
 
 <example of Bri09>
-
-- TODO: find out where rank+select initially come from.
-
- An effective
-version of random access has already been introduced \citep{Bri09}. 
 
 - explain how random access is good ?
 
 \chapter{DAC with select query}
 
 Using $select_1$ on the continuation bit array to achieve direct access is more intuitive than using $rank_1$. The element locations are already marked with 1's 
-in $B$ and a single $select_1$ query gets the desired starting point. 
-    
+in $B$ and a single $select_1$ query gets the desired starting point, while the forementioned version \citep{Bri09} used one $rank$ query for each chunk beyond 
+the first. Minimizing the amount of $select$ and $rank$ queries is important. They run in constant time but their impact is huge, because rest of the VB decoding 
+consists of a few bit operations. 
+
+To use $select_1$ with VB, continuation bits need to be separated from chunks to their own bit array and a $select_1$ structure built over it. $Select$(i) returns the
+location of the end byte of i-th element. Therefore the start of j-th element in the block array is at block $b_s$ = $select_1$(j-1) + 1. To simplify calculations even further,
+block sizes of 2, 4 and 8 were used to avoid splitting of blocks between bytes.
+
+The blocks should be stored in an order that, depending on the endianness of the system, when reading an unsigned integer from the block array, the blocks are already 
+in correct order. This way two bit shift operations are enough to extract the desired value.  Assume original element size is 32 bits, block length is b and requested
+element is at position x in the block array and it's compressed within k blocks. Starting byte s of element e is x * b div 8 where div is the integer division. Offset o
+is the remainder of previous division, o = x*b mod 8. 32-bit value e is read from memory from s. Then we bit shift left 32-b*k-o to remove trailing bits and bit shift right
+32-b*k to re-align bits and remove leading bits. 
+
+Simple way to calculate block length k of i-th element is to get $select_1$(i+1) and subtract already calculated start block index from it. This causes a second $select_1$
+query, which is suboptimal. A much faster option is to iterate forward in bit array until next 1 is found. An even faster option is to read an integer from the bit array, fix
+it's offset and count trailing zeros. Traveling the bit array is recommended, since it is very simple to implement and is not noticably slower. See Table~\ref{endblockcall} for 
+detailed times.
+
+\begin{table}
+\centering
+\caption{Time to calculate end blocks}
+\begin{tabular}{l||c c c c c c} 
+Version & Average time over 10Mall \\ 
+\hline \hline 
+select(i+1) & 34.97 \\
+iterate bit array & 34.97 \\
+bit shift magic & 34.97 \\
+\hline
+%
+\end{tabular}
+\label{endblockcall}
+\end{table}
+
+(maybe to future work) Storing bytes in this fashion may have benefits when reading subsequent (fast next() and previous()?) elements. With some modifications, SIMD instructions can possibly be applied.
+
+
+TODO: check if rank query takes less when done on single byte array instead of multiples
+
+ - get actual results of rank vs select support size
+ - take advantage of how data is stored
+
+     
 
 \chapter{Experimental results}
- - comparison to basic implementation + Bri09
+ - data sets
+
+- comparison to basic implementation + Bri09
+  - compare with b=2,4,8
 
  - do we need to support search()?
+ - SIMD?
 
 \begin{table}
 \centering
@@ -192,17 +244,6 @@ $8bit VByte encoding with array$ & 36.13 & 36.83 & 50.58 & 50.73 & 56.93 & 103.1
 \chapter{Future work}
  - something to improve / research?
 
-
-\section{Figures}
-Figure gives an example how to add figures to the document. Remember always to cite the figure in the main text.
-
-
-\section{Tables}
-
-Table gives an example how to report experimental results. Remember always to cite the table in the main text. 
-
-
 \chapter{Conclusions\label{chapter:conclusions}}
 
 It is good to conclude with a summary of findings. You can also use separate chapter for discussion and future work. These details you can negotiate with your supervisor.
-
