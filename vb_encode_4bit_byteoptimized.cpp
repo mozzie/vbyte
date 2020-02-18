@@ -13,9 +13,11 @@
 using namespace std;
 using namespace sdsl;
 
-uint32_t bit_length = 8;
+uint32_t bit_length = 4;
 unsigned int random_accesses = 1000000;
 uint32_t cap = 1<<bit_length;
+int bsize = 64;
+
 int main(int argc, char *argv[]) {
   if(argc<=1) {
     cerr << "Give uint64_t file as parameter" << endl;
@@ -23,8 +25,18 @@ int main(int argc, char *argv[]) {
   }
 
   vector<uint64_t> original = read_data_from_file(argv[1]);
+//  uint8_t *siv  = new uint8_t[8];
+//  cout << (int)siv[0] << " " << (int)siv[1] << " " << (int)siv[2] << " " << (int)siv[3] << endl;
+//  uint64_t *x = (uint64_t *)&siv[0];
+//  *x = original[0]<<4;
+//  cout << *x << endl;
+//  cout << (int)siv[0] << " " << (int)siv[1] << " " << (int)siv[2] << " " << (int)siv[3] << endl;
+//  exit(1);
 
   vector<uint32_t> data;
+
+//  REDO THIS:
+//  calculate bits on the fly and save number to block array intact
 
   for(vector<uint64_t>::const_iterator i = original.begin(); i != original.end(); i++) {
     vector<uint32_t> v = vb_encode_number(*i, cap);
@@ -32,13 +44,35 @@ int main(int argc, char *argv[]) {
     data.insert(data.end(), v.begin(), v.end());
   }
 
+
   bit_vector b(data.size(), 0);
   uint8_t *iv  = new uint8_t[data.size()];
   size_t index = 0;
-
+  size_t num_index = -1;
+  size_t num_p = 0;
+  uint8_t overflow = 0;
   for (vector<uint32_t>::const_iterator i = data.begin(); i != data.end(); i++, index++) {
     b[index] = (*i>>bit_length) & 1;
-    iv[index] = *i;
+    if(b[index] == 1) {
+        uint64_t orig = original[num_p];
+        int diff = index-num_index;
+        int shiftsize = bsize-(diff*bit_length);
+        orig = (orig<<shiftsize)>>shiftsize;
+        num_index++;
+        if(num_index%2 == 1) {
+          if(diff == 16) {
+            overflow = orig>>60;
+          }
+          orig = orig<<4;
+        }
+        uint64_t *x = (uint64_t *)&iv[num_index/2];
+        *x = *x | orig;
+        if(num_index%2 == 1 && diff == 16) {
+            iv[8+(num_index/2)] = overflow;
+        }
+        num_index=index;
+        num_p++;
+    }
   }
 
   bit_vector::select_1_type sls(&b);
@@ -64,7 +98,6 @@ int end;
 uint8_t diff;
 uint64_t val;
 int begin;
-int bsize = sizeof(b.data()) * 8;
 cout << "bsize" << bsize << endl;
 int shiftamt;
 uint64_t maxuint = 0-1;
@@ -74,9 +107,7 @@ CALLGRIND_START_INSTRUMENTATION;
   for (vector<unsigned int>::const_iterator i = indices.begin(); i != indices.end(); i++) {
     index = *i;
 
-//TODO CALLGRIND THIS
     begin = index == 0 ? 0 : sls(index)+1;
-    test = (uint64_t *)&iv[begin];
 //    while(*(b.begin()+begin+diff)==0) diff++;
 //    bit_vector::iterator iter = b.begin()+begin;
 //    while(*iter == 0) {
@@ -85,30 +116,52 @@ CALLGRIND_START_INSTRUMENTATION;
 //    uint8_t diff = std::distance(b.begin()+begin, iter);
 // TODO: try out with builtin_clz
 //    test = (uint64_t *)&iv[begin];
-    int offset = (begin)%bsize;
-    int block = (begin)/bsize;
+    int offset = begin%bsize;
+    int block = begin/bsize;
     uint64_t blokki = *(b.data()+block);
     val = blokki >> offset;
     if(offset) {
       uint64_t blokki2 = *(b.data()+block+1);
       val = val | (blokki2 <<(64-offset));
     }
-    diff = bits::lo(val) +1;
-
+    diff = bits::lo(val) + 1;
+//    if(diff > 15) {
+//      cout <<"LENGTH:" << (int) diff << endl;
+//    }
 //    if ((val & 0x0000000F) == 0) {diff = diff + 4; val = val >> 4;}
 //    if ((val & 0x00000003) == 0) {diff = diff + 2; val = val >> 2;}
 //    diff = diff -(val & 1);
 //    uint8_t *nro = (uint8_t *)&b[begin];
 //      end = sls(index+1); //TODO this has to be optimized
+//      if(end-begin != diff) {
+//        cout << "bl " << (int)diff << " vs " << (end-begin)<< endl;
+//      }
 //      diff = 1;//end-begin;
+    test = (uint64_t *)&iv[begin/2];
+//    cout << bitset<64>(*test) << endl;
+    val = *test;
+    if(begin%2==1) {
+      val>>=bit_length;
+      if(diff==16) {
+        uint64_t *test2 = (uint64_t *)&iv[1+(begin/2)];
+//        cout << bitset<64>(*test2) << endl;
+        val = (val&0x0FFFFFFFFFFFFFFF) | ((*test2>>56)<<60);
+      }
+    }
+
     shiftamt = 64-bit_length*diff;
-    val = *test<<(shiftamt)>>shiftamt;
+    val = val<<(shiftamt)>>shiftamt;
 
     z = z^val;
 
     if(0 && val != original[index]) {
       cout << "Did not match: " << val << " vs "  << original[index]   << endl;
-      cout << "index " << index << endl;
+      cout << "index " << index << ", begin " << begin << endl;
+      cout << bitset<64>(val) << endl;
+      cout << bitset<64>(original[index]) << endl;
+      cout << bitset<64>(original[index+1]) << endl;
+
+      exit(1);
     }
   }
   CALLGRIND_STOP_INSTRUMENTATION;

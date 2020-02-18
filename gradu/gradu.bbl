@@ -101,6 +101,49 @@
     \field{year}{2009}
   \endentry
 
+  \entry{gbmp2014sea}{inproceedings}{}
+    \name{author}{4}{}{%
+      {{hash=GS}{%
+         family={Gog},
+         familyi={G\bibinitperiod},
+         given={Simon},
+         giveni={S\bibinitperiod},
+      }}%
+      {{hash=BT}{%
+         family={Beller},
+         familyi={B\bibinitperiod},
+         given={Timo},
+         giveni={T\bibinitperiod},
+      }}%
+      {{hash=MA}{%
+         family={Moffat},
+         familyi={M\bibinitperiod},
+         given={Alistair},
+         giveni={A\bibinitperiod},
+      }}%
+      {{hash=PM}{%
+         family={Petri},
+         familyi={P\bibinitperiod},
+         given={Matthias},
+         giveni={M\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{GS+1}
+    \strng{fullhash}{GSBTMAPM1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{labelyear}{2014}
+    \field{labeldatesource}{year}
+    \field{sortinit}{G}
+    \field{sortinithash}{G}
+    \field{booktitle}{13th International Symposium on Experimental Algorithms,
+  (SEA 2014)}
+    \field{pages}{326\bibrangedash 337}
+    \field{title}{From Theory to Practice: Plug and Play with Succinct Data
+  Structures}
+    \field{year}{2014}
+  \endentry
+
   \entry{Lem18}{article}{}
     \name{author}{3}{}{%
       {{hash=LD}{%

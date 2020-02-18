@@ -12,7 +12,7 @@
 using namespace std;
 using namespace sdsl;
 
-uint32_t bit_length = 8;
+uint32_t bit_length = 4;
 unsigned int random_accesses = 1000000;
 uint32_t cap = 1<<bit_length;
 int main(int argc, char *argv[]) {
@@ -23,7 +23,7 @@ int main(int argc, char *argv[]) {
 
   vector<uint64_t> original = read_data_from_file(argv[1]);
 
-  std::array<std::vector<uint32_t>, 8> data;
+  std::array<std::vector<uint32_t>, 16> data;
   for(int i = 0; i < 8; i++) {
     vector<uint32_t> vec;
     data[i] = vec;
@@ -41,11 +41,10 @@ int main(int argc, char *argv[]) {
     }
   //  data.insert(data.end(), v.begin(), v.end());
   }
-  bit_vector b[8];
-  std::array<std::vector<uint8_t>, 8> iv;
+  bit_vector b[16];
+  std::array<std::vector<uint8_t>, 16> iv;
   size_t index = 0;
-
-  for(int i = 0; i < 8; i++) {
+  for(int i = 0; i < 16; i++) {
     vector<uint8_t> vec(data[i].size(),0);
     bit_vector bv(data[i].size(), 0);
     index = 0;
@@ -59,12 +58,9 @@ int main(int argc, char *argv[]) {
   }
 
 
-  select_support_mcl<> sls[8];
-  rank_support_v<0> rb[8];
-  for(int i =0; i < 8; i++) {
-    select_support_mcl<> s(&b[i]);
-    rank_support_v<0> r(&b[i]);
-    sls[i] = s;
+  rank_support_v5<0> rb[16];
+  for(int i =0; i < 16; i++) {
+    rank_support_v5<0> r(&b[i]);
     rb[i] = r;
   }
   //select_support_mcl<> sls(&b);

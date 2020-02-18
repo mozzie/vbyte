@@ -97,7 +97,7 @@ compressing inverted index lists of word locations in documents \citep{Sch02}. T
 have been introduced. 
 
 Modern studies have looked into machine code for VB and applied SIMD (Single instruction, multiple data) architecture to VB \citep{Lem18,Pla15}. The bit 
-operations in VB are simple and therefore modifying the code to use SIMD instructions is simple and the speed improvements are significant. 
+operations in VB are simple and therefore modifying the code to use SIMD instructions is straightforward and the speed improvements are significant. 
 
 TODO: might need 1-2 more chapters
 
@@ -165,12 +165,12 @@ The blocks should be stored in an order that, depending on the endianness of the
 in correct order. This way two bit shift operations are enough to extract the desired value.  Assume original element size is 32 bits, block length is b and requested
 element is at position x in the block array and it's compressed within k blocks. Starting byte s of element e is x * b div 8 where div is the integer division. Offset o
 is the remainder of previous division, o = x*b mod 8. 32-bit value e is read from memory from s. Then we bit shift left 32-b*k-o to remove trailing bits and bit shift right
-32-b*k to re-align bits and remove leading bits. 
+32-b*k to re-align bits. 
 
-Simple way to calculate block length k of i-th element is to get $select_1$(i+1) and subtract already calculated start block index from it. This causes a second $select_1$
-query, which is suboptimal. A much faster option is to iterate forward in bit array until next 1 is found. An even faster option is to read an integer from the bit array, fix
-it's offset and count trailing zeros. Traveling the bit array is recommended, since it is very simple to implement and is not noticably slower. See Table~\ref{endblockcall} for 
-detailed times.
+Simple way to calculate block length k of i-th element is to get $select_1$(i+1) and subtract previously calculated start block index from it. This however causes a second 
+$select_1$ query, which costs a lot timewise. A much faster option is to iterate forward in bit array until next 1 is found. An even faster option is to read an integer from 
+the bit array, fix it's offset and count trailing zeros. Traveling the bit array is recommended, since it is very simple to implement and is not noticably slower. See 
+Table~\ref{endblockcall} for detailed times.
 
 \begin{table}
 \centering
@@ -190,53 +190,75 @@ bit shift magic & 34.97 \\
 (maybe to future work) Storing bytes in this fashion may have benefits when reading subsequent (fast next() and previous()?) elements. With some modifications, SIMD instructions can possibly be applied.
 
 
+
 TODO: check if rank query takes less when done on single byte array instead of multiples
 
  - get actual results of rank vs select support size
  - take advantage of how data is stored
 
-     
+ - emphasis on size!
+
+     RANK seems a lot faster, check algorithms!!!
+TODO: try bitvector SD performance + size (select)
+
+TODO: look into select implementation, may need optimizing
 
 \chapter{Experimental results}
- - data sets
 
+The following experiments are run on <at the moment my work Lenovo Thinkpad T480s, TODO run on a server>.
+
+Five different kinds of VB decoding algorithms were used. Bris-implementations are from \citep{Bri09}. Rank and select functions are from
+ \citep{gbmp2014sea}.
+
+\begin{itemize}
+  \item Bris4v5 - Bris implementation with block size 4, using rank support v5
+  \item Bris8 - Bris implementation with block size 8, using rank support v
+  \item Bris8v5 - Bris implementation with block size 8, using rank support v5
+  \item Our4 - Our implementation with block size 4, using select support mcl
+  \item Our8 - Our implementation with block size 8, using select support mcl
+\end{itemize}
+
+Eight kinds of datasets were used. For each number in the dataset, $p$ was randomly selected from $P$ and then number was randomly selected from
+range [0,$2^p$].
+
+\begin{itemize}
+  \item all5M - 5 million numbers, $P$ = {7,8,15,16,23,24,30,31}
+  \item all50M - 50 million numbers, $P$ = {7,8,15,16,23,24,30,31}
+  \item byte5M - 5 million numbers, $P$ = {7,7,7,8,8,8,16,31}
+  \item byte50M - 50 million numbers, $P$ = {7,7,7,8,8,8,16,31}
+  \item small5M - 5 million numbers, $P$ = {3,4,5,6,7,8,16,31}
+  \item small50M - 50 million numbers, $P$ = {3,4,5,6,7,8,16,31}
+  \item vsmall5M - 5 million numbers, $P$ = {2,2,3,3,3,4,4,15}
+  \item vsmall50M - 50 million numbers, $P$ = {2,2,3,3,3,4,4,15}
+\end{itemize}
+
+All algorithms save the data to memory and randomize one million index numbers to an array. The time taken is calculated from looping through the 
+index array and VB decoding the number in the index. The times shown in Table~\ref{table:results1} are an average of 100 such runs.
+
+\begin{table}
+\centering
+\caption{Results in milliseconds, smaller is better.\label{table:results1}}
+\begin{tabular}{l||c c c c c c c c} 
+Experiment & all5M & all50M & byte5M & byte50M & small5M & small50M & vsmall5M & vsmall50M\\ 
+\hline \hline 
+Bris4v5 & 348.41 & 768.83 & 345.16 & 772.84 & 344.54 & 768.45 & 346.86 & 771.61 \\
+Our4    & 127.92 & 263.22 & 127.44 & 263.5  & 127.9  & 262.67 & 127.88 & 262.58 \\
+Bris8   & \textbf{97.75}  & 308.17 & \textbf{98.47}  & 309.6  & \textbf{98.14}  & 307.81 & \textbf{97.99}  & 308.09 \\
+Bris8v5 & 127.83 & 287.46 & 127.7  & 288.63 & 128.14 & 291.32 & 127.99 & 287.84 \\
+Our8    & 103.85 & \textbf{230.16} & 103.92 & \textbf{230.14} & 103.86 & \textbf{230.02} & 103.95 & \textbf{230.6} \\
+
+\hline
+%
+\end{tabular}
+\end{table}
+
+ - use array instead of vector<uint8 t> for bris?
 - comparison to basic implementation + Bri09
   - compare with b=2,4,8
 
  - do we need to support search()?
  - SIMD?
 
-\begin{table}
-\centering
-\caption{Results with 100k entries (in milliseconds).\label{table:results1}}
-\begin{tabular}{l||l c c c c r} 
-Experiment & 128 & 256 & 32768 & 65536 & $2^{24}$ & $2^{32} -1$\\ 
-\hline \hline 
-$7bit VByte encoding$ & 34.97 & 49 & 53.04 & 52.18 & 53.08 & 76.21\\
-$8bit VByte encoding$ & 33.57 & 32.47 & 42.96 & 43.11 & 46.15 & 65.14\\
-$7bit VByte encoding with array$ & 33.39 & 46.85 & 51.24 & 49.03 & 48.93 & 66.84 \\
-$8bit VByte encoding with array$ & 32.52 & 31.88 & 41.54 & 39.94 & 41.15 & 52.86 \\
-
-\hline
-%
-\end{tabular}
-\end{table}
-
-\begin{table}
-\centering
-\caption{Results with 1M entries (in milliseconds).\label{table:results2}}
-\begin{tabular}{l||l c c c c r} 
-Experiment & 128 & 256 & 32768 & 65536 & $2^{24}$ & $2^{32} -1$ \\ 
-\hline \hline 
-$7bit VByte encoding$ & 38.17 & 55.09 & 64.38 & 65.36 & 68.08 & 159 \\
-$8bit VByte encoding$ & 37.09 & 37.75 & 53.44 & 54.6 & 59.32 & 148.7\\
-$7bit VByte encoding with array$ & 38.09 & 55.42 & 62.22 & 61.25 & 71.72 & 135.01\\
-$8bit VByte encoding with array$ & 36.13 & 36.83 & 50.58 & 50.73 & 56.93 & 103.18\\
-
-\hline
-%
-\end{tabular}
-\end{table}
 
 \chapter{Conclusion}
  - here

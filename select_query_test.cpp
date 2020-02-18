@@ -112,27 +112,6 @@ int main(int argc, char *argv[]) {
   cout << "making sure optimizer doesn't steal our code: " << z << endl;
   std::cout << "SLS_MCL Time taken: " << std::chrono::duration_cast<std::chrono::milliseconds> (time_end - time_begin).count() << "[ms]" << std::endl;
 
-  select_support_scan<> sls_scan(&b);
-  time_begin = std::chrono::steady_clock::now();
-  z = 0;
-  for (vector<unsigned int>::const_iterator i = indices.begin(); i != indices.end(); i++) {
-    index = *i;
-
-//    cout << "original index " << index << " has " << original[index];
-    int begin = index == 0 ? 0 : sls_scan(index)+1; //
-    int end = sls_scan(index+1); // takes around 20ms
-    //int end = begin+1;
-//    cout << "Compressed data is between indices " << begin << "-" << end << endl;
-    //uint64_t val = 0;
-    uint64_t *test = (uint64_t *)&iv[begin];
-    uint8_t diff = end-begin;
-    uint64_t val = *test%(256<<(8*diff));
-
-    z = z^val;
-  }
-    time_end = std::chrono::steady_clock::now();
-  cout << "making sure optimizer doesn't steal our code: " << z << endl;
-  std::cout << "SLS_scan Time taken: " << std::chrono::duration_cast<std::chrono::milliseconds> (time_end - time_begin).count() << "[ms]" << std::endl;
 
   bit_vector_il<> b_il(b);
   select_support_il<> sls_il(&b_il);
@@ -156,6 +135,8 @@ int main(int argc, char *argv[]) {
     time_end = std::chrono::steady_clock::now();
   cout << "making sure optimizer doesn't steal our code: " << z << endl;
   std::cout << "SLS_il Time taken: " << std::chrono::duration_cast<std::chrono::milliseconds> (time_end - time_begin).count() << "[ms]" << std::endl;
+  cout << "SLS_IL support vector memory size: " << size_in_bytes(sls_il) + sizeof(select_support_mcl<>) << "bytes" << endl;
+
   sd_vector<> b_sd(b);
   select_support_sd<> sls_sd(&b_sd);
   time_begin = std::chrono::steady_clock::now();
@@ -178,6 +159,8 @@ int main(int argc, char *argv[]) {
     time_end = std::chrono::steady_clock::now();
   cout << "making sure optimizer doesn't steal our code: " << z << endl;
   std::cout << "SLS_sd Time taken: " << std::chrono::duration_cast<std::chrono::milliseconds> (time_end - time_begin).count() << "[ms]" << std::endl;
+  cout << "SLS_sd support vector memory size: " << size_in_bytes(sls_sd) + sizeof(select_support_mcl<>) << "bytes" << endl;
+  cout << "SLS_sd vector memory size: " << size_in_bytes(b_sd) + sizeof(select_support_mcl<>) << "bytes" << endl;
 
 
   rrr_vector<127> b_rrr(b);
@@ -203,6 +186,8 @@ int main(int argc, char *argv[]) {
     time_end = std::chrono::steady_clock::now();
   cout << "making sure optimizer doesn't steal our code: " << z << endl;
   std::cout << "SLS_rrr Time taken: " << std::chrono::duration_cast<std::chrono::milliseconds> (time_end - time_begin).count() << "[ms]" << std::endl;
+  cout << "SLS_rrr support vector memory size: " << size_in_bytes(sls_rrr) + sizeof(select_support_mcl<>) << "bytes" << endl;
+
 
   bit_vector::select_1_type s_1(&b);
 
@@ -226,6 +211,7 @@ int main(int argc, char *argv[]) {
     time_end = std::chrono::steady_clock::now();
   cout << "making sure optimizer doesn't steal our code: " << z << endl;
   std::cout << "s_1 Time taken: " << std::chrono::duration_cast<std::chrono::milliseconds> (time_end - time_begin).count() << "[ms]" << std::endl;
+  cout << "s_1 support vector memory size: " << size_in_bytes(s_1) + sizeof(select_support_mcl<>) << "bytes" << endl;
 
 
   return 0;

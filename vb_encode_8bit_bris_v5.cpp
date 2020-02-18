@@ -59,12 +59,9 @@ int main(int argc, char *argv[]) {
   }
 
 
-  select_support_mcl<> sls[8];
-  rank_support_v<0> rb[8];
+  rank_support_v5<0> rb[8];
   for(int i =0; i < 8; i++) {
-    select_support_mcl<> s(&b[i]);
-    rank_support_v<0> r(&b[i]);
-    sls[i] = s;
+    rank_support_v5<0> r(&b[i]);
     rb[i] = r;
   }
   //select_support_mcl<> sls(&b);
