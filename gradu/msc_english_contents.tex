@@ -127,6 +127,7 @@ byte of i-th compressed element.
 Structure & TODO & get & multiple & size & calculations & here\\ 
 \hline \hline 
 $rank$ & 34.97 & 49 & 53.04 & 52.18 & 53.08 & 76.21\\
+$rank_v5$ & 34.97 & 49 & 53.04 & 52.18 & 53.08 & 76.21\\
 $select$ & 33.57 & 32.47 & 42.96 & 43.11 & 46.15 & 65.14\\
 \hline
 %
@@ -141,11 +142,31 @@ least significant bits to $A_2$ and the most significant bits would go to $A_3$.
 If the continuation bit is set at 0 (meaning there are more chunks to this element), getting the correct index for $A_2$ is calculated with $rank_1$($A_1$, i). 
 Small values benefit from this reordering, because the first chunk does not need any calculation. This method causes a small overhead on the data, because each 
 continuation bit array needs a support data structure for rank. 
+A pseudo code example of DAC with $rank$ is shown in Figure~\ref{bris_pseudo} with block length of 8. In the actual implementation, different block size requires
+extra calculation to get the block location from the byte array. (TODO: do i need to explain how to get the block location?) (TODO: does this need an example?)
 
-do rank/select algorithms + data structures need to be explained better? (or just referenced to)
+\begin{figure}[ht]
+\begin{algorithmic}
+\State $i \gets $ wanted index
+\State $A \gets $ block arrays
+\State $B \gets $ continuation bit arrays
+\State $level \gets 0$
+\State $number \gets 0$
+\While {$B[level][index] = 0$}
+\State $block \gets A[level][index]$
+\State $number \gets number \mathbin{\ll} 8$
+\State $number \gets number \mathbin{|} block$
+\State $index \gets \Call{Rank}{B[level], index}$
+\State $level \gets level + 1$
+\EndWhile
+\State $block \gets A[level][index]$
+\State $number \gets number \mathbin{\ll} 8$
+\State $number \gets number \mathbin{|} block$
 
-<introduce Bri09 better?>
 
+\end{algorithmic}
+\caption{Example pseudo code of DAC with rank by Brisaboa et al.} \label{bris_pseudo}
+\end{figure}
 <example of Bri09>
 
 - explain how random access is good ?
@@ -161,16 +182,18 @@ To use $select_1$ with VB, continuation bits need to be separated from chunks to
 location of the end byte of i-th element. Therefore the start of j-th element in the block array is at block $b_s$ = $select_1$(j-1) + 1. To simplify calculations even further,
 block sizes of 2, 4 and 8 were used to avoid splitting of blocks between bytes.
 
-The blocks should be stored in an order that, depending on the endianness of the system, when reading an unsigned integer from the block array, the blocks are already 
-in correct order. This way two bit shift operations are enough to extract the desired value.  Assume original element size is 32 bits, block length is b and requested
+The data in blocks should be written into memory as it is, so that when reading a large unsigned integer from the block byte array, the bits are already in correct order. 
+This way two bit shift operations are enough to extract the desired value.  Assume original element size is 32 bits, block length is b and requested
 element is at position x in the block array and it's compressed within k blocks. Starting byte s of element e is x * b div 8 where div is the integer division. Offset o
 is the remainder of previous division, o = x*b mod 8. 32-bit value e is read from memory from s. Then we bit shift left 32-b*k-o to remove trailing bits and bit shift right
 32-b*k to re-align bits. 
 
 Simple way to calculate block length k of i-th element is to get $select_1$(i+1) and subtract previously calculated start block index from it. This however causes a second 
-$select_1$ query, which costs a lot timewise. A much faster option is to iterate forward in bit array until next 1 is found. An even faster option is to read an integer from 
-the bit array, fix it's offset and count trailing zeros. Traveling the bit array is recommended, since it is very simple to implement and is not noticably slower. See 
-Table~\ref{endblockcall} for detailed times.
+$select_1$ query, which is costly. A much faster option is to iterate forward in bit array until next 1 is found. An even faster option is to read an integer from 
+the bit array, fix it's offset and count trailing zeros. Traveling the bit array is preferred, since it is very simple to implement and is not noticably slower. See 
+Table~\ref{endblockcall} for detailed times. See Figure~\ref{select_pseudo} for a DAC with $select$ and block size 8. With different block sizes, extra calculation to get 
+the block location from the byte array is needed. In the example, $CalculateLength$ returns the length of the block and $ByteMask(k)$ returns a bit mask for k bytes. $number$
+is a long unsigned integer with a length of multiple bytes.
 
 \begin{table}
 \centering
@@ -189,23 +212,37 @@ bit shift magic & 34.97 \\
 
 (maybe to future work) Storing bytes in this fashion may have benefits when reading subsequent (fast next() and previous()?) elements. With some modifications, SIMD instructions can possibly be applied.
 
+\begin{figure}[ht]
+\begin{algorithmic}
+\State $i \gets $ wanted index
+\State $A \gets $ block byte array
+\State $B \gets $ continuation bit array
+\State $begin \gets \Call{Select}{index}$
+\State $len \gets \Call{CalculateLength}{begin}$
+\State $mask \gets \Call{ByteMask}{len}$
+\State $number \gets A[begin]$ \Comment{read a larger number from the byte array}
+\State $number \gets number \mathbin{\&} mask$ 
 
+
+\end{algorithmic}
+\caption{Pseudo code of DAC with select with block length 8} \label{select_pseudo}
+\end{figure}
 
 TODO: check if rank query takes less when done on single byte array instead of multiples
 
  - get actual results of rank vs select support size
- - take advantage of how data is stored
 
- - emphasis on size!
 
-     RANK seems a lot faster, check algorithms!!!
+ - compare data structure size!
+
+     RANK seems a lot faster on small arrays, check both algorithms!
 TODO: try bitvector SD performance + size (select)
 
 TODO: look into select implementation, may need optimizing
 
 \chapter{Experimental results}
 
-The following experiments are run on <at the moment my work Lenovo Thinkpad T480s, TODO run on a server>.
+The following experiments are run on <at the moment my work Lenovo Thinkpad T480s, TODO run on a server and write specs here>.
 
 Five different kinds of VB decoding algorithms were used. Bris-implementations are from \citep{Bri09}. Rank and select functions are from
  \citep{gbmp2014sea}.
@@ -252,6 +289,8 @@ Our8    & 103.85 & \textbf{230.16} & 103.92 & \textbf{230.14} & 103.86 & \textbf
 \end{tabular}
 \end{table}
 
+ - do cachegrind
+ - 
  - use array instead of vector<uint8 t> for bris?
 - comparison to basic implementation + Bri09
   - compare with b=2,4,8

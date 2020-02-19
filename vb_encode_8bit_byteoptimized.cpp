@@ -70,13 +70,19 @@ int shiftamt;
 uint64_t maxuint = 0-1;
 cout << maxuint << endl;
 chrono::steady_clock::time_point time_begin = chrono::steady_clock::now();
+uint64_t bitmasks[8];
+val = 0;
+for(int i = 0;i < 8; i++) {
+  val = val << 8;
+  val = val | 0xF;
+  bitmasks[i] = val;
+}
 CALLGRIND_START_INSTRUMENTATION;
   for (vector<unsigned int>::const_iterator i = indices.begin(); i != indices.end(); i++) {
     index = *i;
 
 //TODO CALLGRIND THIS
     begin = index == 0 ? 0 : sls(index)+1;
-    test = (uint64_t *)&iv[begin];
 //    while(*(b.begin()+begin+diff)==0) diff++;
 //    bit_vector::iterator iter = b.begin()+begin;
 //    while(*iter == 0) {
@@ -93,7 +99,7 @@ CALLGRIND_START_INSTRUMENTATION;
       uint64_t blokki2 = *(b.data()+block+1);
       val = val | (blokki2 <<(64-offset));
     }
-    diff = bits::lo(val) +1;
+    diff = bits::lo(val); //ADD +1 for shiftamt stuff
 
 //    if ((val & 0x0000000F) == 0) {diff = diff + 4; val = val >> 4;}
 //    if ((val & 0x00000003) == 0) {diff = diff + 2; val = val >> 2;}
@@ -101,9 +107,12 @@ CALLGRIND_START_INSTRUMENTATION;
 //    uint8_t *nro = (uint8_t *)&b[begin];
 //      end = sls(index+1); //TODO this has to be optimized
 //      diff = 1;//end-begin;
-    shiftamt = 64-bit_length*diff;
-    val = *test<<(shiftamt)>>shiftamt;
+//  TODO: try with bit mask!
+//    shiftamt = 64-bit_length*diff;
+//    val = *test<<(shiftamt)>>shiftamt;
+    test = (uint64_t *)&iv[begin];
 
+    val = *test & bitmasks[diff];
     z = z^val;
 
     if(0 && val != original[index]) {
