@@ -8,17 +8,19 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {chapter}{\numberline {3}Directly addressable codes?}{5}{chapter.3}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {3.1}DAC via rank}{6}{section.3.1}
+\contentsline {section}{\numberline {3.1}Rank and Select}{5}{section.3.1}
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{\numberline {4}DAC with select query}{7}{chapter.4}
+\contentsline {section}{\numberline {3.2}DAC via rank}{6}{section.3.2}
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{\numberline {5}Experimental results}{9}{chapter.5}
+\contentsline {chapter}{\numberline {4}DAC with select query}{8}{chapter.4}
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{\numberline {6}Conclusion}{11}{chapter.6}
+\contentsline {chapter}{\numberline {5}Experimental results}{10}{chapter.5}
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{\numberline {7}Future work}{12}{chapter.7}
+\contentsline {chapter}{\numberline {6}Conclusion}{12}{chapter.6}
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{\numberline {8}Conclusions}{13}{chapter.8}
+\contentsline {chapter}{\numberline {7}Future work}{13}{chapter.7}
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{\numberline {8}Conclusions}{14}{chapter.8}
 \defcounter {refsection}{0}\relax 
 \contentsline {chapter}{Bibliography}{15}{section*.7}
 \defcounter {refsection}{0}\relax 

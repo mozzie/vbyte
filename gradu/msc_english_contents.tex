@@ -110,9 +110,10 @@ possible to decode the i-th element in variable-byte compression algorithms, bec
 is achievable with supporting data structures. An obvious solution is to store each element's location, but that adds a very large overhead which removes the 
 benefit of compression, but for some compression techniques it adds a very large overhead and thus is not applicable.
 
+\section{Rank and Select}
 Rank and select are two succinct data structure operations which operate on a bit array B. $Rank_1$(B, i) gives the sum of 1 bits between B[0] and B[i] and 
-$select_1$(b, i) gives the index of i-th 1 bit in B. Both operations work in constant time (citation?) and they require only a few percents of extra 
-space over the bit array B. See Table~\ref{supportsize} for $rank$ and $select$ size requirement approximations on different sizes of bit arrays. 
+$select_1$(b, i) gives the index of i-th 1 bit in B. Both operations work in constant time (citation?). See Table~\ref{supportsize} for $rank$ and $select$ 
+size requirement approximations over the bit array using \citep{gbmp2014sea}.
 
 Locations of 1 bits in B should represent locations of the items in the encoded data. For most compression algorithms, this requires B to be created in addition 
 to the existing data and the length of B usually has to be close to the length of the data. VB encoding has several advantages with search and rank: it's data 
@@ -120,20 +121,31 @@ is compressed in blocks of equal length which significantly shrinks the length o
 locations of items. In this case, $rank_1$(C, i) would give the sum of end bytes up to i-th index and $select_1$(C, i) would give the location of the ending 
 byte of i-th compressed element.
 
+For every 512th bit in the array, rank stores the absolute value of 1's preceding that bit in a superblock. For every 64th bit in a superblock, a relative 
+count is stored. With this setup, an rank can be instantly calculated for every 64th bit. To get rank(i), superblock[i/512] and it's relative value (i\%512)/64 
+are fetched. Then 1 bits from (i-i\%64) to i are counted and added to get the correct sum. For Rankv5, superblock size is 2048 and relative count is stored every
+384th bit. This offers a decent tradeoff between performance and memory usage.
+
+- explain select here
+<<explain rank and select algorithms here>>
+
 \begin{table}
 \centering
-\caption{Size of support structure with SDSL-lite library}
-\begin{tabular}{l||c c c c c c} 
-Structure & TODO & get & multiple & size & calculations & here\\ 
+\caption{Memory requirements of SDSL rank and select data structures\label{table:supportsize}}
+\begin{tabular}{l||c} 
+Structure & Extra size taken\\ 
 \hline \hline 
-$rank$ & 34.97 & 49 & 53.04 & 52.18 & 53.08 & 76.21\\
-$rank_v5$ & 34.97 & 49 & 53.04 & 52.18 & 53.08 & 76.21\\
-$select$ & 33.57 & 32.47 & 42.96 & 43.11 & 46.15 & 65.14\\
+Rank   & \text{25\% of bit array} \\
+Rankv5 & \text{6.25\% of bit array}\\
+Select & \text{8.3\% of bit array}\\
+TODO & see if data quality or size matters here\\
+
 \hline
 %
 \end{tabular}
-\label{supportsize}
 \end{table}
+
+
 
 \section{DAC via rank}
 Directly addressable codes in VB was first introduced by \citep{Bri09} in 2009. Their solution was to divide chunks in encoded bytes to separate arrays $A_1$ to 
@@ -192,8 +204,8 @@ Simple way to calculate block length k of i-th element is to get $select_1$(i+1)
 $select_1$ query, which is costly. A much faster option is to iterate forward in bit array until next 1 is found. An even faster option is to read an integer from 
 the bit array, fix it's offset and count trailing zeros. Traveling the bit array is preferred, since it is very simple to implement and is not noticably slower. See 
 Table~\ref{endblockcall} for detailed times. See Figure~\ref{select_pseudo} for a DAC with $select$ and block size 8. With different block sizes, extra calculation to get 
-the block location from the byte array is needed. In the example, $CalculateLength$ returns the length of the block and $ByteMask(k)$ returns a bit mask for k bytes. $number$
-is a long unsigned integer with a length of multiple bytes.
+the block location from the byte array is needed. In the example, $CalculateLength$ returns the length of the number in blocks and $ByteMask(k)$ returns a bit mask for k bytes. 
+
 
 \begin{table}
 \centering
@@ -242,11 +254,12 @@ TODO: look into select implementation, may need optimizing
 
 \chapter{Experimental results}
 
-The following experiments are run on <at the moment my work Lenovo Thinkpad T480s, TODO run on a server and write specs here>.
+The following experiments are run on <at the moment my work Lenovo Thinkpad T480s, TODO run on a server and write specs here>. The algorithms 
+were implemented with C++ (TODO: list compile tags and whatnot here) using data structures and functions from \citep{gbmp2014sea}. 
 
-Five different kinds of VB decoding algorithms were used. Bris-implementations are from \citep{Bri09}. Rank and select functions are from
- \citep{gbmp2014sea}.
 
+
+Five different kinds of VB decoding algorithms were used. Bris-implementations are from \citep{Bri09}. 
 \begin{itemize}
   \item Bris4v5 - Bris implementation with block size 4, using rank support v5
   \item Bris8 - Bris implementation with block size 8, using rank support v
@@ -288,6 +301,8 @@ Our8    & 103.85 & \textbf{230.16} & 103.92 & \textbf{230.14} & 103.86 & \textbf
 %
 \end{tabular}
 \end{table}
+
+
 
  - do cachegrind
  - 

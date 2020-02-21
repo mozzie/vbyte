@@ -2,6 +2,7 @@
 times
 backups/
 logs/*
+cachegrind*
 callgrind*
 log_*
 compile

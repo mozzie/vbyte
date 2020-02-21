@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2020.2.4)  20 FEB 2020 01:18
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2020.2.4)  22 FEB 2020 00:27
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1755,7 +1755,7 @@ LaTeX Info: Redefining \nameref on input line 186.
 \openout6 = `gradu.out'.
 
 Package hyperref Info: Option `pageanchor' set `true' on input line 190.
-<HY-logo-ml.png, id=47, 270.0489pt x 254.8722pt>
+<HY-logo-ml.png, id=51, 270.0489pt x 254.8722pt>
 File: HY-logo-ml.png Graphic file (type png)
 <use HY-logo-ml.png>
 Package pdftex.def Info: HY-logo-ml.png  used on input line 190.
@@ -1866,41 +1866,43 @@ See the caption package documentation for explanation.
 
 ] [3] [4]
 Chapter 3.
+
+LaTeX Warning: Reference `supportsize' on page 5 undefined on input line 115.
+
 [5
 
-] [6]
+] [6] [7]
 Chapter 4.
-[7
+[8
 
-] [8]
+] [9]
 Chapter 5.
-LaTeX Font Info:    Try loading font information for TS1+lmr on input line 251.
+LaTeX Font Info:    Try loading font information for TS1+lmr on input line 264.
 
 (/usr/share/texmf/tex/latex/lm/ts1lmr.fd
 File: ts1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
-Overfull \hbox (63.81197pt too wide) in paragraph at lines 278--290
+Overfull \hbox (63.81197pt too wide) in paragraph at lines 291--303
  [][] 
  []
 
-[9
+[10
 
-] [10]
+] [11]
 Chapter 6.
-[11
-
-]
-Chapter 7.
 [12
 
 ]
+Chapter 7.
+[13
+
+]
 Chapter 8.
-) [13
-
-] [14
-
+) [14
 
 ] [15
+
+
 
 ] [16
 
@@ -1914,16 +1916,20 @@ Package atveryend Info: Empty hook `AfterLastShipout' on input line 253.
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 253.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 253.
 Package rerunfilecheck Info: File `gradu.out' has not changed.
-(rerunfilecheck)             Checksum: 7CA87A9B72B4167FA07A0984A441E9F0;1263.
+(rerunfilecheck)             Checksum: 9F9E0675B2A5D2B6655E52312702C03E;1399.
+
+
+LaTeX Warning: There were undefined references.
+
 Package logreq Info: Writing requests to 'gradu.run.xml'.
 \openout1 = `gradu.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 31697 strings out of 494267
- 551937 string characters out of 6162829
- 852628 words of memory out of 5000000
- 34439 multiletter control sequences out of 15000+600000
+ 31701 strings out of 494267
+ 551991 string characters out of 6162829
+ 852627 words of memory out of 5000000
+ 34442 multiletter control sequences out of 15000+600000
  77367 words of font info for 71 fonts, out of 8000000 for 9000
  395 hyphenation exceptions out of 8191
  62i,9n,56p,808b,1822s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -1940,10 +1946,10 @@ e/texmf/fonts/type1/public/lm/lmr8.pfb></usr/share/texmf/fonts/type1/public/lm/
 lmri12.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy10.pfb></usr/share/texmf
 /fonts/type1/public/lm/lmtt10.pfb></usr/share/texmf/fonts/type1/public/lm/lmtt1
 2.pfb>
-Output written on gradu.pdf (22 pages, 332261 bytes).
+Output written on gradu.pdf (22 pages, 334188 bytes).
 PDF statistics:
- 271 PDF objects out of 1000 (max. 8388607)
- 229 compressed objects within 3 object streams
- 46 named destinations out of 1000 (max. 500000)
- 98 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 276 PDF objects out of 1000 (max. 8388607)
+ 234 compressed objects within 3 object streams
+ 47 named destinations out of 1000 (max. 500000)
+ 106 words of extra memory for PDF output out of 10000 (max. 10000000)
 
