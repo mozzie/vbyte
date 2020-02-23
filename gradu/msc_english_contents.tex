@@ -106,28 +106,34 @@ TODO: might need 1-2 more chapters
 
 Ability to handle large amounts of data fast is one of the key challenges in the field of search engines. Compressed data structures are applied to fit the 
 data into cache, memory or even hard drive. Direct access to any element is one of the usual requirements in compressed data strutures. It is not natively
-possible to decode the i-th element in variable-byte compression algorithms, because the position of the element depends on the preceding data. Direct access 
-is achievable with supporting data structures. An obvious solution is to store each element's location, but that adds a very large overhead which removes the 
-benefit of compression, but for some compression techniques it adds a very large overhead and thus is not applicable.
+possible to decode the i-th element in variable-byte compression algorithms, because the position of the element depends on the length of the preceding 
+compressed data. 
+
+Direct access is achievable with supporting data structures. An obvious solution is to store the location of each element, but it adds a very large overhead 
+which removes the benefit of compression.
 
 \section{Rank and Select}
 Rank and select are two succinct data structure operations which operate on a bit array B. $Rank_1$(B, i) gives the sum of 1 bits between B[0] and B[i] and 
-$select_1$(b, i) gives the index of i-th 1 bit in B. Both operations work in constant time (citation?). See Table~\ref{supportsize} for $rank$ and $select$ 
-size requirement approximations over the bit array using \citep{gbmp2014sea}.
+$select_1$(b, i) gives the index of i-th 1 bit in B. Both operations work in constant time (citation?). Locations of 1 bits in B should represent locations 
+of the items in the encoded data. For most compression algorithms, this requires B to be created in addition to the existing data and the length of B usually 
+has to be close to the length of the data. VB encoding has several advantages with search and rank: it's data is compressed in blocks of equal length which 
+significantly shrinks the length of B. Also the bit array C formed from the continuation bits already stores the locations of items. In this case, $rank_1$(C, i) 
+would give the sum of end bytes up to i-th index and $select_1$(C, i) would give the location of the ending byte of i-th compressed element.
 
-Locations of 1 bits in B should represent locations of the items in the encoded data. For most compression algorithms, this requires B to be created in addition 
-to the existing data and the length of B usually has to be close to the length of the data. VB encoding has several advantages with search and rank: it's data 
-is compressed in blocks of equal length which significantly shrinks the length of B. Also the bit array C formed from the continuation bits already stores the 
-locations of items. In this case, $rank_1$(C, i) would give the sum of end bytes up to i-th index and $select_1$(C, i) would give the location of the ending 
-byte of i-th compressed element.
+\section{Rank and Select implementation}
+
+The rank and select implementations used in this article are C++ libraries from \citep{gbmp2014sea}. The library has several implementations of both rank and 
+select as well as an implementaion of a bit array. Table~\ref{table:supportsize} has $rank$ and $select$ size requirements of implementations used in this experiment.
+Both rank implementations have a constant space requirement, while select's needed size depends on the number of 1's in the data.
 
 For every 512th bit in the array, rank stores the absolute value of 1's preceding that bit in a superblock. For every 64th bit in a superblock, a relative 
 count is stored. With this setup, an rank can be instantly calculated for every 64th bit. To get rank(i), superblock[i/512] and it's relative value (i\%512)/64 
 are fetched. Then 1 bits from (i-i\%64) to i are counted and added to get the correct sum. For Rankv5, superblock size is 2048 and relative count is stored every
-384th bit. This offers a decent tradeoff between performance and memory usage.
+384th bit, which offers a tradeoff between performance and memory usage.
 
-- explain select here
-<<explain rank and select algorithms here>>
+Select data structure works similarly to rank. Index location of every 4096th set bit is stored in the superblock and location of every 64th set bit is stored 
+relative to the superblock. 
+
 
 \begin{table}
 \centering
@@ -137,11 +143,8 @@ Structure & Extra size taken\\
 \hline \hline 
 Rank   & \text{25\% of bit array} \\
 Rankv5 & \text{6.25\% of bit array}\\
-Select & \text{8.3\% of bit array}\\
-TODO & see if data quality or size matters here\\
-
+Select & \text{~8.3\% of bit array (on average)}\\
 \hline
-%
 \end{tabular}
 \end{table}
 
@@ -149,13 +152,14 @@ TODO & see if data quality or size matters here\\
 
 \section{DAC via rank}
 Directly addressable codes in VB was first introduced by \citep{Bri09} in 2009. Their solution was to divide chunks in encoded bytes to separate arrays $A_1$ to 
-$A_n$ and then use $rank_1$ to get direct access. For example, if an element needed 3 chunks when encoded, the least significant bits would go to $A_1$, second 
-least significant bits to $A_2$ and the most significant bits would go to $A_3$. When fetching i-th element, getting the first chunk is just fetching $A_1$[i]. 
-If the continuation bit is set at 0 (meaning there are more chunks to this element), getting the correct index for $A_2$ is calculated with $rank_1$($A_1$, i). 
-Small values benefit from this reordering, because the first chunk does not need any calculation. This method causes a small overhead on the data, because each 
-continuation bit array needs a support data structure for rank. 
-A pseudo code example of DAC with $rank$ is shown in Figure~\ref{bris_pseudo} with block length of 8. In the actual implementation, different block size requires
-extra calculation to get the block location from the byte array. (TODO: do i need to explain how to get the block location?) (TODO: does this need an example?)
+$A_n$ and then use $rank_0$ to get direct access. If i is the requested index, then $rank_0$($A_k$, i) returns the number of elements preceding i that have 
+continuation bit set at 0. In other words, the number of elements that continue to $A_{k+1}$. 
+
+For example, if an element needed 3 chunks when encoded, the least significant bits would go to $A_1$, second least significant bits to $A_2$ and the most significant 
+bits would go to $A_3$. When fetching i-th element, getting the first chunk is just fetching $A_1$[i]. If the continuation bit is set at 0 (meaning there are more chunks 
+to this element), getting the correct index for $A_2$ is calculated with $rank_0$($A_1$, i). A pseudo code example of DAC with $rank$ is shown in Figure~\ref{bris_pseudo} 
+with block length of 8. (TODO: example needed?)
+
 
 \begin{figure}[ht]
 \begin{algorithmic}
@@ -174,14 +178,10 @@ extra calculation to get the block location from the byte array. (TODO: do i nee
 \State $block \gets A[level][index]$
 \State $number \gets number \mathbin{\ll} 8$
 \State $number \gets number \mathbin{|} block$
-
-
 \end{algorithmic}
 \caption{Example pseudo code of DAC with rank by Brisaboa et al.} \label{bris_pseudo}
 \end{figure}
-<example of Bri09>
 
-- explain how random access is good ?
 
 \chapter{DAC with select query}
 
@@ -192,35 +192,20 @@ consists of a few bit operations.
 
 To use $select_1$ with VB, continuation bits need to be separated from chunks to their own bit array and a $select_1$ structure built over it. $Select$(i) returns the
 location of the end byte of i-th element. Therefore the start of j-th element in the block array is at block $b_s$ = $select_1$(j-1) + 1. To simplify calculations even further,
-block sizes of 2, 4 and 8 were used to avoid splitting of blocks between bytes.
+block sizes of 4 and 8 were used to avoid splitting of blocks between bytes.
 
-The data in blocks should be written into memory as it is, so that when reading a large unsigned integer from the block byte array, the bits are already in correct order. 
-This way two bit shift operations are enough to extract the desired value.  Assume original element size is 32 bits, block length is b and requested
-element is at position x in the block array and it's compressed within k blocks. Starting byte s of element e is x * b div 8 where div is the integer division. Offset o
-is the remainder of previous division, o = x*b mod 8. 32-bit value e is read from memory from s. Then we bit shift left 32-b*k-o to remove trailing bits and bit shift right
-32-b*k to re-align bits. 
+Unlike the standard VB encoding, the continuation bits are not in the middle of the data blocks. The compressed number can be read from the memory block and concatenation of blocks
+is not needed. The data in blocks is be written into memory as it is, so that when reading a large unsigned integer from the block byte array, the bits are already in correct order. 
 
-Simple way to calculate block length k of i-th element is to get $select_1$(i+1) and subtract previously calculated start block index from it. This however causes a second 
-$select_1$ query, which is costly. A much faster option is to iterate forward in bit array until next 1 is found. An even faster option is to read an integer from 
-the bit array, fix it's offset and count trailing zeros. Traveling the bit array is preferred, since it is very simple to implement and is not noticably slower. See 
-Table~\ref{endblockcall} for detailed times. See Figure~\ref{select_pseudo} for a DAC with $select$ and block size 8. With different block sizes, extra calculation to get 
-the block location from the byte array is needed. In the example, $CalculateLength$ returns the length of the number in blocks and $ByteMask(k)$ returns a bit mask for k bytes. 
+If the original element size is 32 bits and the data was compressed to k blocks of length b. The starting byte s of the element is $select$(i) * b div 8 where div is the integer division. 
+Offset o is the remainder of previous division, o = x*b mod 8. The 32-bit value is read from memory from byte location s. Then bit shift left for 32-b*k-o is applied to remove trailing 
+bits and bit shift right 32-b*k to re-align bits. If block size is one byte, offset calculation is not needed and thus the process is slightly faster.
 
-
-\begin{table}
-\centering
-\caption{Time to calculate end blocks}
-\begin{tabular}{l||c c c c c c} 
-Version & Average time over 10Mall \\ 
-\hline \hline 
-select(i+1) & 34.97 \\
-iterate bit array & 34.97 \\
-bit shift magic & 34.97 \\
-\hline
-%
-\end{tabular}
-\label{endblockcall}
-\end{table}
+The intuitive way to calculate block length k of i-th element is from $select_1$(i+1) and subtract previously calculated start block index from it. This however causes a second 
+$select_1$ query, which is costly. A much faster option is to iterate forward in bit array until the next 1. Alternatively, the block length can be calculated by reading an integer 
+from the bit array, aligning it's offset and counting the trailing zeros. Figure~\ref{select_pseudo} contains an example of VB encoding with DAC with $select$ and block size 8. 
+Different block sizes need extra calculation to get the block location from the byte array. In the example, $CalculateLength$ returns the length of the number in blocks and $ByteMask(k)$ returns 
+a bit mask for k bytes. 
 
 (maybe to future work) Storing bytes in this fashion may have benefits when reading subsequent (fast next() and previous()?) elements. With some modifications, SIMD instructions can possibly be applied.
 
@@ -240,14 +225,6 @@ bit shift magic & 34.97 \\
 \caption{Pseudo code of DAC with select with block length 8} \label{select_pseudo}
 \end{figure}
 
-TODO: check if rank query takes less when done on single byte array instead of multiples
-
- - get actual results of rank vs select support size
-
-
- - compare data structure size!
-
-     RANK seems a lot faster on small arrays, check both algorithms!
 TODO: try bitvector SD performance + size (select)
 
 TODO: look into select implementation, may need optimizing
@@ -312,10 +289,6 @@ Our8    & 103.85 & \textbf{230.16} & 103.92 & \textbf{230.14} & 103.86 & \textbf
 
  - do we need to support search()?
  - SIMD?
-
-
-\chapter{Conclusion}
- - here
 
 \chapter{Future work}
  - something to improve / research?
