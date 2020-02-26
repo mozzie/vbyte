@@ -3,50 +3,62 @@ Enormous datasets are a common case in today's applications. Compressing the dat
 naturally decrease memory requirements but also are faster when compressed data is read from disk \citep{Zob95}.
 
 One of the leading methods of data compression is variable-length coding \citep{Sal99}, where frequent sequences of data
-are represented with shorter codewords. Because the sequences of data have different lenghts when compressed, it is 
-not trivial to determine the exact location of a certain element. If this is required, the usual data compression algorithms are
-inefficient. Fortunately this is not a requirement compression algorithms usually need to fulfill. 
+are represented with shorter codewords. Because the sequences of data have different lengths when compressed, it is 
+not trivial to determine the exact location of a certain element in the compressed data. If this is required, the usual 
+data compression algorithms are inefficient. Fortunately this is not a requirement compression algorithms usually need to fulfill. However, 
+random access of compressed data is useful in compressed data structures. It saves storage space, bandwith and increases the likelihood
+of data already being in cache \citep{Sch02}. In most compression methods, the only way to do this is to decompress data from the beginning. 
 
-However, random access of compressed data is needed in compressed data structures. In most compression methods, the only way 
-to this is to decompress data from the beginning. An integer compressing method with fast random access is explained later and compared
-existing state-of-the-art methods.
+A variable-byte encoding based integer compression method with fast random access was first introduced by \citep{Bri09}. They used clever block 
+reorganizing and $rank$ data structure to achieve random access. Their solution is currently the only published solution for the problem and it 
+has been widely adopted.
+
+An alternative solution with $select$ data structure is shown later. (TODO: refer to results)
+
+--contributions?
+
+
+
 
 \chapter{Variable-byte encoding}
 
-Variable-byte (VB) encoding \citep{Wil99} is a method of compressing integers via omitting leading zero bits. In normal data sets, it loses in 
-compression performance to generic algorithms like Huffman encoding or Lempel-Ziv encoding, but in comparison it's faster to decode \citep{Bri09} 
-and sometimes preferred due to it's simplicity. allows constant time random access. This is later explained in (TODO: link to later chapter). 
+Variable-byte (VB) encoding \citep{Wil99} is a method for compressing integers via omitting leading zero bits that would be present in a longer fixed 
+width word. In normal data sets, VB encoding loses in compression performance to generic algorithms like Huffman encoding or Lempel-Ziv encoding, but 
+is generally faster to decode \citep{Bri09} and sometimes preferred due to its simplicity. As later shown in Chapter~\ref{chapter:DAC}, constant time 
+random access is possible with VB encoding.
 
 A good data set for VB encoding is a list of mostly small numbers with a need to support larger ones. A search engine may use an inverted index of 
 words in documents. For each word, a list of document IDs where the word appears is stored. It may also store locations of the word in document for 
-advanced search purposes. Usually these lists are preprocessed and stored as an inverted index or gaps, storing the difference to previous number instead of the actual 
-number \citep{Man08}. Common words have a lot of entries in these lists, but because of gap storing the numbers are small. In contrast, rare words 
-have only a few entries but the numbers stored are larger. These lists are excellent data sets for VB encoding. 
+advanced search purposes. Usually these lists are preprocessed and stored as an inverted index or gaps, storing the difference to previous number 
+instead of the actual number \citep{Man08}. Common words have a lot of entries in these lists, but because of gap storing the numbers are small. 
+In contrast, rare words have only a few entries but the numbers stored are larger. These lists are excellent data sets for VB encoding. 
+
+Variable-byte encoding originates from and is used in MIDI music file \citep{Mid96} and several applications have a similar implementation of VB. Apache 
+Lucene has vInt datatype. Wireless Application Protocol has a variable length unsigned integer uintvar, Google Protocol Buffers has a Base 128 Varint \citep{GooPB},
+ Microsoft .Net framework offers "7BitEncodedInt" in BinaryReader and BinaryWriter classes and IBM DB2 has a variable byte  \citep{Bha09}.
+
+Elias Delta and Gamma codes \citep{Eli75} are popular encoding methods for forementioned data sets. They assign short bit array codes to small numbers, 
+which allows them to outperform VB encoding on small number datasets \Citep{Wil99}. Elias Delta and Gamma codes can't support fast random access efficiently because
+of their changing code length.
 
 VB encoding splits each integer into blocks of $b$ bits and adds a continuation bit to the block to form chunks of length $1+b$. The extra bit is set to 1 only
 on the block containing the least significant bits of the integer. This information is used in decoding to signal if next chunk continues the current 
 integer. For example, let's assume $b = 4$ and let $n = 42$ be a 16 bit unsigned integer. The standard 8-bit representation of $n$ is 
 \texttt{00000000 00101000}. When split to blocks of $b$ bits, it becomes \texttt{0000 0000 0010 1000}. Empty blocks are omitted and continuation bits 
 are added to the remaining blocks. The result is \texttt{00010 11000}, which is the compressed data.
-
-\medskip
-\noindent\begin{minipage}{.5\textwidth}
+\begin{figure}[ht]
 \begin{algorithmic}
 \Function{VBEncodeNumber}{$n$}
 \State $bytes\gets $ list
 \While{true}
-\State $bytes$.prepend($n \bmod 128$)
+\State \Call{prepend}{bytes,$n \bmod 128$}
 \If{$n < 128$} \State break \EndIf
 \State $n\gets n$ div $128$
 \EndWhile
-\State $bytes$.last() += $128$
+\State $bytes$[\Call{len}{$bytes$}-1] += $128$
 \State \textbf{return} bytes
 \EndFunction
-\captionof{figure}{VByte encoding} \label{vbyte_enc}
-\end{algorithmic}
-\end{minipage}%
-\begin{minipage}{.5\textwidth}
-\begin{algorithmic}
+
 \Function{VBEncode}{$numbers$}
 \State $bytestream\gets $ list
 \ForEach {$n \in numbers$}
@@ -55,9 +67,10 @@ are added to the remaining blocks. The result is \texttt{00010 11000}, which is 
 \EndFor
 \State \textbf{return} bytestream
 \EndFunction
+
 \end{algorithmic}
-\end{minipage}
-\medskip 
+\captionof{figure}{VByte encoding} \label{vbyte_enc}
+\end{figure}
 
 Decoding is essentially just reversing the encoding steps: chunks are read until a chunk with 1 as continuation bit is found. Continuation bits 
 are removed from all the chunks and the blocks are concatenated to form the original number. As in the previous example, $b = 4$, encoded message 
@@ -102,7 +115,7 @@ operations in VB are simple and therefore modifying the code to use SIMD instruc
 TODO: might need 1-2 more chapters
 
 
-\chapter{Directly addressable codes?}
+\chapter{Directly addressable codes} \label{chapter:DAC}
 
 Ability to handle large amounts of data fast is one of the key challenges in the field of search engines. Compressed data structures are applied to fit the 
 data into cache, memory or even hard drive. Direct access to any element is one of the usual requirements in compressed data strutures. It is not natively
@@ -281,6 +294,7 @@ Our8    & 103.85 & \textbf{230.16} & 103.92 & \textbf{230.14} & 103.86 & \textbf
 
 
 
+ - Run with 32 bit values, see what happens (some operations may be 32b?)
  - do cachegrind
  - 
  - use array instead of vector<uint8 t> for bris?
@@ -289,6 +303,8 @@ Our8    & 103.85 & \textbf{230.16} & 103.92 & \textbf{230.14} & 103.86 & \textbf
 
  - do we need to support search()?
  - SIMD?
+
+ - $rank$ vs rank? should formulas have a specific style?
 
 \chapter{Future work}
  - something to improve / research?
