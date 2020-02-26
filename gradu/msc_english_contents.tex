@@ -49,7 +49,7 @@ are added to the remaining blocks. The result is \texttt{00010 11000}, which is 
 
 \begin{figure}[ht]
 \centering
-  \begin{minipage}{.7\linewidth}
+  \begin{minipage}{0.5\linewidth}
 \begin{algorithmic}[H]
 \Function{VBEncodeNumber}{$n$}
 \State $bytes\gets $ list
@@ -66,8 +66,8 @@ are added to the remaining blocks. The result is \texttt{00010 11000}, which is 
 \Function{VBEncode}{$numbers$}
 \State $bytestream\gets $ list
 \ForEach {$n \in numbers$}
-\State $bytes \gets$ VBEncodeNumber($n$)
-\State $bytestream$.extend($bytes$)
+\State $bytes \gets$ \Call{VBEncodeNumber}{$n$}
+\State \Call{extend}{$bytestream$,$bytes$}
 \EndFor
 \State \textbf{return} bytestream
 \EndFunction
