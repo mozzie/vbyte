@@ -46,8 +46,11 @@ on the block containing the least significant bits of the integer. This informat
 integer. For example, let's assume $b = 4$ and let $n = 42$ be a 16 bit unsigned integer. The standard 8-bit representation of $n$ is 
 \texttt{00000000 00101000}. When split to blocks of $b$ bits, it becomes \texttt{0000 0000 0010 1000}. Empty blocks are omitted and continuation bits 
 are added to the remaining blocks. The result is \texttt{00010 11000}, which is the compressed data.
+
 \begin{figure}[ht]
-\begin{algorithmic}
+\centering
+  \begin{minipage}{.7\linewidth}
+\begin{algorithmic}[H]
 \Function{VBEncodeNumber}{$n$}
 \State $bytes\gets $ list
 \While{true}
@@ -58,7 +61,8 @@ are added to the remaining blocks. The result is \texttt{00010 11000}, which is 
 \State $bytes$[\Call{len}{$bytes$}-1] += $128$
 \State \textbf{return} bytes
 \EndFunction
-
+\medskip
+\medskip
 \Function{VBEncode}{$numbers$}
 \State $bytestream\gets $ list
 \ForEach {$n \in numbers$}
@@ -69,6 +73,7 @@ are added to the remaining blocks. The result is \texttt{00010 11000}, which is 
 \EndFunction
 
 \end{algorithmic}
+\end{minipage}
 \captionof{figure}{VByte encoding} \label{vbyte_enc}
 \end{figure}
 
