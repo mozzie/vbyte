@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2020.2.4)  26 FEB 2020 17:48
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2020.2.4)  28 FEB 2020 12:47
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1537,6 +1537,30 @@ s
 \f@nch@O@olf=\skip122
 \f@nch@O@orf=\skip123
 )
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/libraries/pgflibraryarrows.meta.
+code.tex
+File: pgflibraryarrows.meta.code.tex 2015/05/13 v3.0.1a (rcs-revision 1.13)
+\pgfarrowinset=\dimen192
+\pgfarrowlength=\dimen193
+\pgfarrowwidth=\dimen194
+\pgfarrowlinewidth=\dimen195
+)
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tik
+zlibraryscopes.code.tex
+File: tikzlibraryscopes.code.tex 2008/06/27 v3.0.1a (rcs-revision 1.2)
+)
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tik
+zlibrarychains.code.tex
+File: tikzlibrarychains.code.tex 2013/07/15 v3.0.1a (rcs-revision 1.6)
+
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tik
+zlibrarypositioning.code.tex
+File: tikzlibrarypositioning.code.tex 2008/10/06 v3.0.1a (rcs-revision 1.7)
+))
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tik
+zlibrarymatrix.code.tex
+File: tikzlibrarymatrix.code.tex 2013/07/12 v3.0.1a (rcs-revision 1.4)
+)
 (/usr/share/texlive/texmf-dist/tex/latex/algorithms/algorithm.sty
 Package: algorithm 2009/08/24 v0.1 Document Style `algorithm' - floating enviro
 nment
@@ -1572,17 +1596,17 @@ Document Style algorithmicx 1.2 - a greatly improved `algorithmic' style
 )
 Document Style - pseudocode environments for use with the `algorithmicx' style
 )
-Package hyperref Info: Option `unicode' set `true' on input line 182.
+Package hyperref Info: Option `unicode' set `true' on input line 183.
  (/usr/share/texlive/texmf-dist/tex/latex/hyperref/puenc.def
 File: puenc.def 2018/02/06 v6.86b Hyperref: PDF Unicode definition (HO)
 Now handling font encoding PU ...
 ... no UTF-8 mapping file for font encoding PU
 )
-Package hyperref Info: Option `pdftoolbar' set `true' on input line 182.
-Package hyperref Info: Option `pdfmenubar' set `true' on input line 182.
-Package hyperref Info: Option `pdffitwindow' set `false' on input line 182.
-Package hyperref Info: Option `pdfnewwindow' set `true' on input line 182.
-Package hyperref Info: Option `colorlinks' set `true' on input line 182.
+Package hyperref Info: Option `pdftoolbar' set `true' on input line 183.
+Package hyperref Info: Option `pdfmenubar' set `true' on input line 183.
+Package hyperref Info: Option `pdffitwindow' set `false' on input line 183.
+Package hyperref Info: Option `pdfnewwindow' set `true' on input line 183.
+Package hyperref Info: Option `colorlinks' set `true' on input line 183.
 Package csquotes Info: Checking for multilingual support...
 Package csquotes Info: ... found 'babel' package.
 Package csquotes Info: Adjusting default style.
@@ -1607,31 +1631,31 @@ File: swedish.lbx 2017/12/19 v3.10 biblatex localization (PK/JW/AB)
 ) (./gradu.aux (./msc_english_contents.aux))
 \openout1 = `gradu.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 186.
-LaTeX Font Info:    ... okay on input line 186.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 186.
-LaTeX Font Info:    ... okay on input line 186.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 186.
-LaTeX Font Info:    ... okay on input line 186.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 186.
-LaTeX Font Info:    ... okay on input line 186.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 186.
-LaTeX Font Info:    ... okay on input line 186.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 186.
-LaTeX Font Info:    ... okay on input line 186.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 186.
-LaTeX Font Info:    Try loading font information for TS1+cmr on input line 186.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 187.
+LaTeX Font Info:    ... okay on input line 187.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 187.
+LaTeX Font Info:    ... okay on input line 187.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 187.
+LaTeX Font Info:    ... okay on input line 187.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 187.
+LaTeX Font Info:    ... okay on input line 187.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 187.
+LaTeX Font Info:    ... okay on input line 187.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 187.
+LaTeX Font Info:    ... okay on input line 187.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 187.
+LaTeX Font Info:    Try loading font information for TS1+cmr on input line 187.
 
 
 (/usr/share/texlive/texmf-dist/tex/latex/base/ts1cmr.fd
 File: ts1cmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
-LaTeX Font Info:    ... okay on input line 186.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 186.
-LaTeX Font Info:    ... okay on input line 186.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 186.
-LaTeX Font Info:    ... okay on input line 186.
-LaTeX Font Info:    Try loading font information for OT1+lmr on input line 186.
+LaTeX Font Info:    ... okay on input line 187.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 187.
+LaTeX Font Info:    ... okay on input line 187.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 187.
+LaTeX Font Info:    ... okay on input line 187.
+LaTeX Font Info:    Try loading font information for OT1+lmr on input line 187.
 
 
 (/usr/share/texmf/tex/latex/lm/ot1lmr.fd
@@ -1674,20 +1698,20 @@ File: ot1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
 
 Package lastpage Info: Please have a look at the pageslts package at
 (lastpage)             https://www.ctan.org/pkg/pageslts
-(lastpage)             ! on input line 186.
+(lastpage)             ! on input line 187.
 (./translator-UHCSthesis-coverpage-dictionary-English.dict
 Dictionary: translator-UHCSthesis-coverpage-dictionary, Language: English 
 )
 (/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count367
-\scratchdimen=\dimen192
+\scratchdimen=\dimen196
 \scratchbox=\box43
 \nofMPsegments=\count368
 \nofMParguments=\count369
 \everyMPshowfont=\toks40
 \MPscratchCnt=\count370
-\MPscratchDim=\dimen193
+\MPscratchDim=\dimen197
 \MPnumerator=\count371
 \makeMPintoPDFobject=\count372
 \everyMPtoPDFconversion=\toks41
@@ -1734,10 +1758,10 @@ Package biblatex Warning: BibTeX reported the following issues
 (biblatex)                - Invalid format of field 'month'.
 
 )
-Package biblatex Info: Reference section=0 on input line 186.
-Package biblatex Info: Reference segment=0 on input line 186.
+Package biblatex Info: Reference section=0 on input line 187.
+Package biblatex Info: Reference segment=0 on input line 187.
 \AtBeginShipoutBox=\box44
-Package hyperref Info: Link coloring ON on input line 186.
+Package hyperref Info: Link coloring ON on input line 187.
  (/usr/share/texlive/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2016/05/21 v2.44 Cross-referencing by name of section
 
@@ -1746,19 +1770,19 @@ Package: gettitlestring 2016/05/16 v1.5 Cleanup title references (HO)
 )
 \c@section@level=\count377
 )
-LaTeX Info: Redefining \ref on input line 186.
-LaTeX Info: Redefining \pageref on input line 186.
-LaTeX Info: Redefining \nameref on input line 186.
+LaTeX Info: Redefining \ref on input line 187.
+LaTeX Info: Redefining \pageref on input line 187.
+LaTeX Info: Redefining \nameref on input line 187.
 
 (./gradu.out) (./gradu.out)
 \@outlinefile=\write6
 \openout6 = `gradu.out'.
 
-Package hyperref Info: Option `pageanchor' set `true' on input line 190.
+Package hyperref Info: Option `pageanchor' set `true' on input line 191.
 <HY-logo-ml.png, id=51, 270.0489pt x 254.8722pt>
 File: HY-logo-ml.png Graphic file (type png)
 <use HY-logo-ml.png>
-Package pdftex.def Info: HY-logo-ml.png  used on input line 190.
+Package pdftex.def Info: HY-logo-ml.png  used on input line 191.
 (pdftex.def)             Requested size: 142.26378pt x 134.2688pt.
  [-999
 
@@ -1767,68 +1791,68 @@ arning (ext4): destination with the same identifier (name{page.}) has been alre
 ady used, duplicate ignored
 <to be read again> 
                    \relax 
-l.200 \begin{abstract}
+l.201 \begin{abstract}
                        [-998]
-LaTeX Font Info:    Try loading font information for OML+lmm on input line 200.
+LaTeX Font Info:    Try loading font information for OML+lmm on input line 201.
 
  (/usr/share/texmf/tex/latex/lm/omllmm.fd
 File: omllmm.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
-LaTeX Font Info:    Try loading font information for OMS+lmsy on input line 200
+LaTeX Font Info:    Try loading font information for OMS+lmsy on input line 201
 .
 
 (/usr/share/texmf/tex/latex/lm/omslmsy.fd
 File: omslmsy.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
-LaTeX Font Info:    Try loading font information for OMX+lmex on input line 200
+LaTeX Font Info:    Try loading font information for OMX+lmex on input line 201
 .
 
 (/usr/share/texmf/tex/latex/lm/omxlmex.fd
 File: omxlmex.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <12> on input line 200.
+(Font)              <12> on input line 201.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <8> on input line 200.
+(Font)              <8> on input line 201.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <6> on input line 200.
-LaTeX Font Info:    Try loading font information for U+lasy on input line 200.
+(Font)              <6> on input line 201.
+LaTeX Font Info:    Try loading font information for U+lasy on input line 201.
 
 (/usr/share/texlive/texmf-dist/tex/latex/base/ulasy.fd
 File: ulasy.fd 1998/08/17 v2.2e LaTeX symbol font definitions
 )
-LaTeX Font Info:    Try loading font information for U+msa on input line 200.
+LaTeX Font Info:    Try loading font information for U+msa on input line 201.
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 200.
+LaTeX Font Info:    Try loading font information for U+msb on input line 201.
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-LaTeX Font Info:    Try loading font information for OT1+lmtt on input line 205
+LaTeX Font Info:    Try loading font information for OT1+lmtt on input line 206
 .
 
 (/usr/share/texmf/tex/latex/lm/ot1lmtt.fd
 File: ot1lmtt.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <10> on input line 205.
+(Font)              <10> on input line 206.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <7> on input line 205.
+(Font)              <7> on input line 206.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <5> on input line 205.
+(Font)              <5> on input line 206.
 pdfTeX warning (ext4): destination with the same identifier (name{page.}) has b
 een already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.216 \newpage
+l.217 \newpage
                [-997]pdfTeX warning (ext4): destination with the same identifie
 r (name{page.}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.217 \mytableofcontents
+l.218 \mytableofcontents
                          [-996
 
 ] (./gradu.toc)
@@ -1839,12 +1863,12 @@ pdfTeX warning (ext4): destination with the same identifier (name{page.}) has b
 een already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.217 \mytableofcontents
+l.218 \mytableofcontents
                          [-995]pdfTeX warning (ext4): destination with the same
  identifier (name{page.}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.217 \mytableofcontents
+l.218 \mytableofcontents
                          [-994
 
 ]
@@ -1863,18 +1887,24 @@ Chapter 2.
 Chapter 3.
 [5
 
-] [6] [7]
+]
+<bris.png, id=162, 901.3675pt x 467.7475pt>
+File: bris.png Graphic file (type png)
+<use bris.png>
+Package pdftex.def Info: bris.png  used on input line 193.
+(pdftex.def)             Requested size: 360.5406pt x 187.09567pt.
+ [6] [7 <./bris.png>]
 Chapter 4.
 [8
 
 ] [9]
 Chapter 5.
-LaTeX Font Info:    Try loading font information for TS1+lmr on input line 259.
+LaTeX Font Info:    Try loading font information for TS1+lmr on input line 330.
 
 (/usr/share/texmf/tex/latex/lm/ts1lmr.fd
 File: ts1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
-Overfull \hbox (63.81197pt too wide) in paragraph at lines 286--298
+Overfull \hbox (63.81197pt too wide) in paragraph at lines 357--369
  [][] 
  []
 
@@ -1899,29 +1929,29 @@ Chapter 7.
 AED: lastpage setting LastPage
 ***AED Number of Appendices 17
 ***AED Number of pages 15\translate {pp}
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 253.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 253.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 254.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 254.
 (./gradu.aux (./msc_english_contents.aux))
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 253.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 253.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 254.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 254.
 Package rerunfilecheck Info: File `gradu.out' has not changed.
-(rerunfilecheck)             Checksum: 5BD185AD5FEA038ACE9C87831CA536AA;1514.
+(rerunfilecheck)             Checksum: 29920E7DAFB67F21BD0067F83FC6FD93;1515.
 Package logreq Info: Writing requests to 'gradu.run.xml'.
 \openout1 = `gradu.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 31718 strings out of 494267
- 552345 string characters out of 6162829
- 853644 words of memory out of 5000000
- 34457 multiletter control sequences out of 15000+600000
+ 32441 strings out of 494267
+ 570071 string characters out of 6162829
+ 868631 words of memory out of 5000000
+ 35160 multiletter control sequences out of 15000+600000
  77367 words of font info for 71 fonts, out of 8000000 for 9000
  395 hyphenation exceptions out of 8191
- 62i,9n,56p,808b,1822s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 62i,11n,67p,808b,1822s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texmf/fonts/enc/dvips/lm/lm-rm.enc}{/usr/share/texmf/fonts/enc/dv
-ips/lm/lm-ts1.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-mathit.enc}{/usr/shar
-e/texmf/fonts/enc/dvips/lm/lm-rmtt.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-
-mathsy.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-rmsc.enc}</usr/share/texmf/f
+ips/lm/lm-ts1.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-mathsy.enc}{/usr/shar
+e/texmf/fonts/enc/dvips/lm/lm-mathit.enc}{/usr/share/texmf/fonts/enc/dvips/lm/l
+m-rmtt.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-rmsc.enc}</usr/share/texmf/f
 onts/type1/public/lm/lmbx10.pfb></usr/share/texmf/fonts/type1/public/lm/lmbx12.
 pfb></usr/share/texmf/fonts/type1/public/lm/lmcsc10.pfb></usr/share/texmf/fonts
 /type1/public/lm/lmmi12.pfb></usr/share/texmf/fonts/type1/public/lm/lmmi8.pfb><
@@ -1929,12 +1959,12 @@ pfb></usr/share/texmf/fonts/type1/public/lm/lmcsc10.pfb></usr/share/texmf/fonts
 public/lm/lmr12.pfb></usr/share/texmf/fonts/type1/public/lm/lmr6.pfb></usr/shar
 e/texmf/fonts/type1/public/lm/lmr8.pfb></usr/share/texmf/fonts/type1/public/lm/
 lmri12.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy10.pfb></usr/share/texmf
-/fonts/type1/public/lm/lmtt10.pfb></usr/share/texmf/fonts/type1/public/lm/lmtt1
-2.pfb>
-Output written on gradu.pdf (22 pages, 339656 bytes).
+/fonts/type1/public/lm/lmsy8.pfb></usr/share/texmf/fonts/type1/public/lm/lmtt10
+.pfb></usr/share/texmf/fonts/type1/public/lm/lmtt12.pfb>
+Output written on gradu.pdf (22 pages, 364184 bytes).
 PDF statistics:
- 292 PDF objects out of 1000 (max. 8388607)
- 250 compressed objects within 3 object streams
- 49 named destinations out of 1000 (max. 500000)
- 106 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 305 PDF objects out of 1000 (max. 8388607)
+ 260 compressed objects within 3 object streams
+ 52 named destinations out of 1000 (max. 500000)
+ 111 words of extra memory for PDF output out of 10000 (max. 10000000)
 
