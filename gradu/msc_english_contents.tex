@@ -13,7 +13,7 @@ A variable-byte encoding based integer compression method with constant time ran
 reorganizing and $rank$ data structure to achieve random access. Their solution is currently the only published solution for the problem and it 
 has been widely adopted. 
 
-An alternative solution with $select$ data structure is proposed and explained in detail later. Comparison to $rank$ by Brisaboa et al is shown with different
+An alternative solution with $select$ data structure is proposed and explained in detail later in this thesis. Comparison to $rank$ by Brisaboa et al is shown with different
 implementations of $rank$ and $select$ and several different data sets are used. Proposed method does not use data 
 reorganizing, but rather capitalizes on the assumption that data is encoded the same way it is in the source. Because variable-byte encoding does not assign 
 new codewords to data when encoding, reading the data straight from the memory is much faster than reassembling the word from blocks. 
