@@ -157,9 +157,9 @@ would give the sum of end bytes up to i-th index and $select_1$(C, i) would give
 
 \section{Rank and Select implementation}
 
-The rank and select implementations used in this article are C++ libraries from \citep{gbmp2014sea}. The library has several implementations of both rank and 
+The rank and select implementations used in this article are from C++ library by \citep{gbmp2014sea}. The library has several implementations of both rank and 
 select as well as an implementaion of a bit array. Table~\ref{table:supportsize} has $rank$ and $select$ size requirements of implementations used in this experiment.
-Both rank implementations have a constant space requirement, while select's needed size depends on the number of 1's in the data.
+Both rank implementations have a constant space requirement over the bit array, while select's needed size depends on the number of 1's in the data.
 
 For every 512th bit in the array, rank stores the absolute value of 1's preceding that bit in a superblock. For every 64th bit in a superblock, a relative 
 count is stored. With this setup, an rank can be instantly calculated for every 64th bit. To get rank(i), superblock[i/512] and it's relative value (i\%512)/64 
@@ -167,7 +167,7 @@ are fetched. Then 1 bits from (i-i\%64) to i are counted and added to get the co
 384th bit, which offers a tradeoff between performance and memory usage. 
 
 $Select$ data structure works similarly to rank. Index location of every 4096th set bit is stored in the superblock and location of every 64th set bit is stored 
-relative to the superblock. $Select$ 
+relative to the superblock. 
 
 
 \begin{table}
