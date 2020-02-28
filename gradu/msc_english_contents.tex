@@ -9,13 +9,15 @@ data compression algorithms are inefficient. Fortunately this is not a requireme
 random access of compressed data is useful in compressed data structures. It saves storage space, bandwith and increases the likelihood
 of data already being in cache \citep{Sch02}. In most compression methods, the only way to do this is to decompress data from the beginning. 
 
-A variable-byte encoding based integer compression method with fast random access was first introduced by \citep{Bri09}. They used clever block 
+A variable-byte encoding based integer compression method with constant time random access was first introduced by \citep{Bri09}. They used clever block 
 reorganizing and $rank$ data structure to achieve random access. Their solution is currently the only published solution for the problem and it 
-has been widely adopted.
+has been widely adopted. 
 
-An alternative solution with $select$ data structure is shown later. (TODO: refer to results)
+An alternative solution with $select$ data structure is explained in detail and compared to $rank$ by Brisaboa et al. This method does not use data 
+reorganizing, but rather capitalizes on the assumption that data is encoded the same way it's in the source. Because variable-byte encoding does not assign 
+new codewords to data when encoding, reading the data straight from the memory is much faster than reassembling the word from blocks. 
 
---contributions?
+(TODO: refer to results)
 
 
 
@@ -188,16 +190,17 @@ $A_n$ and then use $rank_0$ to get direct access. If i is the requested index, t
 continuation bit set at 0. In other words, the number of elements that continue to $A_{k+1}$. See Figure~\ref{bris_ds} for visualization of data.
 
 
+
 \begin{figure}[H]
 \centering
 \includegraphics[scale=0.4]{bris.png}
-\caption{Data structure by Brisaboa et al., visualized} \label{bris_ds}
+\caption{Data structure by Brisaboa et al., visualized} (TODO: create this with tikz)\label{bris_ds}
 \end{figure}
 
 For example, if an element needed 3 chunks when encoded, the least significant bits would go to $A_1$, second least significant bits to $A_2$ and the most significant 
 bits would go to $A_3$. When fetching i-th element, getting the first chunk is just fetching $A_1$[i]. If the continuation bit is set at 0 (meaning there are more chunks 
 to this element), getting the correct index for $A_2$ is calculated with $rank_0$($A_1$, i). A pseudo code example of DAC with $rank$ is shown in Figure~\ref{bris_pseudo} 
-with block length of 8. (TODO: example needed?)
+with block length of 8.
 
 
 \begin{figure}[ht]
@@ -316,7 +319,10 @@ are removed either with a bitmask or by double bit shifting, resulting in decode
 \end{tikzpicture}
 \caption{Data} \label{VBarrays}
 \end{figure}
-TODO: try bitvector SD performance + size (select)
+TODO: try bitvector SD performance + size (select) (maybe write about different select implementations)
+
+
+
 
 \chapter{Experimental results}
 
