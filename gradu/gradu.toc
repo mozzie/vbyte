@@ -10,9 +10,9 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {section}{\numberline {3.1}Rank and Select}{5}{section.3.1}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {3.2}Rank and Select implementation}{5}{section.3.2}
+\contentsline {section}{\numberline {3.2}Rank and Select implementation}{6}{section.3.2}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {3.3}DAC via rank}{6}{section.3.3}
+\contentsline {section}{\numberline {3.3}DAC via rank}{7}{section.3.3}
 \defcounter {refsection}{0}\relax 
 \contentsline {chapter}{\numberline {4}DAC with select query}{9}{chapter.4}
 \defcounter {refsection}{0}\relax 

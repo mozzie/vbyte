@@ -256,6 +256,48 @@
     \field{year}{2014}
   \endentry
 
+  \entry{Gon05}{inproceedings}{}
+    \name{author}{4}{}{%
+      {{hash=GR}{%
+         family={Gonz{\'a}lez},
+         familyi={G\bibinitperiod},
+         given={Rodrigo},
+         giveni={R\bibinitperiod},
+      }}%
+      {{hash=GS}{%
+         family={Grabowski},
+         familyi={G\bibinitperiod},
+         given={Szymon},
+         giveni={S\bibinitperiod},
+      }}%
+      {{hash=MV}{%
+         family={M{\"a}kinen},
+         familyi={M\bibinitperiod},
+         given={Veli},
+         giveni={V\bibinitperiod},
+      }}%
+      {{hash=NG}{%
+         family={Navarro},
+         familyi={N\bibinitperiod},
+         given={Gonzalo},
+         giveni={G\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{GR+1}
+    \strng{fullhash}{GRGSMVNG1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{labelyear}{2005}
+    \field{labeldatesource}{year}
+    \field{sortinit}{G}
+    \field{sortinithash}{G}
+    \field{booktitle}{Poster Proc. Volume of 4th Workshop on Efficient and
+  Experimental Algorithms (WEA)}
+    \field{pages}{27\bibrangedash 38}
+    \field{title}{Practical implementation of rank and select queries}
+    \field{year}{2005}
+  \endentry
+
   \entry{Lem18}{article}{}
     \name{author}{3}{}{%
       {{hash=LD}{%

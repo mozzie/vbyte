@@ -149,11 +149,14 @@ of each element, but it adds a very large overhead which removes the benefit of 
 
 \section{Rank and Select}
 Rank and select are two succinct data structure operations which operate on a bit array B. $Rank_1$(B, i) gives the sum of 1 bits between B[0] and B[i] and 
-$select_1$(b, i) gives the index of i-th 1 bit in B. Both operations can be implemented to work in constant time \citep{gbmp2014sea}. Locations of 1 bits in B should represent locations 
-of the items in the encoded data. For most compression algorithms, this requires B to be created in addition to the existing data and the length of B usually 
-has to be close to the length of the data. VB encoding has several advantages with search and rank: it's data is compressed in blocks of equal length which 
-significantly shrinks the length of B. Also the bit array C formed from the continuation bits already stores the locations of items. In this case, $rank_1$(C, i) 
-would give the sum of end bytes up to i-th index and $select_1$(C, i) would give the location of the ending byte of i-th compressed element.
+$select_1$(B, i) gives the index of i-th 1 bit in B. Both operations can be implemented to work in constant time \citep{gbmp2014sea}. To use rank or select in indexing, the
+set 1 bits in B should reflect to the element locations in the encoded data. 
+
+For most compression algorithms, this requires B to be created in addition to the existing data and the length of B usually 
+has to be close to the length of the data, because encoded element lenghts vary. VB encoding has several advantages with search and rank: the data is compressed in 
+blocks of equal length which significantly shrinks the length of B. Moreover the bit array C formed from the continuation bits already stores the locations of items and works
+as the needed indexing array. In this case, $rank_1$(C, i) would give the sum of end blocks up to i-th index and $select_1$(C, i) would give the location of the ending block 
+of i-th compressed element.
 
 \section{Rank and Select implementation}
 
@@ -161,14 +164,17 @@ The rank and select implementations used in this article are from C++ library by
 select as well as an implementaion of a bit array. Table~\ref{table:supportsize} has $rank$ and $select$ size requirements of implementations used in this experiment.
 Both rank implementations have a constant space requirement over the bit array, while select's needed size depends on the number of 1's in the data.
 
-For every 512th bit in the array, rank stores the absolute value of 1's preceding that bit in a superblock. For every 64th bit in a superblock, a relative 
-count is stored. With this setup, an rank can be instantly calculated for every 64th bit. To get rank(i), superblock[i/512] and it's relative value (i\%512)/64 
-are fetched. Then 1 bits from (i-i\%64) to i are counted and added to get the correct sum. For Rankv5, superblock size is 2048 and relative count is stored every
-384th bit, which offers a tradeoff between performance and memory usage. 
+The data structure of rank has two layers. First layer is the superblock array. For every 512th bit, the number of 1's from the beginning of the array is stored to the superblock array.
+The second layer is the relative count block. It stores a relative count of 1's for every 64th bit. To calculate rank(i), the superblock index is s = i/512 and 
+relative count block index is r = i-s / 64, both being integer divisions. Then number of 1 bits from index r to i are calculated. All three values added together add up to rank(i). 
+Rankv5 is a lighter structure: it's superblock size is 2048 and relative counts are taken for every 384th bit. This causes the final bit calculation to be more costly, but reduces 
+memory requirement to a quarter.
 
-$Select$ data structure works similarly to rank. Index location of every 4096th set bit is stored in the superblock and location of every 64th set bit is stored 
-relative to the superblock. 
+$Select$ data structure works similarly to rank. The index location of every 4096th set bit is stored in the superblock and location of every 64th set bit is stored 
+relative to the superblock. With similar calculations, the location of closest 64th set bit is calculated and then bit array is iterated until required amount of bits is reached. 
 
+In both cases, one function call always gets a value from the superblock and then from the superblock's relative block. The only differiating factor is the manual bit count from relative
+block's index to wanted index. This is at most the size of one relative block and thus both of the functions work in constant time \citep{Gon05}.
 
 \begin{table}
 \centering
@@ -186,11 +192,9 @@ Select & \text{~8.3\% of bit array (on average)}\\
 
 
 \section{DAC via rank}
-Directly addressable codes in VB was first introduced by \citep{Bri09} in 2009. Their solution was to divide chunks in encoded bytes to separate arrays $A_1$ to 
-$A_n$ and then use $rank_0$ to get direct access. If i is the requested index, then $rank_0$($A_k$, i) returns the number of elements preceding i that have 
-continuation bit set at 0. In other words, the number of elements that continue to $A_{k+1}$. See Figure~\ref{bris_ds} for visualization of data.
-
-
+Directly addressable codes in VB was first introduced by \citep{Bri09} in 2009. In their solution, the chunks are sorted in separate arrays by their significance. For each integer, the block 
+of the least significant chunk is stored in the first array $A_1$, and its bit to the first bit array $B_1$. Then if the number was stored in multiple chunks, the block of the next chunk is
+stored to $A_2$ and the bit to $B_2$ and so on. After the data is set, rank data structure is built for each bit array. Figure~\ref{bris_ds} contains a visualization of the data structure.
 
 \begin{figure}[H]
 \centering
@@ -198,13 +202,16 @@ continuation bit set at 0. In other words, the number of elements that continue 
 \caption{Data structure by Brisaboa et al., visualized} (TODO: create this with tikz)\label{bris_ds}
 \end{figure}
 
-For example, if an element needed 3 chunks when encoded, the least significant bits would go to $A_1$, second least significant bits to $A_2$ and the most significant 
-bits would go to $A_3$. When fetching i-th element, getting the first chunk is just fetching $A_1$[i]. If the continuation bit is set at 0 (meaning there are more chunks 
-to this element), getting the correct index for $A_2$ is calculated with $rank_0$($A_1$, i). A pseudo code example of DAC with $rank$ is shown in Figure~\ref{bris_pseudo} 
+To decode an element from index i, first block is fetched from $A_1$[i]. Because each is composed of at least one block, the first block is obtainable via straight indexing. With small numbers, this 
+is all that is required. If the data has a lot of small numbers, the $rank$ method has a huge advantage. However if the element was stored in multiple blocks, $i \gets rank_0$($A_1$, i) is called. $Rank_0$ 
+returns the number of zeros preceding i. In other words, the number of blocks that continue to the next array. This in turn means that $i$ now has the index of the element's next block in array $A_2$.
+This process is then repeated until ith bit of the current bit array is set. The decompressed integer is constructed from the fetched blocks. A pseudo code example of DAC with $rank$ is shown in Figure~\ref{bris_pseudo} 
 with block length of 8.
 
 
 \begin{figure}[ht]
+\centering
+\begin{minipage}{0.5\linewidth}
 \begin{algorithmic}
 \State $i \gets $ wanted index
 \State $A \gets $ block arrays
@@ -222,9 +229,12 @@ with block length of 8.
 \State $number \gets number \mathbin{\ll} 8$
 \State $number \gets number \mathbin{|} block$
 \end{algorithmic}
+\end{minipage}
 \caption{Example pseudo code of DAC with rank by Brisaboa et al.} \label{bris_pseudo}
+
 \end{figure}
 
+--TODO: create another version: 7bit bris. Store bits in both bit array and chunk (to see if it's faster to get the continuation bit from the chunk than from the bit array) (also needs 7bit compliant dataset)
 
 \chapter{DAC with select query}
 
@@ -327,48 +337,51 @@ TODO: try bitvector SD performance + size (select) (maybe write about different 
 
 \chapter{Experimental results}
 
-The following experiments are run on <at the moment my work Lenovo Thinkpad T480s, TODO run on a server and write specs here>. The algorithms 
-were implemented with C++ (TODO: list compile tags and whatnot here) using data structures and functions from \citep{gbmp2014sea}. 
+The following experiments were run on a AMD Phenom(tm) II X6 1055T Processor@2.8Ghz with 64Kb+64Kb L1 cache, 512Kb L2 cache, 6144Kb L3 cache and 32GB of DDR3 1333MHz.
+The computer runs Ubuntu 14.04.4 (3.13.0-91-generic x86\_64). The code was compiled with g++-7 -std=c++11 -DNDEBUG and with libraries -lsdsl -ldivsufsort -ldivsufsort64.
 
+Five different VB decoding algorithms were compared. The Bris-algorithms are from \citep{Bri09}. All algorithms are implemented using data structures and functions from the SDSL 
+library \citep{gbmp2014sea}. Each implementation is decoding a uint64\_t integer.
 
-
-Five different kinds of VB decoding algorithms were used. Bris-implementations are from \citep{Bri09}. 
 \begin{itemize}
   \item Bris4v5 - Bris implementation with block size 4, using rank support v5
   \item Bris8 - Bris implementation with block size 8, using rank support v
   \item Bris8v5 - Bris implementation with block size 8, using rank support v5
-  \item Our4 - Our implementation with block size 4, using select support mcl
-  \item Our8 - Our implementation with block size 8, using select support mcl
+  \item Select4 - Proposed implementation with block size 4, using select support mcl
+  \item Select8 - Proposed implementation with block size 8, using select support mcl
 \end{itemize}
 
-Eight kinds of datasets were used. For each number in the dataset, $p$ was randomly selected from $P$ and then number was randomly selected from
-range [0,$2^p$].
+
+
+
+
+
+Five differently constructed datasets were used and three different sizes of dataset were used (5M, 50M, 500M). 
 
 \begin{itemize}
-  \item all5M - 5 million numbers, $P$ = {7,8,15,16,23,24,30,31}
-  \item all50M - 50 million numbers, $P$ = {7,8,15,16,23,24,30,31}
-  \item byte5M - 5 million numbers, $P$ = {7,7,7,8,8,8,16,31}
-  \item byte50M - 50 million numbers, $P$ = {7,7,7,8,8,8,16,31}
-  \item small5M - 5 million numbers, $P$ = {3,4,5,6,7,8,16,31}
-  \item small50M - 50 million numbers, $P$ = {3,4,5,6,7,8,16,31}
-  \item vsmall5M - 5 million numbers, $P$ = {2,2,3,3,3,4,4,15}
-  \item vsmall50M - 50 million numbers, $P$ = {2,2,3,3,3,4,4,15}
+  \item all - integers equally 1-4 bytes long
+  \item twolarge - one eighth of integers 4 bytes long, one eighth 2 bytes long, rest 1 byte    
+  \item twolarge2 - Same as twolarge, but third of the 1 byte numbers 4 bits or less
+  \item onelarge - one eighth of integers 2 bytes long, rest 4 bits or less
+  \item onebyte - all integers 4 bits or less
 \end{itemize}
 
-All algorithms save the data to memory and randomize one million index numbers to an array. The time taken is calculated from looping through the 
-index array and VB decoding the number in the index. The times shown in Table~\ref{table:results1} are an average of 100 such runs.
+All implementation read the data set from a file and compres it to memory. Then one million index numbers are randomized to an array. The times shown in Table~\ref{table:results1} 
+are times taken from looping through the index array and VB decoding the number in the index. Additionally, each run is iterated ten times and a mean of the run is taken. 
 
 \begin{table}
 \centering
 \caption{Results in milliseconds, smaller is better.\label{table:results1}}
-\begin{tabular}{l||c c c c c c c c} 
-Experiment & all5M & all50M & byte5M & byte50M & small5M & small50M & vsmall5M & vsmall50M\\ 
+\begin{tabular}{l||c c c c c c} 
+ & Bris4v5 & Select4 & Bris8 & Bris8v5 & Select8 \\ 
 \hline \hline 
-Bris4v5 & 348.41 & 768.83 & 345.16 & 772.84 & 344.54 & 768.45 & 346.86 & 771.61 \\
-Our4    & 127.92 & 263.22 & 127.44 & 263.5  & 127.9  & 262.67 & 127.88 & 262.58 \\
-Bris8   & \textbf{97.75}  & 308.17 & \textbf{98.47}  & 309.6  & \textbf{98.14}  & 307.81 & \textbf{97.99}  & 308.09 \\
-Bris8v5 & 127.83 & 287.46 & 127.7  & 288.63 & 128.14 & 291.32 & 127.99 & 287.84 \\
-Our8    & 103.85 & \textbf{230.16} & 103.92 & \textbf{230.14} & 103.86 & \textbf{230.02} & 103.95 & \textbf{230.6} \\
+all (5M)        & - & 189.8 & 194.0 & 230.3 & 139.2 \\
+all (50M)       & - & 292.0 & 256.0 & 304.4 & 232.7 \\
+all (500M)      & - &  -    & 299.9 & 369.2 & 335.1 \\
+twolarge (5M)   & - & 164.1 & 93.9  & 216.7 & 117.5 \\
+twolarge (50M)  & - & 270.4 & 140.0 & 159.8 & 210.6 \\
+twolarge (500M) & - & 381.4 & 169.7 & 383.6 & 307.8 \\
+
 
 \hline
 %
@@ -378,14 +391,12 @@ Our8    & 103.85 & \textbf{230.16} & 103.92 & \textbf{230.14} & 103.86 & \textbf
 
 
  - Run with 32 bit values, see what happens (some operations may be 32b?)
- - do cachegrind
  - 
  - use array instead of vector<uint8 t> for bris?
 - comparison to basic implementation + Bri09
   - compare with b=2,4,8
 
  - do we need to support search()?
- - SIMD?
 
  - $rank$ vs rank? should formulas have a specific style?
 
