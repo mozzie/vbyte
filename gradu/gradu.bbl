@@ -18,24 +18,25 @@
 
 \datalist[entry]{nyt/global//global/global}
   \entry{Mid96}{article}{}
+    \true{moreauthor}
     \name{author}{1}{}{%
-      {{hash=ATMM}{%
+      {{hash=AMM}{%
          family={Association},
          familyi={A\bibinitperiod},
-         given={The Midi\bibnamedelima Manufacturers},
-         giveni={T\bibinitperiod\bibinitdelim M\bibinitperiod\bibinitdelim
-  M\bibinitperiod},
+         given={MIDI\bibnamedelima Manufacturers},
+         giveni={M\bibinitperiod\bibinitdelim M\bibinitperiod},
       }}%
     }
-    \strng{namehash}{ATMM1}
-    \strng{fullhash}{ATMM1}
+    \strng{namehash}{AMM+1}
+    \strng{fullhash}{AMM+1}
     \field{labelnamesource}{author}
     \field{labeltitlesource}{title}
     \field{labelyear}{1996}
     \field{labeldatesource}{year}
     \field{sortinit}{A}
     \field{sortinithash}{A}
-    \field{title}{The Complete MIDI 1.0 Detailed Specification}
+    \field{title}{The complete MIDI 1.0 detailed specification}
+    \field{journaltitle}{Los Angeles, CA, The MIDI Manufacturers Association}
     \field{year}{1996}
   \endentry
 
@@ -453,7 +454,7 @@
       }}%
     }
     \list{publisher}{1}{%
-      {Springer, Heidelberg}%
+      {Springer Science \& Business Media}%
     }
     \strng{namehash}{SD1}
     \strng{fullhash}{SD1}
@@ -467,7 +468,7 @@
     \field{year}{2007}
   \endentry
 
-  \entry{Sch02}{article}{}
+  \entry{Sch02}{inproceedings}{}
     \name{author}{4}{}{%
       {{hash=SF}{%
          family={Scholer},
@@ -478,7 +479,7 @@
       {{hash=WHE}{%
          family={Williams},
          familyi={W\bibinitperiod},
-         given={Hugh\bibnamedelima E.},
+         given={Hugh\bibnamedelima E},
          giveni={H\bibinitperiod\bibinitdelim E\bibinitperiod},
       }}%
       {{hash=YJ}{%
@@ -502,7 +503,10 @@
     \field{labeldatesource}{year}
     \field{sortinit}{S}
     \field{sortinithash}{S}
-    \field{title}{Compression of Inverted Indexes For Fast Query Evaluation}
+    \field{booktitle}{Proceedings of the 25th annual international ACM SIGIR
+  conference on Research and development in information retrieval}
+    \field{pages}{222\bibrangedash 229}
+    \field{title}{Compression of inverted indexes for fast query evaluation}
     \field{year}{2002}
   \endentry
 
@@ -552,6 +556,9 @@
          giveni={A\bibinitperiod},
       }}%
     }
+    \list{publisher}{1}{%
+      {Wiley Online Library}%
+    }
     \strng{namehash}{ZJMA1}
     \strng{fullhash}{ZJMA1}
     \field{labelnamesource}{author}
@@ -562,9 +569,9 @@
     \field{sortinithash}{Z}
     \field{number}{8}
     \field{pages}{891\bibrangedash 903}
-    \field{title}{Adding Compression to a Full-text Retrieval System}
+    \field{title}{Adding compression to a full-text retrieval system}
     \field{volume}{25}
-    \field{journaltitle}{Software-practice and experience}
+    \field{journaltitle}{Software: Practice and Experience}
     \field{year}{1995}
   \endentry
 \enddatalist

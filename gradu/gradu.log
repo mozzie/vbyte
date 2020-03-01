@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2020.2.4)  1 MAR 2020 22:57
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2020.2.4)  1 MAR 2020 23:45
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1887,25 +1887,19 @@ Chapter 2.
 Chapter 3.
 [5
 
-] [6]
-<bris.png, id=169, 901.3675pt x 467.7475pt>
-File: bris.png Graphic file (type png)
-<use bris.png>
-Package pdftex.def Info: bris.png  used on input line 201.
-(pdftex.def)             Requested size: 360.5406pt x 187.09567pt.
- [7 <./bris.png>] [8]
+] [6] [7] [8]
 Chapter 4.
 [9
 
 ] [10]
 Chapter 5.
 
-Overfull \hbox (3.79015pt too wide) in paragraph at lines 340--342
+Overfull \hbox (3.79015pt too wide) in paragraph at lines 398--400
 \OT1/lmr/m/n/12 The fol-low-ing ex-per-i-ments were run on a AMD Phe-nom(tm) II
  X6 1055T Pro-ces-sor@2.8Ghz
  []
 
-LaTeX Font Info:    Try loading font information for TS1+lmr on input line 347.
+LaTeX Font Info:    Try loading font information for TS1+lmr on input line 405.
 
 (/usr/share/texmf/tex/latex/lm/ts1lmr.fd
 File: ts1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
@@ -1934,15 +1928,19 @@ Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 254.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 254.
 Package rerunfilecheck Info: File `gradu.out' has not changed.
 (rerunfilecheck)             Checksum: 29920E7DAFB67F21BD0067F83FC6FD93;1515.
+
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
 Package logreq Info: Writing requests to 'gradu.run.xml'.
 \openout1 = `gradu.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 32448 strings out of 494267
- 570206 string characters out of 6162829
- 868631 words of memory out of 5000000
- 35166 multiletter control sequences out of 15000+600000
+ 32767 strings out of 494267
+ 575262 string characters out of 6162829
+ 871631 words of memory out of 5000000
+ 35486 multiletter control sequences out of 15000+600000
  77367 words of font info for 71 fonts, out of 8000000 for 9000
  395 hyphenation exceptions out of 8191
  62i,11n,67p,808b,1822s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -1959,10 +1957,10 @@ e/texmf/fonts/type1/public/lm/lmr8.pfb></usr/share/texmf/fonts/type1/public/lm/
 lmri12.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy10.pfb></usr/share/texmf
 /fonts/type1/public/lm/lmsy8.pfb></usr/share/texmf/fonts/type1/public/lm/lmtt10
 .pfb></usr/share/texmf/fonts/type1/public/lm/lmtt12.pfb>
-Output written on gradu.pdf (22 pages, 365509 bytes).
+Output written on gradu.pdf (22 pages, 350067 bytes).
 PDF statistics:
- 307 PDF objects out of 1000 (max. 8388607)
+ 305 PDF objects out of 1000 (max. 8388607)
  262 compressed objects within 3 object streams
  53 named destinations out of 1000 (max. 500000)
- 111 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 106 words of extra memory for PDF output out of 10000 (max. 10000000)
 
