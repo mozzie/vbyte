@@ -1928,10 +1928,6 @@ Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 254.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 254.
 Package rerunfilecheck Info: File `gradu.out' has not changed.
 (rerunfilecheck)             Checksum: 29920E7DAFB67F21BD0067F83FC6FD93;1515.
-
-
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
-
 Package logreq Info: Writing requests to 'gradu.run.xml'.
 \openout1 = `gradu.run.xml'.
 
