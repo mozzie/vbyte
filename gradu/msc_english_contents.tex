@@ -388,7 +388,7 @@ are removed either with a bitmask or by double bit shifting, resulting in decode
 \end{tikzpicture}
 \caption{Data} \label{VBarrays}
 \end{figure}
-TODO: try bitvector SD performance + size (select) (maybe write about different select implementations)
+
 
 
 
@@ -424,7 +424,7 @@ Five differently constructed datasets were used and three different sizes of dat
   \item onebyte - all integers 4 bits or less
 \end{itemize}
 
-All implementation read the data set from a file and compres it to memory. Then one million index integers are randomized to an array. The times shown in Table~\ref{table:results1} 
+All implementations read the data set from a file and compress it to memory. Then one million index integers are randomized and stored to an array. The times shown in Table~\ref{table:results1} 
 are times taken from looping through the index array and VB decoding the number in the index. Additionally, each run is iterated ten times and a mean of the run is taken. 
 
 \begin{table}
