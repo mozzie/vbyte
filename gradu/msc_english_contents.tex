@@ -26,7 +26,7 @@ proposed $select$ method offers quick access to next or previous element.
 
 \chapter{Variable-bytes}
 
-Variable-byte (VB) encoding \citep{Wil99} is a method for compressing integers via omitting leading zero bits that would be present in a longer fixed 
+Variable-byte (VB) encoding \citep{Wil99} is a method for compressing unsigned integers via omitting leading zero bits that would be present in a longer fixed 
 width word. In normal data sets, VB encoding loses in compression performance to generic algorithms like Huffman encoding or Lempel-Ziv encoding, but 
 is generally faster to decode \citep{Bri09} and sometimes preferred due to its simplicity. 
 
@@ -55,8 +55,8 @@ VB encoding splits each integer into blocks of $b$ bits and adds a continuation 
 on the block containing the least significant bits of the integer. This information is used in decoding to signal if the current integer continues in the next chunk. 
 
 For example, block length is set to 4 and 42 is a 16 bit unsigned integer that is to be encoded. The standard 8-bit representation of 42 is 
-\texttt{00000000 00101000}. This is then split to blocks of 4 bits, resulting in \texttt{0000 0000 0010 1000}. The block with least significant bits is given a continuation bit 1.
-The block with the next least significant bits is given a continuation bit 0. The rest of the blocks are omitted, because they all are empty. The result of this is \texttt{00010 11000}, 
+\texttt{00000000 00101010}. This is then split to blocks of 4 bits, resulting in \texttt{0000 0000 0010 1010}. The block with least significant bits is given a continuation bit 1.
+The block with the next least significant bits is given a continuation bit 0. The rest of the blocks are omitted, because they all are empty. The result of this is \texttt{00010 11010}, 
 which is the number 42 compressed with VB encoding and block length of 4. A pseudo code with block length 4 is shown in Figure~\ref{vbyte_enc}. Prepend adds an element to the beginning of the list 
 and extend adds all the elements of the second list to the end of the first list.
 
@@ -116,11 +116,11 @@ VB decoding reverses the encoding steps: encoded chunks are read until a chunk w
 are removed from all the chunks and the blocks are concatenated to form the original integer. A pseudo code implementation of VB decoding with block length of 7 is shown in Figure~\ref{vbyte_dec}.
 Append adds an element to the end of the list. If block length is changed, additional bit operation steps when reading the data may be needed.
 
-As how the encoding example ended, the encoded message was \texttt{00010 11000} with block length of 4 and the goal is to decode a 16 bit unsigned integer. The block from the first chunk is 
+As how the encoding example ended, the encoded message was \texttt{00010 11010} with block length of 4 and the goal is to decode a 16 bit unsigned integer. The block from the first chunk is 
 extracted and added to $n$, making $n = $\texttt{10} (bit representation of 2).
 The continuation bit was 0 in this chunk, which means the encoded integer continues to the next block. A bitwise shift to the left equal to block length is applied to $n$, 
 changing $n = $\texttt{100000} (bit representation of 32). Then the chunk reading process is repeated. The block of the next chunk is added to $n$, making 
-$n = $\texttt{101000} (bit representation of 42). The continuation bit of this chunk is 1, which means the decoding for this number is complete. 
+$n = $\texttt{101010} (bit representation of 42). The continuation bit of this chunk is 1, which means the decoding for this number is complete. 
 
 \begin{figure}[ht]
 \centering
@@ -151,9 +151,9 @@ $n = $\texttt{101000} (bit representation of 42). The continuation bit of this c
 
 The ability to handle large amounts of data fast is one of the key challenges in the field of search engines. Compressed data structures are applied to fit the 
 data into cache, memory or even hard drive. Direct access to any element in a compressed list or array is one of the usual requirements in compressed data 
-strutures. It is not natively possible to decode the i-th element in variable-byte compression algorithms, because the position of the element in the compressed
+structures. It is not natively possible to decode the i-th element in variable-byte compression algorithms, because the position of the element in the compressed
 list depends on the length of the preceding compressed data. Direct access is achievable with supporting data structures. A naive solution is to store the location 
-of each element, but it adds a very large overhead which removes the benefit of compression.
+of each element to an array, but it adds a very large overhead which removes the benefit of compression.
 
 \section{Rank and Select}
 Rank and select are two succinct data structure operations which operate on a bit array B. $Rank_1$(B, i) gives the sum of 1 bits between B[0] and B[i] and 
@@ -168,9 +168,10 @@ of i-th compressed element.
 
 \section{Rank and Select implementation}
 
-The rank and select implementations used in this thesis are from C++ library by \citep{gbmp2014sea}. The library has several implementations of both rank and 
-select as well as an implementaion of a bit array. Table~\ref{table:supportsize} has $rank$ and $select$ size requirements of implementations used in this experiment.
-Both rank implementations have a constant space requirement over the bit array, while select's needed size depends on the number of 1's in the data.
+The rank and select implementations used in this thesis are from C++ library 'SDSL-lite' by \citep{gbmp2014sea}. The library has an implementation of a bit array and  several implementations
+ of both rank and select to support the bit array. Also a few useful functions were used during the implementation phase. Table~\ref{table:supportsize} has $rank$ and $select$ 
+size requirements of implementations used in this experiment. Both rank implementations have a constant space requirement over the bit array, while select's needed size depends on 
+the number of 1's in the data.
 
 The data structure of rank has two layers. First layer is the superblock array. For every 512th bit, the number of 1's from the beginning of the array is stored to the superblock array.
 The second layer is the relative count block. It stores a relative count of 1's for every 64th bit. To calculate rank(i), the superblock index is s = i/512 and 
@@ -461,9 +462,15 @@ onlysmall (500M)   & 34.60 & 39.40 & 35.10 & 34.10 & 278.00 & 333.90 \\
 \end{tabular}
 \end{table}
 
-The results show that the proposed $select$ method outperforms $rank$ when data set contains 
+The results show that the proposed $select$ method outperforms $rank$ when the data set contains several integers that are encoded into more than one block. The difference is explained 
+with how $rank$ and $select$ use the data structure. $Select$ is always called once, while $rank$ is called once for each block beyond the first. Bris8 performs better than Bris8v5, but also requires 
+more memory. See Figure~\ref{table:supportsize} for memory consumption.
 
- - see how data length percentage matters.
+8-bit versions perform better than 4-bit versions timewise, because they need less operations overall. However 4-bit versions have better compression in some data sets, because they are able to compress 
+some integers better. 
+
+
+ - see how data length percentage matters (do datasets with k/8 long numbers).
  - see how cache matters
 
  - 4bit is naturally slower, because of smaller block size
