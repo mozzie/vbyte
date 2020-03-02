@@ -2,5 +2,5 @@
 for i in log_*
 do
   echo $i
-  cat $i | grep Time |sed s/"\[ms\]"//g | awk 'BEGIN{i=0};{i+=$3};END{print i/100}'
+  cat $i | grep Time |sed s/"\[ms\]"//g | awk 'BEGIN{i=0};{i+=$3};END{print i/10}'
 done

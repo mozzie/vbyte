@@ -1,0 +1,25 @@
+#/bin/bash
+files=( "bris8" "bris4" "bris8_v5" "bris4_v5"  "select8" "select4")
+datasets=( "all" "twolarge" "onelarge" "onlysmall")
+sizes=("5M" "50M" "500M")
+echo ""
+for f in "${files[@]}"
+do
+  printf "& ${f} "  
+done
+printf " \\\\\\\\\n"
+printf " \\hline \\hline \n"
+for d in "${datasets[@]}"
+do
+  for s in "${sizes[@]}"
+  do
+    printf "${d} (${s})  "
+    for f in "${files[@]}"
+    do
+     cat "log_${f}_numbers_${s}_${d}" | grep Time |sed s/"\[ms\]"//g | awk 'BEGIN{k=0;i=0};{i+=$3;k++;};END{printf " & %.2f",k==0?0:i/k}'
+    done
+    printf " \\\\\\\\\n"    
+  done
+done
+#    ./$f.o $1 >> "log_${f}_$1"
+

@@ -1,9 +1,9 @@
 #!/bin/bash
-files=( "vb_encode_8bit_bris" "vb_encode_8bit_bris_v5" "vb_encode_4bit_byteoptimized" "vb_encode_8bit_byteoptimized" "vb_encode_4bit_bris_v5")
+files=( "bris8" "bris4" "bris8_v5" "bris4_v5"  "select8" "select4")
 for f in "${files[@]}"
 do
   echo $f $1
-  for run in {1..100}
+  for run in {1..10}
   do
     echo $run
     ./$f.o $1 >> "log_${f}_$1"
