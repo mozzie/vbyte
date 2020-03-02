@@ -461,6 +461,11 @@ onlysmall (500M)   & 34.60 & 39.40 & 35.10 & 34.10 & 278.00 & 333.90 \\
 \end{tabular}
 \end{table}
 
+The results show that the proposed $select$ method outperforms $rank$ when data set contains 
+
+ - see how data length percentage matters.
+ - see how cache matters
+
  - 4bit is naturally slower, because of smaller block size
  - select is better with longer numbers, because it only needs 1 select call and reads straight from memory
  

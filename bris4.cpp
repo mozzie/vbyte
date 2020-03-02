@@ -45,7 +45,7 @@ int main(int argc, char *argv[]) {
   std::array<std::vector<uint8_t>, 16> iv;
   size_t index = 0;
   for(int i = 0; i < 16; i++) {
-    vector<uint8_t> vec(data[i].size(),0);
+    vector<uint8_t> vec(data[i].size()/2 +1,0);
     bit_vector bv(data[i].size(), 0);
     index = 0;
     for (vector<uint32_t>::const_iterator j = data[i].begin(); j != data[i].end(); j++, index++) {
