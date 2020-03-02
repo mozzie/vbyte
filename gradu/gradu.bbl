@@ -299,6 +299,31 @@
     \field{year}{2005}
   \endentry
 
+  \entry{GooPB}{online}{}
+    \name{author}{1}{}{%
+      {{hash=G}{%
+         family={Google},
+         familyi={G\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{G1}
+    \strng{fullhash}{G1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{labelyear}{2019}
+    \field{labeldatesource}{year}
+    \field{sortinit}{G}
+    \field{sortinithash}{G}
+    \field{title}{Protocol Buffers Encoding}
+    \verb{url}
+    \verb https://developers.google.com/protocol-buffers/docs/encoding#varints
+    \endverb
+    \field{year}{2019}
+    \field{urlday}{26}
+    \field{urlmonth}{02}
+    \field{urlyear}{2020}
+  \endentry
+
   \entry{Lem18}{article}{}
     \name{author}{3}{}{%
       {{hash=LD}{%
@@ -344,33 +369,6 @@
     \field{journaltitle}{Information Processing Letters}
     \field{year}{2018}
     \warn{\item Invalid format of field 'month'}
-  \endentry
-
-  \entry{GooPB}{online}{}
-    \name{author}{1}{}{%
-      {{hash=LG}{%
-         family={LLC},
-         familyi={L\bibinitperiod},
-         given={Google},
-         giveni={G\bibinitperiod},
-      }}%
-    }
-    \strng{namehash}{LG1}
-    \strng{fullhash}{LG1}
-    \field{labelnamesource}{author}
-    \field{labeltitlesource}{title}
-    \field{labelyear}{2019}
-    \field{labeldatesource}{year}
-    \field{sortinit}{L}
-    \field{sortinithash}{L}
-    \field{title}{Protocol Buffers Encoding}
-    \verb{url}
-    \verb https://developers.google.com/protocol-buffers/docs/encoding#varints
-    \endverb
-    \field{year}{2019}
-    \field{urlday}{26}
-    \field{urlmonth}{02}
-    \field{urlyear}{2020}
   \endentry
 
   \entry{Man08}{book}{}

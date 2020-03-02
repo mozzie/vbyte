@@ -4,25 +4,29 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {chapter}{\numberline {1}Introduction}{1}{chapter.1}
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{\numberline {2}Variable-byte encoding}{2}{chapter.2}
+\contentsline {chapter}{\numberline {2}Variable-bytes}{2}{chapter.2}
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{\numberline {3}Directly addressable codes}{5}{chapter.3}
+\contentsline {section}{\numberline {2.1}VB encoding}{3}{section.2.1}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {3.1}Rank and Select}{5}{section.3.1}
+\contentsline {section}{\numberline {2.2}VB decoding}{4}{section.2.2}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {3.2}Rank and Select implementation}{6}{section.3.2}
+\contentsline {chapter}{\numberline {3}Directly addressable codes}{6}{chapter.3}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {3.3}DAC via rank}{7}{section.3.3}
+\contentsline {section}{\numberline {3.1}Rank and Select}{6}{section.3.1}
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{\numberline {4}DAC with select query}{9}{chapter.4}
+\contentsline {section}{\numberline {3.2}Rank and Select implementation}{7}{section.3.2}
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{\numberline {5}Experimental results}{11}{chapter.5}
+\contentsline {section}{\numberline {3.3}DAC via rank}{8}{section.3.3}
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{\numberline {6}Future work}{13}{chapter.6}
+\contentsline {chapter}{\numberline {4}DAC with select query}{10}{chapter.4}
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{\numberline {7}Conclusions}{14}{chapter.7}
+\contentsline {chapter}{\numberline {5}Experimental results}{12}{chapter.5}
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{Bibliography}{15}{section*.10}
+\contentsline {chapter}{\numberline {6}Future work}{14}{chapter.6}
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{\numberline {7}Conclusions}{15}{chapter.7}
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{Bibliography}{17}{section*.10}
 \defcounter {refsection}{0}\relax 
 \cftpagenumbersoff {chapter}
 \contentsfinish 

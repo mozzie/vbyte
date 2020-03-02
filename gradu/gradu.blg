@@ -24,42 +24,42 @@ Reallocated wiz_functions (elt_size=4) to 9000 items from 6000.
 Reallocated singl_function (elt_size=4) to 100 items from 50.
 You've used 15 entries,
             6268 wiz_defined-function locations,
-            1292 strings with 11219 characters,
-and the built_in function-call counts, 91295 in all, are:
-= -- 6336
+            1292 strings with 11215 characters,
+and the built_in function-call counts, 90931 in all, are:
+= -- 6298
 > -- 1831
 < -- 496
-+ -- 2549
++ -- 2529
 - -- 786
-* -- 6746
-:= -- 9472
+* -- 6720
+:= -- 9415
 add.period$ -- 0
 call.type$ -- 15
 change.case$ -- 282
 chr.to.int$ -- 61
 cite$ -- 28
-duplicate$ -- 10116
-empty$ -- 8343
-format.name$ -- 1002
-if$ -- 18389
+duplicate$ -- 10063
+empty$ -- 8321
+format.name$ -- 1001
+if$ -- 18329
 int.to.chr$ -- 0
 int.to.str$ -- 36
 missing$ -- 0
-newline$ -- 574
+newline$ -- 572
 num.names$ -- 727
-pop$ -- 4992
+pop$ -- 4988
 preamble$ -- 1
 purify$ -- 369
 quote$ -- 0
-skip$ -- 2611
+skip$ -- 2610
 stack$ -- 0
-substring$ -- 10315
-swap$ -- 2541
+substring$ -- 10253
+swap$ -- 2535
 text.length$ -- 401
 text.prefix$ -- 14
 top$ -- 1
 type$ -- 498
 warning$ -- 0
-while$ -- 1203
+while$ -- 1193
 width$ -- 0
-write$ -- 560
+write$ -- 558
