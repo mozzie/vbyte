@@ -439,14 +439,20 @@ are times taken from looping through the index array and VB decoding the number 
 \centering
 \caption{Results in milliseconds, smaller is better.\label{table:results1}}
 \begin{tabular}{l||c c c c c c} 
- & Bris4v5 & Select4 & Bris8 & Bris8v5 & Select8 \\ 
-\hline \hline 
-all (5M)        & - & 189.8 & 194.0 & 230.3 & 139.2 \\
-all (50M)       & - & 292.0 & 256.0 & 304.4 & 232.7 \\
-all (500M)      & - &  -    & 299.9 & 369.2 & 335.1 \\
-twolarge (5M)   & - & 164.1 & 93.9  & 216.7 & 117.5 \\
-twolarge (50M)  & - & 270.4 & 140.0 & 159.8 & 210.6 \\
-twolarge (500M) & - & 381.4 & 169.7 & 383.6 & 307.8 \\
+& bris8 & bris4 & bris8v5 & bris4v5 & select8 & select4  \\
+ \hline \hline 
+all (5M)   & 194.10 & 578.20 & 232.30 & 461.80 & 132.00 & 187.60 \\
+all (50M)   & 255.40 & 719.10 & 300.70 & 558.90 & 214.20 & 291.00 \\
+all (500M)   & 298.10 & 821.90 & 368.10 & 644.90 & 307.20 & 388.10 \\
+twolarge (5M)   & 96.40 & 331.70 & 107.70 & 260.20 & 119.40 & 165.20 \\
+twolarge (50M)   & 142.30 & 406.50 & 159.30 & 332.10 & 212.10 & 269.20 \\
+twolarge (500M)   & 168.50 & 516.10 & 191.80 & 393.80 & 304.90 & 381.30 \\
+onelarge (5M)   & 25.80 & 50.80 & 26.90 & 42.30 & 94.60 & 106.10 \\
+onelarge (50M)   & 50.00 & 85.30 & 51.00 & 72.30 & 197.90 & 241.00 \\
+onelarge (500M)   & 55.10 & 96.80 & 59.10 & 80.50 & 294.30 & 351.70 \\
+onlysmall (5M)   & 16.40 & 17.60 & 16.60 & 16.50 & 82.40 & 94.90 \\
+onlysmall (50M)   & 31.90 & 36.90 & 32.50 & 31.20 & 186.50 & 226.90 \\
+onlysmall (500M)   & 34.60 & 39.40 & 35.10 & 34.10 & 278.00 & 333.90 \\
 
 
 \hline

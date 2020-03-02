@@ -46,7 +46,7 @@ int main(int argc, char *argv[]) {
 
 
   bit_vector b(data.size(), 0);
-  uint8_t *iv  = new uint8_t[data.size()];
+  uint8_t *iv  = new uint8_t[data.size()+8];
   size_t index = 0;
   size_t num_index = -1;
   size_t num_p = 0;
