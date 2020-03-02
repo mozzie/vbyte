@@ -18,7 +18,8 @@ shown with different implementations of $rank$ and $select$ and several differen
 reorganizing, but rather capitalizes on the assumption that data is encoded the same way it is in the source. Because variable-byte encoding does not assign 
 new codewords to data when encoding, data can be read straight from the memory and reassembling the integer from blocks is not needed.
 
-$Rank$ method is superior when dataset contains mostly small integers. With larger integers, multiple $rank$ calls are needed and $select$ method performs better.
+$Rank$ method is superior when dataset contains mostly small integers. With larger integers, multiple $rank$ calls are needed and $select$ method performs better. Additionally, the
+proposed $select$ method offers quick access to next or previous element.
 
 
 
@@ -53,10 +54,11 @@ which is why they outperform VB encoding on datasets with a lot of small integer
 VB encoding splits each integer into blocks of $b$ bits and adds a continuation bit to the block to form chunks of length $1+b$. The continuation bit is set to 1 only
 on the block containing the least significant bits of the integer. This information is used in decoding to signal if the current integer continues in the next chunk. 
 
-For example, if block length is set to 4 and 42 is a 16 bit unsigned integer that is to be encoded. The standard 8-bit representation of 42 is 
+For example, block length is set to 4 and 42 is a 16 bit unsigned integer that is to be encoded. The standard 8-bit representation of 42 is 
 \texttt{00000000 00101000}. This is then split to blocks of 4 bits, resulting in \texttt{0000 0000 0010 1000}. The block with least significant bits is given a continuation bit 1.
 The block with the next least significant bits is given a continuation bit 0. The rest of the blocks are omitted, because they all are empty. The result of this is \texttt{00010 11000}, 
-which is the number 42 compressed with VB encoding and block length of 4. A pseudo code with block length 4 is shown in Figure~\ref{vbyte_enc}.
+which is the number 42 compressed with VB encoding and block length of 4. A pseudo code with block length 4 is shown in Figure~\ref{vbyte_enc}. Prepend adds an element to the beginning of the list 
+and extend adds all the elements of the second list to the end of the first list.
 
 \begin{figure}[ht]
 \centering
@@ -110,14 +112,15 @@ Original number & first block & second block & third block & fourth block &\\
 \end{table}
 
 \section{VB decoding}
-VB decoding is technically just reversing the encoding steps: chunks are read until a chunk with 1 as continuation bit is found. Continuation bits 
-are removed from all the chunks and the blocks are concatenated to form the original number. An example implementation of VB decoding with block length of 7 is shown in Figure~\ref{vbyte_dec}.
+VB decoding reverses the encoding steps: encoded chunks are read until a chunk with 1 as continuation bit is found. Continuation bits 
+are removed from all the chunks and the blocks are concatenated to form the original integer. A pseudo code implementation of VB decoding with block length of 7 is shown in Figure~\ref{vbyte_dec}.
+Append adds an element to the end of the list. If block length is changed, additional bit operation steps when reading the data may be needed.
 
-As in the encoding example, block length is 4, the encoded message 
-is \texttt{00010 11000} and n is a 16 bit unsigned integer. The block from the first chunk is extracted and added to $n$, making $n = $\texttt{10} (bit representation of 2).
+As how the encoding example ended, the encoded message was \texttt{00010 11000} with block length of 4 and the goal is to decode a 16 bit unsigned integer. The block from the first chunk is 
+extracted and added to $n$, making $n = $\texttt{10} (bit representation of 2).
 The continuation bit was 0 in this chunk, which means the encoded integer continues to the next block. A bitwise shift to the left equal to block length is applied to $n$, 
 changing $n = $\texttt{100000} (bit representation of 32). Then the chunk reading process is repeated. The block of the next chunk is added to $n$, making 
-$n = $\texttt{101000} (bit representation of 42). Because the continuation bit of this chunk is 1, decoding for this number is complete. 
+$n = $\texttt{101000} (bit representation of 42). The continuation bit of this chunk is 1, which means the decoding for this number is complete. 
 
 \begin{figure}[ht]
 \centering
@@ -131,7 +134,7 @@ $n = $\texttt{101000} (bit representation of 42). Because the continuation bit o
 \State $n\gets 128\times n $ + $b$
 \Else
 \State $n\gets 128\times n $ + $b$ - $128$
-\State $numbers$.append($n$)
+\State \Call{append}{numbers,n}
 \State $n\gets 0$
 \EndIf
 \EndFor
@@ -189,7 +192,7 @@ Structure & Extra size taken\\
 \hline \hline 
 Rank   & \text{25\% of bit array} \\
 Rankv5 & \text{6.25\% of bit array}\\
-Select & \text{~8.3\% of bit array (on average)}\\
+Select & \text{~8-12\% of bit array}\\
 \hline
 \end{tabular}
 \end{table}
@@ -398,7 +401,6 @@ are removed either with a bitmask or by double bit shifting, resulting in decode
 \end{tikzpicture}
 \caption{Data} \label{VBarrays}
 \end{figure}
- 
 
 
 \chapter{Experimental results}
@@ -407,7 +409,7 @@ The following experiments were run on a AMD Phenom(tm) II X6 1055T Processor@2.8
 The computer runs Ubuntu 14.04.4 (3.13.0-91-generic x86\_64). The code was compiled with g++-7 -std=c++11 -DNDEBUG and with libraries -lsdsl -ldivsufsort -ldivsufsort64.
 
 Five different VB decoding algorithms were compared. The Bris-algorithms are from \citep{Bri09}. All algorithms are implemented using data structures and functions from the SDSL 
-library \citep{gbmp2014sea}. Each implementation is decoding a uint64\_t integer.
+library \citep{gbmp2014sea}. Each implementation is compressing and decoding uint64\_t integers.
 
 \begin{itemize}
   \item Bris4v5 - Bris implementation with block size 4, using rank support v5
@@ -422,18 +424,17 @@ library \citep{gbmp2014sea}. Each implementation is decoding a uint64\_t integer
 
 
 
-Five differently constructed datasets were used and three different sizes of dataset were used (5M, 50M, 500M). 
+Four differently constructed datasets were used and three different sizes of dataset were used (5M, 50M, 500M). 
 
 \begin{itemize}
   \item all - all integers randomly 1-4 bytes long
   \item twolarge - one eighth of integers 4 bytes long, one eighth 2 bytes long, rest 1 byte    
-  \item twolarge2 - Same as twolarge, but third of the 1 byte integers 4 bits or less
   \item onelarge - one eighth of integers 2 bytes long, rest 4 bits or less
-  \item onebyte - all integers 4 bits or less
+  \item onlysmall - all integers 4 bits or less
 \end{itemize}
 
 All implementations read the data set from a file and compress it to memory. Then one million index integers are randomized and stored to an array. The times shown in Table~\ref{table:results1} 
-are times taken from looping through the index array and VB decoding the number in the index. Additionally, each run is iterated ten times and a mean of the run is taken. 
+are times taken from looping through the index array and VB decoding the number in the index. Additionally, each run is iterated multiple times and an average of the runtimes is taken. 
 
 \begin{table}
 \centering
@@ -462,8 +463,10 @@ onlysmall (500M)   & 34.60 & 39.40 & 35.10 & 34.10 & 278.00 & 333.90 \\
 
 
 
- - Run with 32 bit values, see what happens (some operations may be 32b?)
- - 
+
+ - get compression sizes of 4 and 8 bit versions
+
+ - figure out why data size matters
 
  - do we need to support search()?
 
