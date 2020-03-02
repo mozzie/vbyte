@@ -49,8 +49,16 @@ int main(int argc, char *argv[]) {
     bit_vector bv(data[i].size(), 0);
     index = 0;
     for (vector<uint32_t>::const_iterator j = data[i].begin(); j != data[i].end(); j++, index++) {
-        bv[index] = (*j>>bit_length) & 1;
-        vec[index] = *j%(cap);
+      uint8_t value = *j;
+      if(index%2 == 0) {
+        vec[index/2] = (value%cap)<<4;
+      }
+      else {
+        vec[index/2] += value%cap;
+
+      }
+//      cout << (int)*j <<" " << (int)value << " " << (int)vec[index/2] << endl;
+      bv[index] = (*j>>bit_length) & 1;
     }
 
     iv[i] = vec;
@@ -58,9 +66,9 @@ int main(int argc, char *argv[]) {
   }
 
 
-  rank_support_v5<0> rb[16];
+  rank_support_v<0> rb[16];
   for(int i =0; i < 16; i++) {
-    rank_support_v5<0> r(&b[i]);
+    rank_support_v<0> r(&b[i]);
     rb[i] = r;
   }
   //select_support_mcl<> sls(&b);
@@ -89,8 +97,14 @@ int main(int argc, char *argv[]) {
     while(b[level][index] == 0) {
 //      cout << "orig:" << original[*i] << endl;
 //      cout << "l:" <<level << " " << index << endl;
-      uint8_t d = iv[level][index];
-//      cout << "d " << (int)d << endl;
+      uint8_t d = iv[level][index/2];
+      if(index%2==1) {
+        d=d&15;
+      }
+      else {
+        d=d>>4;
+      }
+//      cout << (int)d << endl;
       val = (val<<bit_length) + d;
 //      cout << "val " << val << endl;
       index = rb[level](index);
@@ -98,8 +112,15 @@ int main(int argc, char *argv[]) {
     }
 //    cout << "orig:" << original[*i] << endl;
 //    cout << "l:"<<level << " " << index << endl;
+    uint8_t e = iv[level][index/2];
+    if(index%2==1) {
+      e=e&15;
+    }
+    else {
+      e=e>>4;
+    }
 
-    val = (val<<bit_length) + iv[level][index];
+    val = (val<<bit_length) + e;
 //    cout << "val " << val << endl;
 
   //  int begin = index == 0 ? 0 : sls(index)+1;

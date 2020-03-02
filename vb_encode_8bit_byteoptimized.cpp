@@ -92,7 +92,7 @@ CALLGRIND_START_INSTRUMENTATION;
 // TODO: try out with builtin_clz
 //    test = (uint64_t *)&iv[begin];
     int offset = (begin)%bsize;
-    int block = (begin)/bsize;
+    int block = (begin)>>bsize;
     uint64_t blokki = *(b.data()+block);
     val = blokki >> offset;
     if(offset) {

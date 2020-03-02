@@ -440,7 +440,7 @@ are times taken from looping through the index array and VB decoding the number 
 \centering
 \caption{Results in milliseconds, smaller is better.\label{table:results1}}
 \begin{tabular}{l||c c c c c c} 
-& bris8 & bris4 & bris8v5 & bris4v5 & select8 & select4  \\
+& bris8 & bris4v5 & bris8v5 & bris4 & select8 & select4  \\
  \hline \hline 
 all (5M)   & 194.10 & 578.20 & 232.30 & 461.80 & 132.00 & 187.60 \\
 all (50M)   & 255.40 & 719.10 & 300.70 & 558.90 & 214.20 & 291.00 \\
@@ -461,8 +461,11 @@ onlysmall (500M)   & 34.60 & 39.40 & 35.10 & 34.10 & 278.00 & 333.90 \\
 \end{tabular}
 \end{table}
 
+ - 4bit is naturally slower, because of smaller block size
+ - select is better with longer numbers, because it only needs 1 select call and reads straight from memory
+ 
 
-
+ - subarray access(?)
 
  - get compression sizes of 4 and 8 bit versions
 
