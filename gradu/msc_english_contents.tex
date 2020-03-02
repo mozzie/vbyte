@@ -1,51 +1,64 @@
 \chapter{Introduction}
 Enormous datasets are a common case in today's applications. Compressing the datasets is beneficial, because they 
-naturally decrease memory requirements but also are faster when compressed data is read from disk \citep{Zob95}.
+naturally decrease memory requirements but also are faster when compressed data is read from disk \citep{Zob95}. 
 
 One of the leading methods of data compression is variable-length coding \citep{Sal99}, where frequent sequences of data
 are represented with shorter codewords. Because the sequences of data have different lengths when compressed, it is 
 not trivial to determine the exact location of a certain element in the compressed data. If this is required, the usual 
 data compression algorithms are inefficient. Fortunately this is not a requirement compression algorithms usually need to fulfill. However, 
-random access of compressed data is useful in compressed data structures. It saves storage space, bandwith and increases the likelihood
+random access of compressed data is useful in compressed data structures. It saves storage space, bandwidth and increases the likelihood
 of data already being in cache \citep{Sch02}. In most compression methods, the only way to do this is to decompress data from the beginning. 
 
-A variable-byte encoding based integer compression method with fast random access was first introduced by \citep{Bri09}. They used clever block 
+A variable-byte encoding based integer compression method with constant time random access was first introduced by \citep{Bri09}. They used clever block 
 reorganizing and $rank$ data structure to achieve random access. Their solution is currently the only published solution for the problem and it 
-has been widely adopted.
+has been widely adopted. 
 
-An alternative solution with $select$ data structure is shown later. (TODO: refer to results)
+An alternative solution with $select$ data structure is proposed and explained in detail later in this thesis. Comparison to $rank$ implementation by Brisaboa et al is 
+shown with different implementations of $rank$ and $select$ and several different data sets. Proposed method does not use data 
+reorganizing, but rather capitalizes on the assumption that data is encoded the same way it is in the source. Because variable-byte encoding does not assign 
+new codewords to data when encoding, data can be read straight from the memory and reassembling the integer from blocks is not needed.
 
---contributions?
+$Rank$ method is superior when dataset contains mostly small integers. With larger integers, multiple $rank$ calls are needed and $select$ method performs better. Additionally, the
+proposed $select$ method offers quick access to next or previous element.
 
 
 
 
-\chapter{Variable-byte encoding}
+\chapter{Variable-bytes}
 
 Variable-byte (VB) encoding \citep{Wil99} is a method for compressing integers via omitting leading zero bits that would be present in a longer fixed 
 width word. In normal data sets, VB encoding loses in compression performance to generic algorithms like Huffman encoding or Lempel-Ziv encoding, but 
-is generally faster to decode \citep{Bri09} and sometimes preferred due to its simplicity. As later shown in Chapter~\ref{chapter:DAC}, constant time 
-random access is possible with VB encoding.
+is generally faster to decode \citep{Bri09} and sometimes preferred due to its simplicity. 
 
-A good data set for VB encoding is a list of mostly small numbers with a need to support larger ones. A search engine may use an inverted index of 
+A good data set for VB encoding is a list of mostly small integers with a need to support larger ones. A search engine may use an inverted index of 
 words in documents. For each word, a list of document IDs where the word appears is stored. It may also store locations of the word in document for 
 advanced search purposes. Usually these lists are preprocessed and stored as an inverted index or gaps, storing the difference to previous number 
-instead of the actual number \citep{Man08}. Common words have a lot of entries in these lists, but because of gap storing the numbers are small. 
-In contrast, rare words have only a few entries but the numbers stored are larger. These lists are excellent data sets for VB encoding. 
+instead of the actual number \citep{Man08}. Common words have a lot of entries in these lists, but because of gap storing the integers are small. 
+In contrast, rare words have only a few entries but the integers stored are larger. These lists are excellent data sets for VB encoding. 
 
-Variable-byte encoding originates from and is used in MIDI music file \citep{Mid96} and several applications have a similar implementation of VB. Apache 
+Variable-byte encoding originates from and is used in MIDI music file format \citep{Mid96} and several applications have a similar implementation of VB. Apache 
 Lucene has vInt datatype. Wireless Application Protocol has a variable length unsigned integer uintvar, Google Protocol Buffers has a Base 128 Varint \citep{GooPB},
  Microsoft .Net framework offers "7BitEncodedInt" in BinaryReader and BinaryWriter classes and IBM DB2 has a variable byte  \citep{Bha09}.
 
-Elias Delta and Gamma codes \citep{Eli75} are popular encoding methods for forementioned data sets. They assign short bit array codes to small numbers, 
-which allows them to outperform VB encoding on small number datasets \Citep{Wil99}. Elias Delta and Gamma codes can't support fast random access efficiently because
-of their changing code length.
+Later, VB encoding was to 
+be found efficient in compressing integer lists. It was first experimented as a tool for compressing inverted index lists of word locations in documents \citep{Sch02}. 
+That yielded excellent records, and since then many different approaches have been introduced. 
 
-VB encoding splits each integer into blocks of $b$ bits and adds a continuation bit to the block to form chunks of length $1+b$. The extra bit is set to 1 only
-on the block containing the least significant bits of the integer. This information is used in decoding to signal if next chunk continues the current 
-integer. For example, let's assume $b = 4$ and let $n = 42$ be a 16 bit unsigned integer. The standard 8-bit representation of $n$ is 
-\texttt{00000000 00101000}. When split to blocks of $b$ bits, it becomes \texttt{0000 0000 0010 1000}. Empty blocks are omitted and continuation bits 
-are added to the remaining blocks. The result is \texttt{00010 11000}, which is the compressed data.
+More recent studies have taken a look into the machine code level for VB and applied SIMD (Single instruction, multiple data) instructions to VB \citep{Lem18,Pla15}. The bit 
+operations in VB are simple and therefore modifying the code to use SIMD instructions is straightforward and the speed improvements are significant. 
+
+Elias Delta and Gamma codes \citep{Eli75} are popular encoding methods for forementioned data sets. Their encoding process assigns short bit array codes to small integers, 
+which is why they outperform VB encoding on datasets with a lot of small integers \Citep{Wil99}.
+
+\section{VB encoding}
+VB encoding splits each integer into blocks of $b$ bits and adds a continuation bit to the block to form chunks of length $1+b$. The continuation bit is set to 1 only
+on the block containing the least significant bits of the integer. This information is used in decoding to signal if the current integer continues in the next chunk. 
+
+For example, block length is set to 4 and 42 is a 16 bit unsigned integer that is to be encoded. The standard 8-bit representation of 42 is 
+\texttt{00000000 00101000}. This is then split to blocks of 4 bits, resulting in \texttt{0000 0000 0010 1000}. The block with least significant bits is given a continuation bit 1.
+The block with the next least significant bits is given a continuation bit 0. The rest of the blocks are omitted, because they all are empty. The result of this is \texttt{00010 11000}, 
+which is the number 42 compressed with VB encoding and block length of 4. A pseudo code with block length 4 is shown in Figure~\ref{vbyte_enc}. Prepend adds an element to the beginning of the list 
+and extend adds all the elements of the second list to the end of the first list.
 
 \begin{figure}[ht]
 \centering
@@ -77,15 +90,42 @@ are added to the remaining blocks. The result is \texttt{00010 11000}, which is 
 \captionof{figure}{VByte encoding} \label{vbyte_enc}
 \end{figure}
 
-Decoding is essentially just reversing the encoding steps: chunks are read until a chunk with 1 as continuation bit is found. Continuation bits 
-are removed from all the chunks and the blocks are concatenated to form the original number. As in the previous example, $b = 4$, encoded message 
-is \texttt{00010 11000} and $n = 0$. Block from the first chunk is extracted and added to $n$, making $n = $\texttt{10}. A bitwise shift to left 
-equal to $b$ is applied to $n$, changing $n = $\texttt{100000}. Then the block is extracted from the next chunk. This block is added  $n$, making 
-$n = 42$. Because the previous continuous bit was 1, decoding this number has finished. An example implementation of encode and decode with block 
-length of 7 is shown in Figure~\ref{vbyte_enc} and Figure~\ref{vbyte_dec}.
+Smaller block length can yield a better compression rate at the cost of more bit manipulation, while bigger block lenghts need less bit manipulation and 
+offer less effective compression. On the other hand, bigger block length means a smaller percentage of added continuation bits.
+Generally block length of 7 has been used because it tends to perform well on average and handling chunks as bytes is 
+convenient \citep{Man08}.
+
+
+\begin{table}
+\centering
+\begin{tabular}{l||c c c c c} 
+Original number & first block & second block & third block & fourth block &\\ 
+\hline \hline 
+4  & \texttt{\underline{1}0100}    &                             &                           &  &  \\
+17  & \texttt{\underline{0}0001}   & \texttt{\underline{1}0001}  &                           &  &  \\
+620  & \texttt{\underline{0}1100}  & \texttt{\underline{0}0110} & \texttt{\underline{1}0010} &  &  \\
+60201 & \texttt{\underline{1}1001} & \texttt{\underline{0}0010} & \texttt{\underline{0}1011} & \texttt{\underline{1}1110} &  \\
+
+\hline
+\end{tabular}
+\caption{VByte encoded integers, block size 4. Continuation bit underlined.\label{table:vbytes}}
+\end{table}
+
+\section{VB decoding}
+VB decoding reverses the encoding steps: encoded chunks are read until a chunk with 1 as continuation bit is found. Continuation bits 
+are removed from all the chunks and the blocks are concatenated to form the original integer. A pseudo code implementation of VB decoding with block length of 7 is shown in Figure~\ref{vbyte_dec}.
+Append adds an element to the end of the list. If block length is changed, additional bit operation steps when reading the data may be needed.
+
+As how the encoding example ended, the encoded message was \texttt{00010 11000} with block length of 4 and the goal is to decode a 16 bit unsigned integer. The block from the first chunk is 
+extracted and added to $n$, making $n = $\texttt{10} (bit representation of 2).
+The continuation bit was 0 in this chunk, which means the encoded integer continues to the next block. A bitwise shift to the left equal to block length is applied to $n$, 
+changing $n = $\texttt{100000} (bit representation of 32). Then the chunk reading process is repeated. The block of the next chunk is added to $n$, making 
+$n = $\texttt{101000} (bit representation of 42). The continuation bit of this chunk is 1, which means the decoding for this number is complete. 
 
 \begin{figure}[ht]
-\begin{algorithmic}
+\centering
+  \begin{minipage}{0.5\linewidth}
+\begin{algorithmic}[H]
 \Function{VBDecode}{$bytestream$}
 \State $numbers\gets $ list
 \State $n\gets 0$
@@ -94,64 +134,55 @@ length of 7 is shown in Figure~\ref{vbyte_enc} and Figure~\ref{vbyte_dec}.
 \State $n\gets 128\times n $ + $b$
 \Else
 \State $n\gets 128\times n $ + $b$ - $128$
-\State $numbers$.append($n$)
+\State \Call{append}{numbers,n}
 \State $n\gets 0$
 \EndIf
 \EndFor
 \State \textbf{return} numbers
 \EndFunction
 \end{algorithmic}
+\end{minipage}
 \caption{VByte decoding} \label{vbyte_dec}
 \end{figure}
 
-Small lengths of $c$ can yield better compression rate at the cost of more bit manipulation, while longer chunks need less bit manipulation and 
-offer less effective compression. Generally block length of 7 has been used because it gives a good average and handling chunks as bytes is 
-convenient \citep{Man08}.
-
-VB encoding is a well known compression algorithm. It's origins date back to 1980's and the famous MIDI music file format. It stored some of the numbers
-in a "variable-length quantity" form, which was a 7-bit block VB structure \citep{Mid96}. Similar data types have existed for example in Apache Lucene 
-(as vInt) and IBM DB2 database (as Variable Byte). Later, VB encoding was found efficient in compressing integer lists. It was first experimented in 
-compressing inverted index lists of word locations in documents \citep{Sch02}. That yielded excellent records, and since then many different approaches 
-have been introduced. 
-
-Modern studies have looked into machine code for VB and applied SIMD (Single instruction, multiple data) architecture to VB \citep{Lem18,Pla15}. The bit 
-operations in VB are simple and therefore modifying the code to use SIMD instructions is straightforward and the speed improvements are significant. 
-
-TODO: might need 1-2 more chapters
 
 
 \chapter{Directly addressable codes} \label{chapter:DAC}
 
-Ability to handle large amounts of data fast is one of the key challenges in the field of search engines. Compressed data structures are applied to fit the 
-data into cache, memory or even hard drive. Direct access to any element is one of the usual requirements in compressed data strutures. It is not natively
-possible to decode the i-th element in variable-byte compression algorithms, because the position of the element depends on the length of the preceding 
-compressed data. 
-
-Direct access is achievable with supporting data structures. An obvious solution is to store the location of each element, but it adds a very large overhead 
-which removes the benefit of compression.
+The ability to handle large amounts of data fast is one of the key challenges in the field of search engines. Compressed data structures are applied to fit the 
+data into cache, memory or even hard drive. Direct access to any element in a compressed list or array is one of the usual requirements in compressed data 
+strutures. It is not natively possible to decode the i-th element in variable-byte compression algorithms, because the position of the element in the compressed
+list depends on the length of the preceding compressed data. Direct access is achievable with supporting data structures. A naive solution is to store the location 
+of each element, but it adds a very large overhead which removes the benefit of compression.
 
 \section{Rank and Select}
 Rank and select are two succinct data structure operations which operate on a bit array B. $Rank_1$(B, i) gives the sum of 1 bits between B[0] and B[i] and 
-$select_1$(b, i) gives the index of i-th 1 bit in B. Both operations work in constant time (citation?). Locations of 1 bits in B should represent locations 
-of the items in the encoded data. For most compression algorithms, this requires B to be created in addition to the existing data and the length of B usually 
-has to be close to the length of the data. VB encoding has several advantages with search and rank: it's data is compressed in blocks of equal length which 
-significantly shrinks the length of B. Also the bit array C formed from the continuation bits already stores the locations of items. In this case, $rank_1$(C, i) 
-would give the sum of end bytes up to i-th index and $select_1$(C, i) would give the location of the ending byte of i-th compressed element.
+$select_1$(B, i) gives the index of i-th 1 bit in B. Both operations can be implemented to work in constant time \citep{gbmp2014sea}. To use rank or select in indexing, the
+set 1 bits in B should reflect to the element locations in the encoded data. 
+
+For most compression algorithms, this requires B to be created in addition to the existing data and the length of B usually 
+has to be close to the length of the data, because encoded element lenghts vary. VB encoding has several advantages with search and rank: the data is compressed in 
+blocks of equal length which significantly shrinks the length of B. Moreover the bit array C formed from the continuation bits already stores the locations of items and works
+as the needed indexing array. In this case, $rank_1$(C, i) would give the sum of end blocks up to i-th index and $select_1$(C, i) would give the location of the ending block 
+of i-th compressed element.
 
 \section{Rank and Select implementation}
 
-The rank and select implementations used in this article are C++ libraries from \citep{gbmp2014sea}. The library has several implementations of both rank and 
+The rank and select implementations used in this thesis are from C++ library by \citep{gbmp2014sea}. The library has several implementations of both rank and 
 select as well as an implementaion of a bit array. Table~\ref{table:supportsize} has $rank$ and $select$ size requirements of implementations used in this experiment.
-Both rank implementations have a constant space requirement, while select's needed size depends on the number of 1's in the data.
+Both rank implementations have a constant space requirement over the bit array, while select's needed size depends on the number of 1's in the data.
 
-For every 512th bit in the array, rank stores the absolute value of 1's preceding that bit in a superblock. For every 64th bit in a superblock, a relative 
-count is stored. With this setup, an rank can be instantly calculated for every 64th bit. To get rank(i), superblock[i/512] and it's relative value (i\%512)/64 
-are fetched. Then 1 bits from (i-i\%64) to i are counted and added to get the correct sum. For Rankv5, superblock size is 2048 and relative count is stored every
-384th bit, which offers a tradeoff between performance and memory usage.
+The data structure of rank has two layers. First layer is the superblock array. For every 512th bit, the number of 1's from the beginning of the array is stored to the superblock array.
+The second layer is the relative count block. It stores a relative count of 1's for every 64th bit. To calculate rank(i), the superblock index is s = i/512 and 
+relative count block index is r = i-s / 64, both being integer divisions. Then number of 1 bits from index r to i are calculated. All three values added together add up to rank(i). 
+Rankv5 is a lighter structure: it's superblock size is 2048 and relative counts are taken for every 384th bit. This causes the final bit calculation to be more costly, but reduces 
+memory requirement to a quarter.
 
-Select data structure works similarly to rank. Index location of every 4096th set bit is stored in the superblock and location of every 64th set bit is stored 
-relative to the superblock. 
+$Select$ data structure works similarly to rank. The index location of every 4096th set bit is stored in the superblock and location of every 64th set bit is stored 
+relative to the superblock. With similar calculations, the location of closest 64th set bit is calculated and then bit array is iterated until required amount of bits is reached. 
 
+In both cases, one function call always gets a value from the superblock and then from the superblock's relative block. The only differiating factor is the manual bit count from relative
+block's index to wanted index. This is at most the size of one relative block and thus both of the functions work in constant time \citep{Gon05}.
 
 \begin{table}
 \centering
@@ -161,7 +192,7 @@ Structure & Extra size taken\\
 \hline \hline 
 Rank   & \text{25\% of bit array} \\
 Rankv5 & \text{6.25\% of bit array}\\
-Select & \text{~8.3\% of bit array (on average)}\\
+Select & \text{~8-12\% of bit array}\\
 \hline
 \end{tabular}
 \end{table}
@@ -169,19 +200,91 @@ Select & \text{~8.3\% of bit array (on average)}\\
 
 
 \section{DAC via rank}
-Directly addressable codes in VB was first introduced by \citep{Bri09} in 2009. Their solution was to divide chunks in encoded bytes to separate arrays $A_1$ to 
-$A_n$ and then use $rank_0$ to get direct access. If i is the requested index, then $rank_0$($A_k$, i) returns the number of elements preceding i that have 
-continuation bit set at 0. In other words, the number of elements that continue to $A_{k+1}$. 
+Directly addressable codes in VB was first introduced by \citep{Bri09}. In their solution, the chunks are sorted in separate arrays by their significance. For each integer, the block 
+of the least significant chunk is stored in the first array $A_1$, and its bit to the first bit array $B_1$. Then if the number was stored in multiple chunks, the block of the next chunk is
+stored to $A_2$ and the bit to $B_2$ and so on. After the data is set, rank data structure is built for each bit array. The data structure is implicit and does not require additional space apart
+from the $rank$ structure. Figure~\ref{bris_ds} contains a visualization of the data structure.
 
-For example, if an element needed 3 chunks when encoded, the least significant bits would go to $A_1$, second least significant bits to $A_2$ and the most significant 
-bits would go to $A_3$. When fetching i-th element, getting the first chunk is just fetching $A_1$[i]. If the continuation bit is set at 0 (meaning there are more chunks 
-to this element), getting the correct index for $A_2$ is calculated with $rank_0$($A_1$, i). A pseudo code example of DAC with $rank$ is shown in Figure~\ref{bris_pseudo} 
-with block length of 8. (TODO: example needed?)
 
 
 \begin{figure}[ht]
+\centering
+\begin{tikzpicture}
+[node distance=0pt,
+ start chain = A going right,
+ arrow/.style = {draw=#1,-{Stealth[]}, 
+                shorten >=1mm, shorten <=1mm}, % styles of arrows
+ arrow/.default = black,
+ X/.style = {rectangle, draw,% styles of nodes in string (chain)
+                minimum width=7ex, minimum height=4ex,
+                outer sep=0pt, on chain}
+ ]
+\node[X, join] (start) {$C_{1,2}C_{1,1}$};
+\node [above=1ex of start]{The chunk array. $C_{i,j}$ = $B_{i,j}$ : $A_{i,j}$};
+\node [left=1ex of start]{\textbf{C =}};
+\node[X] {$C_{2,1}$};
+\node[X] {$C_{3,3}C_{3,2}C_{3,1}$};
+\node[X] {$C_{4,2}C_{4,1}$};
+\node[X] {$C_{5,1}$...};
+
+\node[X, below=5ex of start] (a1) {$A_{1,1}$};
+\node [left=1ex of a1]{\textbf{$A_1$ =}};
+\node[X] {$A_{2,1}$};
+\node[X] {$A_{3,1}$};
+\node[X] {$A_{4,1}$};
+\node[X] {$A_{5,1}$};
+\node[X] {...};
+
+\node[X, below=0ex of a1] (b1) {0};
+\node [left=1ex of b1]{\textbf{$B_1$ =}};
+\node[X] {1};
+\node[X] {0};
+\node[X] {0};
+\node[X] {1};
+\node[X] {...};
+    
+
+\node[X, below=5ex of b1] (a2) {$A_{1,2}$};
+\node [left=1ex of a2]{\textbf{$A_1$ =}};
+\node[X] {$A_{3,2}$};
+\node[X] {$A_{4,2}$};
+\node[X] {...};
+
+\node[X, below=0ex of a2] (b2) {1};
+\node [left=1ex of b2]{\textbf{$B_2$ =}};
+\node[X] {0};
+\node[X] {1};
+\node[X] {...};
+
+\node[X, below=5ex of b2] (a3) {$A_{3,3}$};
+\node [left=1ex of a3]{\textbf{$A_3$ =}};
+\node[X] {...};
+
+\node[X, below=0ex of a3] (b3) {1};
+\node [left=1ex of b3]{\textbf{$B_3$ =}};
+\node[X] {...};
+
+
+\end{tikzpicture}
+\caption{Data structure by Brisaboa et al., visualized}\label{bris_ds}
+
+\end{figure}
+
+To decode an element from index i, first block is fetched from $A_1$[i]. Because each encoded element is composed of at least one block, the first block is obtainable via straight indexing. With small integers, this 
+is all that is required. If the data has a lot of small integers, the $rank$ method has a huge advantage. 
+
+However if the element was stored in multiple blocks, the index of the next block in $A_2$ is obtained from $i \gets rank_0$($A_1$, i). $Rank_0$ 
+returns the number of zeros in the bit array preceding index i. In other words, the number of elements before $i$ that continue to the next array. 
+This in turn means that $i$ now has the index of the element's next block in array $A_2$.
+This process is repeated until the i-th bit of the bit array of current level is set. The resulting integer is constructed from the blocks of the fetched chunks. A pseudo code example of DAC with $rank$ is shown in Figure~\ref{bris_pseudo} 
+with block length of 8.
+
+
+\begin{figure}[ht]
+\centering
+\begin{minipage}{0.5\linewidth}
 \begin{algorithmic}
-\State $i \gets $ wanted index
+\State $index \gets $ wanted index
 \State $A \gets $ block arrays
 \State $B \gets $ continuation bit arrays
 \State $level \gets 0$
@@ -189,17 +292,20 @@ with block length of 8. (TODO: example needed?)
 \While {$B[level][index] = 0$}
 \State $block \gets A[level][index]$
 \State $number \gets number \mathbin{\ll} 8$
-\State $number \gets number \mathbin{|} block$
+\State $number \gets number + block$
 \State $index \gets \Call{Rank}{B[level], index}$
 \State $level \gets level + 1$
 \EndWhile
 \State $block \gets A[level][index]$
 \State $number \gets number \mathbin{\ll} 8$
-\State $number \gets number \mathbin{|} block$
+\State $number \gets number + block$
 \end{algorithmic}
+\end{minipage}
 \caption{Example pseudo code of DAC with rank by Brisaboa et al.} \label{bris_pseudo}
+
 \end{figure}
 
+--TODO: create another version: 7bit bris. Store bits in both bit array and chunk (to see if it's faster to get the continuation bit from the chunk than from the bit array) (also needs 7bit compliant dataset)
 
 \chapter{DAC with select query}
 
@@ -208,26 +314,26 @@ in $B$ and a single $select_1$ query gets the desired starting point, while the 
 the first. Minimizing the amount of $select$ and $rank$ queries is important. They run in constant time but their impact is huge, because rest of the VB decoding 
 consists of a few bit operations. 
 
-To use $select_1$ with VB, continuation bits need to be separated from chunks to their own bit array and a $select_1$ structure built over it. $Select$(i) returns the
-location of the end byte of i-th element. Therefore the start of j-th element in the block array is at block $b_s$ = $select_1$(j-1) + 1. To simplify calculations even further,
-block sizes of 4 and 8 were used to avoid splitting of blocks between bytes.
+To use $select_1$ with VB, continuation bits need to be separated from chunks to their own bit array and a $select_1$ structure built over it. Because every compressed element has 1
+only on it's last block, $Select_1$(i) returns the location of the end byte of i-th element. Therefore the start of j-th element in the block array is at 
+block $b_s$ = $select_1$(j-1) + 1. Implementation was simplified by using only block sizes 4 and 8 to prevent block splitting between bytes.
 
-Unlike the standard VB encoding, the continuation bits are not in the middle of the data blocks. The compressed number can be read from the memory block and concatenation of blocks
-is not needed. The data in blocks is be written into memory as it is, so that when reading a large unsigned integer from the block byte array, the bits are already in correct order. 
+Unlike the standard VB encoding, the continuation bits are removed from the chunks and stored in their own array, which leaves the blocks in their own array. This allows the 
+compressed number to be read from the memory block and removes the need of block concatenation. The data in blocks is written into memory as they appear in the original integer, so that 
+when reading a word from the block byte array, the bits and bytes are already in correct order. 
 
 If the original element size is 32 bits and the data was compressed to k blocks of length b. The starting byte s of the element is $select$(i) * b div 8 where div is the integer division. 
-Offset o is the remainder of previous division, o = x*b mod 8. The 32-bit value is read from memory from byte location s. Then bit shift left for 32-b*k-o is applied to remove trailing 
+Offset o is the remainder of previous division, o = x*b mod 8. The 32-bit word is read from memory from byte location s. Then bit shift left for 32-b*k-o is applied to remove trailing 
 bits and bit shift right 32-b*k to re-align bits. If block size is one byte, offset calculation is not needed and thus the process is slightly faster.
 
-The intuitive way to calculate block length k of i-th element is from $select_1$(i+1) and subtract previously calculated start block index from it. This however causes a second 
+The most intuitive way to calculate block length of i-th element is from $select_1$(i+1) and subtract the previously calculated start block index. This however causes a second 
 $select_1$ query, which is costly. A much faster option is to iterate forward in bit array until the next 1. Alternatively, the block length can be calculated by reading an integer 
-from the bit array, aligning it's offset and counting the trailing zeros. Figure~\ref{select_pseudo} contains an example of VB encoding with DAC with $select$ and block size 8. 
+from the bit array, aligning it's offset and counting the trailing zeros. Figure~\ref{select_pseudo} contains an example of VB decoding with DAC with $select$ and block size 8. 
 Different block sizes need extra calculation to get the block location from the byte array. In the example, $CalculateLength$ returns the length of the number in blocks and $ByteMask(k)$ returns 
 a bit mask for k bytes. 
 
-(maybe to future work) Storing bytes in this fashion may have benefits when reading subsequent (fast next() and previous()?) elements. With some modifications, SIMD instructions can possibly be applied.
-
 \begin{figure}[ht]
+\centering
 \begin{algorithmic}
 \State $i \gets $ wanted index
 \State $A \gets $ block byte array
@@ -235,62 +341,120 @@ a bit mask for k bytes.
 \State $begin \gets \Call{Select}{index}$
 \State $len \gets \Call{CalculateLength}{begin}$
 \State $mask \gets \Call{ByteMask}{len}$
-\State $number \gets A[begin]$ \Comment{read a larger number from the byte array}
-\State $number \gets number \mathbin{\&} mask$ 
+\State $word \gets A[begin]$ \Comment{read a word from the byte array}
+\State $word \gets word \mathbin{\&} mask$ 
 
 
 \end{algorithmic}
 \caption{Pseudo code of DAC with select with block length 8} \label{select_pseudo}
 \end{figure}
 
-TODO: try bitvector SD performance + size (select)
+Figure~\ref{VBarrays} portrays an example of the bit array and the block array. $Select_1(k-1)$+1 returns the index of the starting byte of ith compressed element. Length of the compressed 
+element is obtainable e.g. via $select_1(k)$. Then a word is read from the block array, starting from block $A_i$. Because element length in this case is 3, blocks not belonging to the element
+are removed either with a bitmask or by double bit shifting, resulting in decoded k-th element.
 
-TODO: look into select implementation, may need optimizing
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}
+[node distance=0pt,
+ start chain = A going right,
+ start chain = B going right,
+ arrow/.style = {draw=#1,-{Stealth[]}, 
+                shorten >=1mm, shorten <=1mm}, % styles of arrows
+ arrow/.default = black,
+ X/.style = {rectangle, draw,% styles of nodes in string (chain)
+                minimum width=9ex, minimum height=5ex,
+                outer sep=0pt, on chain}
+ ]
+
+\node[X, join] (start) {...};
+\node[X] (first){0};
+\node[X, very thick] (select){1};
+\node[X] (Btarget){0};
+\node[X, join] (second){0};
+\node[X, very thick, join] (end){1};
+\node[X, join] (third){0};
+\node[X, join] {$B_{...}$};
+
+\node [above=1ex of start]{Bit array};
+\node [below=1ex of start]{index:};
+\node [above=1ex of select]{k-1th 1};
+\node [below=1ex of first]{$i-1$};
+\node [below=1ex of select]{$i$};
+\node [below=1ex of Btarget]{$i+1$};
+\node [below=1ex of second]{$i+2$};
+\node [below=1ex of end]{$i+3$};
+\node [below=1ex of third]{$i+4$};
+\node [above=1ex of end]{kth 1};
+\node[X, below=12ex of start] (x) {...};
+\node[X, join] {$A_{i-2}$};
+\node[X, join] {$A_{i-1}$};
+\node[X, ultra thick] (Atarget){$A_{i}$};
+\node[X, ultra thick] {$A_{i+1}$};
+\node[X, ultra thick] {$A_{i+2}$};
+\node[X, join] {$A_{i+3}$};
+\node[X, join] {$A_{...}$};
+\node [above=1ex of x]{Block array};
+
+
+\draw[arrow] (Btarget.south) to (Atarget.north);
+\end{tikzpicture}
+\caption{Data} \label{VBarrays}
+\end{figure}
+
 
 \chapter{Experimental results}
 
-The following experiments are run on <at the moment my work Lenovo Thinkpad T480s, TODO run on a server and write specs here>. The algorithms 
-were implemented with C++ (TODO: list compile tags and whatnot here) using data structures and functions from \citep{gbmp2014sea}. 
+The following experiments were run on a AMD Phenom(tm) II X6 1055T Processor@2.8Ghz with 64kB+64kB L1 cache, 512kB L2 cache, 6144kB L3 cache and 32GB of DDR3 1333MHz.
+The computer runs Ubuntu 14.04.4 (3.13.0-91-generic x86\_64). The code was compiled with g++-7 -std=c++11 -DNDEBUG and with libraries -lsdsl -ldivsufsort -ldivsufsort64.
 
+Five different VB decoding algorithms were compared. The Bris-algorithms are from \citep{Bri09}. All algorithms are implemented using data structures and functions from the SDSL 
+library \citep{gbmp2014sea}. Each implementation is compressing and decoding uint64\_t integers.
 
-
-Five different kinds of VB decoding algorithms were used. Bris-implementations are from \citep{Bri09}. 
 \begin{itemize}
   \item Bris4v5 - Bris implementation with block size 4, using rank support v5
   \item Bris8 - Bris implementation with block size 8, using rank support v
   \item Bris8v5 - Bris implementation with block size 8, using rank support v5
-  \item Our4 - Our implementation with block size 4, using select support mcl
-  \item Our8 - Our implementation with block size 8, using select support mcl
+  \item Select4 - Proposed implementation with block size 4, using select support mcl
+  \item Select8 - Proposed implementation with block size 8, using select support mcl
 \end{itemize}
 
-Eight kinds of datasets were used. For each number in the dataset, $p$ was randomly selected from $P$ and then number was randomly selected from
-range [0,$2^p$].
+
+
+
+
+
+Four differently constructed datasets were used and three different sizes of dataset were used (5M, 50M, 500M). 
 
 \begin{itemize}
-  \item all5M - 5 million numbers, $P$ = {7,8,15,16,23,24,30,31}
-  \item all50M - 50 million numbers, $P$ = {7,8,15,16,23,24,30,31}
-  \item byte5M - 5 million numbers, $P$ = {7,7,7,8,8,8,16,31}
-  \item byte50M - 50 million numbers, $P$ = {7,7,7,8,8,8,16,31}
-  \item small5M - 5 million numbers, $P$ = {3,4,5,6,7,8,16,31}
-  \item small50M - 50 million numbers, $P$ = {3,4,5,6,7,8,16,31}
-  \item vsmall5M - 5 million numbers, $P$ = {2,2,3,3,3,4,4,15}
-  \item vsmall50M - 50 million numbers, $P$ = {2,2,3,3,3,4,4,15}
+  \item all - all integers randomly 1-4 bytes long
+  \item twolarge - one eighth of integers 4 bytes long, one eighth 2 bytes long, rest 1 byte    
+  \item onelarge - one eighth of integers 2 bytes long, rest 4 bits or less
+  \item onlysmall - all integers 4 bits or less
 \end{itemize}
 
-All algorithms save the data to memory and randomize one million index numbers to an array. The time taken is calculated from looping through the 
-index array and VB decoding the number in the index. The times shown in Table~\ref{table:results1} are an average of 100 such runs.
+All implementations read the data set from a file and compress it to memory. Then one million index integers are randomized and stored to an array. The times shown in Table~\ref{table:results1} 
+are times taken from looping through the index array and VB decoding the number in the index. Additionally, each run is iterated multiple times and an average of the runtimes is taken. 
 
 \begin{table}
 \centering
 \caption{Results in milliseconds, smaller is better.\label{table:results1}}
-\begin{tabular}{l||c c c c c c c c} 
-Experiment & all5M & all50M & byte5M & byte50M & small5M & small50M & vsmall5M & vsmall50M\\ 
-\hline \hline 
-Bris4v5 & 348.41 & 768.83 & 345.16 & 772.84 & 344.54 & 768.45 & 346.86 & 771.61 \\
-Our4    & 127.92 & 263.22 & 127.44 & 263.5  & 127.9  & 262.67 & 127.88 & 262.58 \\
-Bris8   & \textbf{97.75}  & 308.17 & \textbf{98.47}  & 309.6  & \textbf{98.14}  & 307.81 & \textbf{97.99}  & 308.09 \\
-Bris8v5 & 127.83 & 287.46 & 127.7  & 288.63 & 128.14 & 291.32 & 127.99 & 287.84 \\
-Our8    & 103.85 & \textbf{230.16} & 103.92 & \textbf{230.14} & 103.86 & \textbf{230.02} & 103.95 & \textbf{230.6} \\
+\begin{tabular}{l||c c c c c c} 
+& bris8 & bris4 & bris8v5 & bris4v5 & select8 & select4  \\
+ \hline \hline 
+all (5M)   & 194.10 & 578.20 & 232.30 & 461.80 & 132.00 & 187.60 \\
+all (50M)   & 255.40 & 719.10 & 300.70 & 558.90 & 214.20 & 291.00 \\
+all (500M)   & 298.10 & 821.90 & 368.10 & 644.90 & 307.20 & 388.10 \\
+twolarge (5M)   & 96.40 & 331.70 & 107.70 & 260.20 & 119.40 & 165.20 \\
+twolarge (50M)   & 142.30 & 406.50 & 159.30 & 332.10 & 212.10 & 269.20 \\
+twolarge (500M)   & 168.50 & 516.10 & 191.80 & 393.80 & 304.90 & 381.30 \\
+onelarge (5M)   & 25.80 & 50.80 & 26.90 & 42.30 & 94.60 & 106.10 \\
+onelarge (50M)   & 50.00 & 85.30 & 51.00 & 72.30 & 197.90 & 241.00 \\
+onelarge (500M)   & 55.10 & 96.80 & 59.10 & 80.50 & 294.30 & 351.70 \\
+onlysmall (5M)   & 16.40 & 17.60 & 16.60 & 16.50 & 82.40 & 94.90 \\
+onlysmall (50M)   & 31.90 & 36.90 & 32.50 & 31.20 & 186.50 & 226.90 \\
+onlysmall (500M)   & 34.60 & 39.40 & 35.10 & 34.10 & 278.00 & 333.90 \\
+
 
 \hline
 %
@@ -299,15 +463,12 @@ Our8    & 103.85 & \textbf{230.16} & 103.92 & \textbf{230.14} & 103.86 & \textbf
 
 
 
- - Run with 32 bit values, see what happens (some operations may be 32b?)
- - do cachegrind
- - 
- - use array instead of vector<uint8 t> for bris?
-- comparison to basic implementation + Bri09
-  - compare with b=2,4,8
+
+ - get compression sizes of 4 and 8 bit versions
+
+ - figure out why data size matters
 
  - do we need to support search()?
- - SIMD?
 
  - $rank$ vs rank? should formulas have a specific style?
 
