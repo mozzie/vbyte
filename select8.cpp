@@ -64,7 +64,7 @@ int end;
 uint8_t diff;
 uint64_t val;
 int begin;
-int bsize = sizeof(b.data()) * 8;
+int bsize = 64;
 cout << "bsize" << bsize << endl;
 int shiftamt;
 uint64_t maxuint = 0-1;
@@ -74,7 +74,7 @@ uint64_t bitmasks[8];
 val = 0;
 for(int i = 0;i < 8; i++) {
   val = val << 8;
-  val = val | 0xF;
+  val = val | 0xFF;
   bitmasks[i] = val;
 }
   for (vector<unsigned int>::const_iterator i = indices.begin(); i != indices.end(); i++) {
@@ -98,7 +98,7 @@ for(int i = 0;i < 8; i++) {
       uint64_t blokki2 = *(b.data()+block+1);
       val = val | (blokki2 <<(64-offset));
     }
-    diff = bits::lo(val); //ADD +1 for shiftamt stuff
+    //diff = bits::lo(val); //ADD +1 for shiftamt stuff
 
 //    if ((val & 0x0000000F) == 0) {diff = diff + 4; val = val >> 4;}
 //    if ((val & 0x00000003) == 0) {diff = diff + 2; val = val >> 2;}
@@ -111,7 +111,7 @@ for(int i = 0;i < 8; i++) {
 //    val = *test<<(shiftamt)>>shiftamt;
     test = (uint64_t *)&iv[begin];
 
-    val = *test & bitmasks[diff];
+    val = *test & bitmasks[bits::lo(val)];
     z = z^val;
 
     if(0 && val != original[index]) {
