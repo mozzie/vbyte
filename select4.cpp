@@ -102,6 +102,13 @@ cout << "bsize" << bsize << endl;
 int shiftamt;
 uint64_t maxuint = 0-1;
 cout << maxuint << endl;
+uint64_t bitmasks[16];
+val = 0;
+for(int i = 0;i < 16; i++) {
+  val = val << 4;
+  val = val | 0xF;
+  bitmasks[i] = val;
+}
 chrono::steady_clock::time_point time_begin = chrono::steady_clock::now();
   for (vector<unsigned int>::const_iterator i = indices.begin(); i != indices.end(); i++) {
     index = *i;
@@ -123,34 +130,15 @@ chrono::steady_clock::time_point time_begin = chrono::steady_clock::now();
       uint64_t blokki2 = *(b.data()+block+1);
       val = val | (blokki2 <<(64-offset));
     }
-    diff = bits::lo(val) + 1;
-//    if(diff > 15) {
-//      cout <<"LENGTH:" << (int) diff << endl;
-//    }
-//    if ((val & 0x0000000F) == 0) {diff = diff + 4; val = val >> 4;}
-//    if ((val & 0x00000003) == 0) {diff = diff + 2; val = val >> 2;}
-//    diff = diff -(val & 1);
-//    uint8_t *nro = (uint8_t *)&b[begin];
-//      end = sls(index+1); //TODO this has to be optimized
-//      if(end-begin != diff) {
-//        cout << "bl " << (int)diff << " vs " << (end-begin)<< endl;
-//      }
-//      diff = 1;//end-begin;
+      uint8_t diff = bits::lo(val);
+
+
     test = (uint64_t *)&iv[begin/2];
-//    cout << bitset<64>(*test) << endl;
-    val = *test;
-    if(begin%2==1) {
-      val>>=bit_length;
-      if(diff==16) {
-        uint64_t *test2 = (uint64_t *)&iv[1+(begin/2)];
-//        cout << bitset<64>(*test2) << endl;
-        val = (val&0x0FFFFFFFFFFFFFFF) | ((*test2>>56)<<60);
-      }
-    }
 
-    shiftamt = 64-bit_length*diff;
-    val = val<<(shiftamt)>>shiftamt;
+    val = *test>>((begin%2)*bit_length);
 
+    val = val & bitmasks[diff];
+    
     z = z^val;
 
     if(0 && val != original[index]) {

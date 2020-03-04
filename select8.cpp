@@ -69,7 +69,6 @@ cout << "bsize" << bsize << endl;
 int shiftamt;
 uint64_t maxuint = 0-1;
 cout << maxuint << endl;
-chrono::steady_clock::time_point time_begin = chrono::steady_clock::now();
 uint64_t bitmasks[8];
 val = 0;
 for(int i = 0;i < 8; i++) {
@@ -77,19 +76,14 @@ for(int i = 0;i < 8; i++) {
   val = val | 0xFF;
   bitmasks[i] = val;
 }
+chrono::steady_clock::time_point time_begin = chrono::steady_clock::now();
   for (vector<unsigned int>::const_iterator i = indices.begin(); i != indices.end(); i++) {
     index = *i;
 
 //TODO CALLGRIND THIS
     begin = index == 0 ? 0 : sls(index)+1;
-//    while(*(b.begin()+begin+diff)==0) diff++;
-//    bit_vector::iterator iter = b.begin()+begin;
-//    while(*iter == 0) {
-//      iter++;
-//    }
-//    uint8_t diff = std::distance(b.begin()+begin, iter);
-// TODO: try out with builtin_clz
-//    test = (uint64_t *)&iv[begin];
+
+//TODO see if this can be read on byte level instead of 64bit level - would save the extra calculation
     int offset = (begin)%bsize;
     int block = (begin)/bsize;
     uint64_t blokki = *(b.data()+block);

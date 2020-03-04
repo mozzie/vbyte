@@ -323,9 +323,15 @@ Unlike the standard VB encoding, the continuation bits are removed from the chun
 compressed number to be read from the memory block and removes the need of block concatenation. The data in blocks is written into memory as they appear in the original integer, so that 
 when reading a word from the block byte array, the bits and bytes are already in correct order. 
 
-If the original element size is 32 bits and the data was compressed to k blocks of length b. The starting byte s of the element is $select$(i) * b div 8 where div is the integer division. 
-Offset o is the remainder of previous division, o = x*b mod 8. The 32-bit word is read from memory from byte location s. Then bit shift left for 32-b*k-o is applied to remove trailing 
-bits and bit shift right 32-b*k to re-align bits. If block size is one byte, offset calculation is not needed and thus the process is slightly faster.
+For example, let the integer bit length be 32 and the original data be compressed to 5 blocks of 4 bits. First, the byte location of the first block is needed. $Select_1$(i) gets the index location
+of needed block. Because the block length differs from byte length, the the two values need to be calculated. First, the starting byte location $s$ needs to be calculated 
+$(s = select_1(i) \times 4) \div 8$, the latter operand being the integer division. Second, the first block might not be at the start of the byte $s$. This is why offset $o = select_1(i) \times 4) mod 8$
+is needed (in the example case, o equals to either 0 or 4). Then a 32-bit word $w$ is read from memory from byte location $s$. 
+
+At this point, $w$ contains the wanted bits, but also has extra bits from the previous and next compressed integers. If offset was not zero, there are trailing $o$ bits in $w$ from the previous integer. 
+These can be conveniently removed by bit-shifting $w$ right for $o$ bits. Then a pre-calculated bitmask (0xFFFFF in this case) is applied and $w$ contains the requested value. Because most systems are
+able to read memory only from byte addresses, there is a corner case where the value is stored in too many bytes for a word. In this setup, this happens if compressed length was 8 blocks and offset was 4.
+Then another step of reading another byte and storing the remaining bits to $w$ is required. This is entirely avoidable if integer length is constrained. In this case maximum integer length would be 28 bits.
 
 The most intuitive way to calculate block length of i-th element is from $select_1$(i+1) and subtract the previously calculated start block index. This however causes a second 
 $select_1$ query, which is costly. A much faster option is to iterate forward in bit array until the next 1. Alternatively, the block length can be calculated by reading an integer 
@@ -477,8 +483,10 @@ some integers better.
  - 4bit is naturally slower, because of smaller block size
  - select is better with longer numbers, because it only needs 1 select call and reads straight from memory
  
-
+ - See Ahn \& Moffat 2005; Lemire et al. 2018
  - subarray access(?)
+ 
+ - compare to elias-fano?
 
  - get compression sizes of 4 and 8 bit versions
 
