@@ -478,10 +478,17 @@ more memory. See Figure~\ref{table:supportsize} for memory consumption.
 some integers better. 
 
 
+ - TODO figure out why 4bit crashes sometimes with 500M_all
+
  - see how data length percentage matters (do datasets with k/8 long numbers).
  - see how cache matters
 
  - 4bit is naturally slower, because of smaller block size
+
+ - actually may not be the case with select (maybe cache is causing this?)
+ 
+ - better dataset might be something with larger (like 60bit) numbers
+
  - select is better with longer numbers, because it only needs 1 select call and reads straight from memory
  
  - See Ahn \& Moffat 2005; Lemire et al. 2018
