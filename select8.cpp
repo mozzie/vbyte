@@ -84,8 +84,8 @@ chrono::steady_clock::time_point time_begin = chrono::steady_clock::now();
     begin = index == 0 ? 0 : sls(index)+1;
 
 //TODO see if this can be read on byte level instead of 64bit level - would save the extra calculation
-    int offset = (begin)%bsize;
-    int block = (begin)/bsize;
+    int offset = begin&0x3F;
+    int block = begin>>6;
     uint64_t blokki = *(b.data()+block);
     val = blokki >> offset;
     if(offset) {
