@@ -126,7 +126,7 @@ chrono::steady_clock::time_point time_begin = chrono::steady_clock::now();
     int block = begin/bsize;
     uint64_t blokki = *(b.data()+block);
     val = blokki >> offset;
-    if(offset) {
+    if(!val) {
       uint64_t blokki2 = *(b.data()+block+1);
       val = val | (blokki2 <<(64-offset));
     }

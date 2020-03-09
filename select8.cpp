@@ -82,27 +82,20 @@ chrono::steady_clock::time_point time_begin = chrono::steady_clock::now();
 
 //TODO CALLGRIND THIS
     begin = index == 0 ? 0 : sls(index)+1;
+//TODO see if ternary above can be substituted with just sls call
+
 
 //TODO see if this can be read on byte level instead of 64bit level - would save the extra calculation
-    int offset = begin&0x3F;
+    int offset = (begin)%bsize;
     int block = begin>>6;
     uint64_t blokki = *(b.data()+block);
     val = blokki >> offset;
-    if(offset) {
+    if(!val) {
       uint64_t blokki2 = *(b.data()+block+1);
       val = val | (blokki2 <<(64-offset));
     }
-    //diff = bits::lo(val); //ADD +1 for shiftamt stuff
 
-//    if ((val & 0x0000000F) == 0) {diff = diff + 4; val = val >> 4;}
-//    if ((val & 0x00000003) == 0) {diff = diff + 2; val = val >> 2;}
-//    diff = diff -(val & 1);
-//    uint8_t *nro = (uint8_t *)&b[begin];
-//      end = sls(index+1); //TODO this has to be optimized
-//      diff = 1;//end-begin;
-//  TODO: try with bit mask!
-//    shiftamt = 64-bit_length*diff;
-//    val = *test<<(shiftamt)>>shiftamt;
+
     test = (uint64_t *)&iv[begin];
 
     val = *test & bitmasks[bits::lo(val)];
