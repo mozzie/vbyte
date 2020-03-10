@@ -48,16 +48,15 @@ More recent studies have taken a look into the machine code level for VB and app
 operations in VB are simple and therefore modifying the code to use SIMD instructions is straightforward and the speed improvements are significant. 
 
 Elias Delta and Gamma codes \citep{Eli75} are popular encoding methods for forementioned data sets. Their encoding process assigns short bit array codes to small integers, 
-which is why they outperform VB encoding on datasets with a lot of small integers \Citep{Wil99}.
+which is why they outperform VB encoding on datasets with a lot of small integers \citep{Wil99}, such as inverted indexes \citep{Anh05, Pib19}. In this thesis, the compressable data sets will have
+the focus on slightly larger, unordered numbers.
 
 \section{VB encoding}
 VB encoding splits each integer into blocks of $b$ bits and adds a continuation bit to the block to form chunks of length $1+b$. The continuation bit is set to 1 only
 on the block containing the least significant bits of the integer. This information is used in decoding to signal if the current integer continues in the next chunk. 
 
-For example, block length is set to 4 and 42 is a 16 bit unsigned integer that is to be encoded. The standard 8-bit representation of 42 is 
-\texttt{00000000 00101010}. This is then split to blocks of 4 bits, resulting in \texttt{0000 0000 0010 1010}. The block with least significant bits is given a continuation bit 1.
-The block with the next least significant bits is given a continuation bit 0. The rest of the blocks are omitted, because they all are empty. The result of this is \texttt{00010 11010}, 
-which is the number 42 compressed with VB encoding and block length of 4. A pseudo code with block length 4 is shown in Figure~\ref{vbyte_enc}. Prepend adds an element to the beginning of the list 
+For example, the standard bit representation of an unsigned integer 42 is \texttt{00000000 00101010}. When split to blocks of length 4, it becomes \texttt{0000 0000 0010 1010}. The empty blocks 
+are removed and then continuation bits are added. 1 is added to the least significant block and 0 to the other block, resulting in \texttt{00010 11010}. A pseudo code with block length 4 is shown in Figure~\ref{vbyte_enc}. Prepend adds an element to the beginning of the list 
 and extend adds all the elements of the second list to the end of the first list.
 
 \begin{figure}[ht]
@@ -272,7 +271,8 @@ from the $rank$ structure. Figure~\ref{bris_ds} contains a visualization of the 
 \end{figure}
 
 To decode an element from index i, first block is fetched from $A_1$[i]. Because each encoded element is composed of at least one block, the first block is obtainable via straight indexing. With small integers, this 
-is all that is required. If the data has a lot of small integers, the $rank$ method has a huge advantage. 
+is all that is required. If the data has a lot of small integers, the $rank$ method has a huge advantage. In addition, the block length of this method can change within different array levels. This opens 
+a possibility for further optimization.
 
 However if the element was stored in multiple blocks, the index of the next block in $A_2$ is obtained from $i \gets rank_0$($A_1$, i). $Rank_0$ 
 returns the number of zeros in the bit array preceding index i. In other words, the number of elements before $i$ that continue to the next array. 
@@ -306,7 +306,6 @@ with block length of 8.
 
 \end{figure}
 
---TODO: create another version: 7bit bris. Store bits in both bit array and chunk (to see if it's faster to get the continuation bit from the chunk than from the bit array) (also needs 7bit compliant dataset)
 
 \chapter{DAC with select query}
 
@@ -325,7 +324,7 @@ when reading a word from the block byte array, the bits and bytes are already in
 
 For example, let the integer bit length be 32 and the original data be compressed to 5 blocks of 4 bits. First, the byte location of the first block is needed. $Select_1$(i) gets the index location
 of needed block. Because the block length differs from byte length, the the two values need to be calculated. First, the starting byte location $s$ needs to be calculated 
-$(s = select_1(i) \times 4) \div 8$, the latter operand being the integer division. Second, the first block might not be at the start of the byte $s$. This is why offset $o = select_1(i) \times 4) mod 8$
+$(s = select_1(i) \times 4) \div 8$, the latter operand being the integer division. Second, the first block might not be at the start of the byte $s$. This is why offset $o = (select_1(i) \times 4)$ $mod$ $8$
 is needed (in the example case, o equals to either 0 or 4). Then a 32-bit word $w$ is read from memory from byte location $s$. 
 
 At this point, $w$ contains the wanted bits, but also has extra bits from the previous and next compressed integers. If offset was not zero, there are trailing $o$ bits in $w$ from the previous integer. 
@@ -409,14 +408,36 @@ are removed either with a bitmask or by double bit shifting, resulting in decode
 \caption{Data} \label{VBarrays}
 \end{figure}
 
+\section{Elias-Fano encoding}
+Direct access via select can also be implemented with Elias-Fano (TODO citation to Elias-Fano?), but the data has to be sorted. In Elias-Fano encoding, the data is at first split into low and 
+high bits. Low bits, the k least significant bits, are stored to their own array. Direct access to the lower bits is trivial. The higher bits are gap-encoded and then encoded in unary. 
+For example, [1,3,5,8,11] becomes [1,2,2,3,3] and then is encoded as unary bit array B = \texttt{0100100100010001}. $Select_1$ has an interesting interaction with gap encoded unary arrays. $k = Select_1(B,i)$ 
+returns the location of i-th 1 in B. Up to index $k$, the bit array has had $i$ ones and $i-k$ zeros. The $i$ corresponds to the number of compressed integers in $B$ and every zero in the array 
+means an increment of 1 in the numbers. In other words, $i-k$ equals to the integer at position $i$ before gap-encoding. Therefore $select_1(i)$ - i returns the original higher bit number. The split 
+between bits is made to reduce the gap sizes.
+This approach can be further optimized by finding clusters in the integers and partitioning the indexes \citep{Ott14}.
 
+\chapter{Sub-array access}
+After locating and decompressing one value from a compressed data structure, compressing the subsequent items gets a lot easier. Because the next compressed value is usually located next to the fetched
+in memory, locating the data is not needed. This is especially beneficial to the VByte decoding with $select$ method, where calculating the start byte location takes majority of he runtime. In 
+addition to this, the length of the next compressed integer is faster to calculate because already manipulated data in memory. 
+
+The shown $rank$ method by Brisaboa et al. can also effectively decompress the next value but some modifications are needed. When fetching a longer subarray, the goal becomes to minimize $rank$ calls. 
+If an additional pointer array is stored during subarray decompression, only one $rank$ call for each accessed block level is needed. This can be observed from Figure~\ref{bris_ds}; the blocks of subarray
+are located next to each other in different block levels.
+
+ - examples / visualizaton?
+
+
+
+ - TODO get results from this
 \chapter{Experimental results}
 
 The following experiments were run on a AMD Phenom(tm) II X6 1055T Processor@2.8Ghz with 64kB+64kB L1 cache, 512kB L2 cache, 6144kB L3 cache and 32GB of DDR3 1333MHz.
-The computer runs Ubuntu 14.04.4 (3.13.0-91-generic x86\_64). The code was compiled with g++-7 -std=c++11 -DNDEBUG and with libraries -lsdsl -ldivsufsort -ldivsufsort64.
+The computer runs Ubuntu 14.04.4 (3.13.0-91-generic x86\_64). The codes were compiled with \texttt{g++-7 -std=c++11 -DNDEBUG} and with libraries \texttt{-lsdsl -ldivsufsort -ldivsufsort64}.
 
 Five different VB decoding algorithms were compared. The Bris-algorithms are from \citep{Bri09}. All algorithms are implemented using data structures and functions from the SDSL 
-library \citep{gbmp2014sea}. Each implementation is compressing and decoding uint64\_t integers.
+library \citep{gbmp2014sea}. Each implementation is compressing and decoding uint64\_t type integers.
 
 \begin{itemize}
   \item Bris4v5 - Bris implementation with block size 4, using rank support v5
@@ -440,7 +461,7 @@ Four differently constructed datasets were used and three different sizes of dat
   \item onlysmall - all integers 4 bits or less
 \end{itemize}
 
-All implementations read the data set from a file and compress it to memory. Then one million index integers are randomized and stored to an array. The times shown in Table~\ref{table:results1} 
+All implementations read the data set from a file and compress it to memory, randomize one million indexes and stored to an array. The times shown in Table~\ref{table:results1} 
 are times taken from looping through the index array and VB decoding the number in the index. Additionally, each run is iterated multiple times and an average of the runtimes is taken. 
 
 \begin{table}
@@ -449,18 +470,19 @@ are times taken from looping through the index array and VB decoding the number 
 \begin{tabular}{l||c c c c c c c} 
 & bris8 & bris4 & bris8v5 & bris4v5 & select8 & select4  \\
  \hline \hline 
-all (5M)   & 194.50 & 473.00 & 232.40 & 578.00 & 133.50 & 186.10 \\
-all (50M)   & 270.90 & 580.00 & 323.80 & 786.50 & 214.30 & 291.50 \\
-all (500M)   & 298.90 & 678.80 & 368.80 & 940.30 & 308.10 & 388.10 \\
-twolarge (5M)   & 92.60 & 270.70 & 109.60 & 328.90 & 117.20 & 166.50 \\
-twolarge (50M)   & 140.60 & 378.30 & 159.20 & 458.50 & 210.60 & 269.60 \\
-twolarge (500M)   & 168.50 & 439.90 & 191.30 & 586.00 & 304.50 & 382.10 \\
-onelarge (5M)   & 26.10 & 42.20 & 27.20 & 50.10 & 95.30 & 106.10 \\
-onelarge (50M)   & 50.00 & 91.20 & 51.20 & 104.90 & 199.60 & 239.90 \\
-onelarge (500M)   & 55.20 & 100.50 & 59.00 & 123.90 & 294.70 & 351.30 \\
-onlysmall (5M)   & 16.60 & 21.10 & 16.60 & 23.00 & 80.20 & 95.10 \\
-onlysmall (50M)   & 31.60 & 51.90 & 32.40 & 57.00 & 186.50 & 227.30 \\
-onlysmall (500M)   & 34.40 & 56.00 & 35.00 & 63.50 & 279.30 & 335.40 \\
+all (5M)   & 191.80 & 471.50 & 234.00 & 569.40 & 149.20 & 175.90 \\
+all (50M)   & 269.20 & 573.80 & 323.00 & 785.00 & 245.40 & 275.00 \\
+all (500M)   & 298.50 & 677.80 & 368.20 & 941.80 & 355.90 & 382.20 \\
+twolarge (5M)   & 96.70 & 275.50 & 110.70 & 329.00 & 125.60 & 151.90 \\
+twolarge (50M)   & 140.40 & 379.70 & 159.80 & 456.80 & 227.70 & 242.20 \\
+twolarge (500M)   & 168.20 & 441.00 & 191.50 & 584.70 & 330.20 & 341.00 \\
+onelarge (5M)   & 25.80 & 40.10 & 28.30 & 49.20 & 95.90 & 100.40 \\
+onelarge (50M)   & 49.80 & 91.30 & 50.90 & 105.70 & 212.70 & 213.20 \\
+onelarge (500M)   & 55.00 & 100.00 & 58.50 & 124.00 & 315.80 & 307.70 \\
+onlysmall (5M)   & 16.50 & 20.20 & 16.50 & 23.80 & 84.70 & 88.40 \\
+onlysmall (50M)   & 31.20 & 51.80 & 32.10 & 57.00 & 201.20 & 198.80 \\
+onlysmall (500M)   & 34.10 & 56.00 & 35.00 & 63.10 & 297.90 & 293.80 \\
+
 
 
 
@@ -470,23 +492,32 @@ onlysmall (500M)   & 34.40 & 56.00 & 35.00 & 63.50 & 279.30 & 335.40 \\
 \end{table}
 
 The results show that the proposed $select$ method outperforms $rank$ when the data set contains several integers that are encoded into more than one block. The difference is explained 
-with how $rank$ and $select$ use the data structure. $Select$ is always called once, while $rank$ is called once for each block beyond the first. Bris8 performs better than Bris8v5, but also requires 
-more memory. See Figure~\ref{table:supportsize} for memory consumption.
+with how $rank$ and $select$ use the data structure. $Select$ is always called once, while $rank$ is called once for each block beyond the first. The 8-bit versions tend to perform better than the 
+4-bit versions. This is because 8-bit version stores more data in one block and less block readings are required. However, 4bit versions achieve better compression in data sets containing small integers.
+Select versions do not depend as much on the block size, because all the blocks in 
+the compressed element are read at one go. 
 
-8-bit versions perform better than 4-bit versions timewise, because they need less operations overall. However 4-bit versions have better compression in some data sets, because they are able to compress 
-some integers better. 
+In rank, the v5 version naturally has worse performance because more calculations are needed to locate the correct index. As a trade-off, it requires 
+significantly less memory, as seen on Figure~\ref{table:supportsize}.
 
+Interestingly the 4-bit version of $select$ performs better than the 8-bit version with some data sets, even though 4-bit version should execute at least the same commands as the 8-bit version 
+in every scenario. This is most likely due to cache, because in the 4-bit version the stored data set is smaller.
+
+
+ - TODO figure out why 4bit crashes sometimes with 500M\_all
 
  - see how data length percentage matters (do datasets with k/8 long numbers).
+
  - see how cache matters
 
- - 4bit is naturally slower, because of smaller block size
- - select is better with longer numbers, because it only needs 1 select call and reads straight from memory
+ - better dataset might be something with larger (like 60bit) numbers
+
  
  - See Ahn \& Moffat 2005; Lemire et al. 2018
+
  - subarray access(?)
  
- - compare to elias-fano?
+ - bris has advantage of different size blocks (in different levels)
 
  - get compression sizes of 4 and 8 bit versions
 
@@ -497,7 +528,13 @@ some integers better.
  - $rank$ vs rank? should formulas have a specific style?
 
 \chapter{Future work}
- - something to improve / research?
+
+There has already been a few successful attempts to decompress VB encoded integers with SIMD \citep{Lem18,Pla15}. It is worthwhile to check if the presented approach benefits from SIMD. The data needs 
+less manipulation because the data is already written as it is, but calculating the integer block lengths might benefit from SIMD.
+
+Another improvement to VB encoding is to see whether the compressed numbers can be changed. This is trivial until the block length of the compressed number changes. Then an additional data structure or 
+cache is needed and the supporting rank/select data structure needs to be recalculated.
+
 
 \chapter{Conclusions\label{chapter:conclusions}}
 

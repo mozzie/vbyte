@@ -20,11 +20,15 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {chapter}{\numberline {4}DAC with select query}{10}{chapter.4}
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{\numberline {5}Experimental results}{13}{chapter.5}
+\contentsline {section}{\numberline {4.1}Elias-Fano encoding}{12}{section.4.1}
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{\numberline {6}Future work}{16}{chapter.6}
+\contentsline {chapter}{\numberline {5}Sub-array access}{13}{chapter.5}
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{\numberline {7}Conclusions}{17}{chapter.7}
+\contentsline {chapter}{\numberline {6}Experimental results}{14}{chapter.6}
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{\numberline {7}Future work}{17}{chapter.7}
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{\numberline {8}Conclusions}{18}{chapter.8}
 \defcounter {refsection}{0}\relax 
 \contentsline {chapter}{Bibliography}{19}{section*.10}
 \defcounter {refsection}{0}\relax 

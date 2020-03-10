@@ -46,7 +46,7 @@ int main(int argc, char *argv[]) {
 
 
   bit_vector b(data.size(), 0);
-  uint8_t *iv  = new uint8_t[data.size()+4];
+  uint8_t *iv  = new uint8_t[data.size()/2+4];
   size_t index = 0;
   size_t num_index = -1;
   size_t num_p = 0;
@@ -126,7 +126,7 @@ chrono::steady_clock::time_point time_begin = chrono::steady_clock::now();
     int block = begin/bsize;
     uint64_t blokki = *(b.data()+block);
     val = blokki >> offset;
-    if(offset) {
+    if(!val) {
       uint64_t blokki2 = *(b.data()+block+1);
       val = val | (blokki2 <<(64-offset));
     }
@@ -138,7 +138,7 @@ chrono::steady_clock::time_point time_begin = chrono::steady_clock::now();
     val = *test>>((begin%2)*bit_length);
 
     val = val & bitmasks[diff];
-    
+
     z = z^val;
 
     if(0 && val != original[index]) {
