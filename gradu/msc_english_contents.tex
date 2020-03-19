@@ -306,7 +306,6 @@ with block length of 8.
 
 \end{figure}
 
-
 \chapter{DAC with select query}
 
 Using $select_1$ on the continuation bit array to achieve direct access is more intuitive than using $rank_1$. The element locations are already marked with 1's 
@@ -408,6 +407,7 @@ are removed either with a bitmask or by double bit shifting, resulting in decode
 \caption{Data} \label{VBarrays}
 \end{figure}
 
+
 \section{Elias-Fano encoding}
 Direct access via select can also be implemented with Elias-Fano (TODO citation to Elias-Fano?), but the data has to be sorted. In Elias-Fano encoding, the data is at first split into low and 
 high bits. Low bits, the k least significant bits, are stored to their own array. Direct access to the lower bits is trivial. The higher bits are gap-encoded and then encoded in unary. 
@@ -423,7 +423,7 @@ in memory, locating the data is not needed. This is especially beneficial to the
 addition to this, the length of the next compressed integer is faster to calculate because already manipulated data in memory. 
 
 The shown $rank$ method by Brisaboa et al. can also effectively decompress the next value but some modifications are needed. When fetching a longer subarray, the goal becomes to minimize $rank$ calls. 
-If an additional pointer array is stored during subarray decompression, only one $rank$ call for each accessed block level is needed. This can be observed from Figure~\ref{bris_ds}; the blocks of subarray
+If an additional pointer array is stored during subarray decompression, only one $rank$ call for each accessed block level is needed. This can be observed from Figure~\ref{bris_ds}; the blocks of a subarray
 are located next to each other in different block levels.
 
  - examples / visualizaton?
@@ -487,39 +487,131 @@ onlysmall (500M)   & 34.10 & 56.00 & 35.00 & 63.10 & 297.90 & 293.80 \\
 
 
 \hline
-%
 \end{tabular}
 \end{table}
 
 The results show that the proposed $select$ method outperforms $rank$ when the data set contains several integers that are encoded into more than one block. The difference is explained 
-with how $rank$ and $select$ use the data structure. $Select$ is always called once, while $rank$ is called once for each block beyond the first. The 8-bit versions tend to perform better than the 
-4-bit versions. This is because 8-bit version stores more data in one block and less block readings are required. However, 4bit versions achieve better compression in data sets containing small integers.
-Select versions do not depend as much on the block size, because all the blocks in 
-the compressed element are read at one go. 
+with how $rank$ and $select$ use the data structure. $Select$ is always called once, while $rank$ is called once for each block beyond the first. Figure~\ref{graph:data_comparison} shows average times
+of one million $rank$ and $select$ calls with different average block lengths. The effect of multiple $rank$ calls is visible, as is the single $select$ call behavior. 
+
+The 8-bit versions tend to perform better than the 4-bit versions. This is because 8-bit version stores more data in one block and less block readings are required. However, 4bit versions achieve 
+better compression in data sets containing small integers. Select versions do not depend as much on the block size, because all the blocks in the compressed element are read at the same time. 
+Interestingly the 4-bit version of $select$ performs better than the 8-bit version with some data sets, even though 4-bit version should execute at least the same commands as the 8-bit version 
+in every scenario. This is most likely due to cache, because the stored data set is smaller in the 4-bit version.
 
 In rank, the v5 version naturally has worse performance because more calculations are needed to locate the correct index. As a trade-off, it requires 
 significantly less memory, as seen on Figure~\ref{table:supportsize}.
 
-Interestingly the 4-bit version of $select$ performs better than the 8-bit version with some data sets, even though 4-bit version should execute at least the same commands as the 8-bit version 
-in every scenario. This is most likely due to cache, because in the 4-bit version the stored data set is smaller.
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+    xlabel={average integer byte length},
+    ylabel={ms per million queries},
+    xmin=1, xmax=8,
+    ymin=0, ymax=800,
+    xtick={1,2,3,4,5,6,7,8},
+    ytick={0,100,200,300,400,500,600,700,800},
+    legend pos=north west,
+    ymajorgrids=true,
+    grid style=dashed,
+]
+
+\addplot[
+color=blue,
+mark=square,
+]
+coordinates {
+(1,31.90)(2,111.00)(3,205.40)(4,304.20)(5,405.80)(6,513.90)(7,616.90)(8,725.10)
+};
+\addplot[
+color=green,
+mark=triangle,
+]
+coordinates {
+(1,32.90)(2,145.30)(3,271.20)(4,399.00)(5,528.20)(6,666.80)(7,767.40)(8,902.00)
+};
+\addplot[
+color=red,
+mark=ball,
+]
+coordinates {
+(1,202.40)(2,219.70)(3,228.70)(4,251.60)(5,261.80)(6,269.60)(7,275.70)(8,284.30)
+};
+\addplot[
+color=black,
+mark=line,
+]
+coordinates {
+(1,218.60)(2,255.20)(3,273.00)(4,282.90)(5,296.00)(6,306.10)(7,317.30)(8,327.50)
+};
+
+\legend{bris8, bris8v5, select8, select4 }
+
+
+\end{axis}
+\end{tikzpicture}
+\caption{Rank and select performances} \label{graph:data_comparison}
+\end{figure}
+
+
+Figures \ref{table:results8bit} and \ref{table:results4bit} show memory size requirements for $rank$ and $select$ data structures. The data sets consist of 50 million 64-bit numbers and 
+the compressed size is a sum of continuation bit array and the data blocks.
+
+The static memory requirement of $select$ is easily noticeable, 
+as is the relation between the memory requirement of $rank$ and the total number of blocks. Data structures in versions with smaller block size naturally take more space, but smaller block 
+size allows a better data compression in some data sets and therefore a smaller total size. This can be seen when comparing the two forementioned figures: All 4-bit versions of the algorithms require
+more space than the 8-bit versions, but the compressed size of the data is significantly smaller in the bottom two data sets. The data structure memory usage for the bottom row is similar in both versions 
+due to the fact that the continuation bit array is exactly the same.
+
+
+
+
+\begin{table}
+\centering
+\begin{tabular}{l|| c c c c } 
+dataset   & compressed size & bris8  & bris8v5 & select8  \\
+ \hline \hline 
+all       & 168.4MB         & 4.67MB & 1.17MB   & 1.54MB    \\
+twolarge  & 112.4MB         & 3.12MB & 781kB    & 1.48MB    \\
+onelarge  &  63.2MB         & 1.76MB & 439kB    & 1.43MB    \\
+onlysmall &  56.3MB         & 1.56MB & 391kB    & 1.43MB    \\
+
+
+\hline
+%
+\end{tabular}
+\caption{Memory requirement for 50M 64-bit numbers 8bit blocks, smaller is better.\label{table:results8bit}}
+\end{table}
+
+\begin{table}
+\centering
+\begin{tabular}{l|| c c c c } 
+dataset   & compressed size & bris4  & bris4v5 & select4  \\
+ \hline \hline 
+all       & 177.7MB         & 7.65MB & 1.91MB  & 1.63MB \\
+twolarge  & 116.1MB         & 4.66MB & 1.14MB  & 1.54MB \\
+onelarge  & 42.5MB          & 2.12MB & 531kB   & 1.44MB \\
+onlysmall & 31.3MB          & 1.56MB & 391kB   & 1.43MB \\
+
+
+\hline
+%
+\end{tabular}
+\caption{Memory requirement for 50M 64-bit numbers 4bit blocks, smaller is better.\label{table:results4bit}}
+\end{table}
+
 
 
  - TODO figure out why 4bit crashes sometimes with 500M\_all
-
- - see how data length percentage matters (do datasets with k/8 long numbers).
 
  - see how cache matters
 
  - better dataset might be something with larger (like 60bit) numbers
 
- 
- - See Ahn \& Moffat 2005; Lemire et al. 2018
-
- - subarray access(?)
+ - subarray access
  
  - bris has advantage of different size blocks (in different levels)
-
- - get compression sizes of 4 and 8 bit versions
 
  - figure out why data size matters
 
