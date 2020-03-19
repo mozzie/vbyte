@@ -48,6 +48,8 @@ int main(int argc, char *argv[]) {
   cout << "continue-stop vector memory size: " << size_in_bytes(b) + sizeof(bit_vector) << "bytes" <<endl;
   cout << "select support vector memory size: " << size_in_bytes(sls) + sizeof(select_support_mcl<>) << "bytes" << endl;
   cout << "Data vector memory size: " << sizeof(uint8_t) * data.size() << "bytes" << endl;
+  cout << "total data size:" << size_in_bytes(b) + sizeof(uint8_t)*data.size() << endl;
+
   srand((unsigned) time(0));
 
   cout << "number of numbers: " << original.size() << endl;
@@ -92,7 +94,7 @@ chrono::steady_clock::time_point time_begin = chrono::steady_clock::now();
     val = blokki >> offset;
     if(!val) {
       uint64_t blokki2 = *(b.data()+block+1);
-      val = val | (blokki2 <<(64-offset));
+      val = (blokki2 <<(64-offset));
     }
 
 

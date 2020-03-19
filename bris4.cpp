@@ -161,6 +161,8 @@ int main(int argc, char *argv[]) {
   }
   cout << "rank support size: " << sum << endl;
   cout << "bit vector size: " << bit_vec_size << endl;
-  cout << "Data size: " << sizeof(uint8_t)*data_size << endl;
+  cout << "Data size: " << sizeof(uint8_t)*data_size/2 << endl;
+  cout << "total data size:" << bit_vec_size + sizeof(uint8_t)*data_size/2 << endl;
+
   return 0;
 }
