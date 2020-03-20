@@ -13,9 +13,11 @@
 using namespace std;
 using namespace sdsl;
 
-uint32_t bit_length = 8;
+uint32_t bit_length = 4;
 unsigned int random_accesses = 1000000;
 uint32_t cap = 1<<bit_length;
+int bsize = 64;
+
 int main(int argc, char *argv[]) {
   if(argc<=1) {
     cerr << "Give uint64_t file as parameter" << endl;
@@ -32,13 +34,35 @@ int main(int argc, char *argv[]) {
     data.insert(data.end(), v.begin(), v.end());
   }
 
-  bit_vector b(data.size(), 0);
-  uint8_t *iv  = new uint8_t[data.size()];
-  size_t index = 0;
 
+  bit_vector b(data.size(), 0);
+  uint8_t *iv  = new uint8_t[data.size()/2+4];
+  size_t index = 0;
+  size_t num_index = -1;
+  size_t num_p = 0;
+  uint8_t overflow = 0;
   for (vector<uint32_t>::const_iterator i = data.begin(); i != data.end(); i++, index++) {
     b[index] = (*i>>bit_length) & 1;
-    iv[index] = *i;
+    if(b[index] == 1) {
+        uint64_t orig = original[num_p];
+        int diff = index-num_index;
+        int shiftsize = bsize-(diff*bit_length);
+        orig = (orig<<shiftsize)>>shiftsize;
+        num_index++;
+        if(num_index%2 == 1) {
+          if(diff == 16) {
+            overflow = orig>>60;
+          }
+          orig = orig<<4;
+        }
+        uint64_t *x = (uint64_t *)&iv[num_index/2];
+        *x = *x | orig;
+        if(num_index%2 == 1 && diff == 16) {
+            iv[8+(num_index/2)] = overflow;
+        }
+        num_index=index;
+        num_p++;
+    }
   }
 
   bit_vector::select_1_type sls(&b);
@@ -64,16 +88,14 @@ uint64_t *test;
 int end;
 uint8_t diff;
 uint64_t val;
-int bsize = 64;
-cout << "bsize" << bsize << endl;
 int shiftamt;
 uint64_t maxuint = 0-1;
 cout << maxuint << endl;
-uint64_t bitmasks[8];
+uint64_t bitmasks[16];
 val = 0;
-for(int i = 0;i < 8; i++) {
-  val = val << 8;
-  val = val | 0xFF;
+for(int i = 0;i < 16; i++) {
+  val = val << 4;
+  val = val | 0xF;
   bitmasks[i] = val;
 }
 uint8_t loopcount = 50;
@@ -108,13 +130,16 @@ chrono::steady_clock::time_point time_begin = chrono::steady_clock::now();
     for(int counter=0;counter<loopcount;counter++) {
 //TODO see if this can be read on byte level instead of 64bit level - would save the extra calculation
 
-      test = (uint64_t *)&iv[begin];
-      val = *test & bitmasks[diff];
+      test = (uint64_t *)&iv[begin/2];
+
+      val = *test>>((begin%2)*bit_length);
+      val = val & bitmasks[diff];
       z = z^val;
 //      if((int)diff != sls(index+counter+1) - sls(index+counter) -1) {
 //        cout << "Diff:" << (int)diff << " sls diff:" << (sls(index+counter+1) - sls(index+counter) -1) << endl;
 //      }
       if(1 && val != original[index+counter]) {
+        cout << "diff: " << (int)diff << endl;
         cout << "Did not match: " << val << " vs "  << original[index+counter]   << endl;
         cout << "index " << index+counter << ", counter: " << counter << endl;
         cout << "bit_offset " << bit_offset << ", total_diff " << (int)total_diff << endl;

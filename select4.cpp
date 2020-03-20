@@ -25,18 +25,8 @@ int main(int argc, char *argv[]) {
   }
 
   vector<uint64_t> original = read_data_from_file(argv[1]);
-//  uint8_t *siv  = new uint8_t[8];
-//  cout << (int)siv[0] << " " << (int)siv[1] << " " << (int)siv[2] << " " << (int)siv[3] << endl;
-//  uint64_t *x = (uint64_t *)&siv[0];
-//  *x = original[0]<<4;
-//  cout << *x << endl;
-//  cout << (int)siv[0] << " " << (int)siv[1] << " " << (int)siv[2] << " " << (int)siv[3] << endl;
-//  exit(1);
 
   vector<uint32_t> data;
-
-//  REDO THIS:
-//  calculate bits on the fly and save number to block array intact
 
   for(vector<uint64_t>::const_iterator i = original.begin(); i != original.end(); i++) {
     vector<uint32_t> v = vb_encode_number(*i, cap);
@@ -115,15 +105,12 @@ chrono::steady_clock::time_point time_begin = chrono::steady_clock::now();
   for (vector<unsigned int>::const_iterator i = indices.begin(); i != indices.end(); i++) {
     index = *i;
 
+
     begin = index == 0 ? 0 : sls(index)+1;
-//    while(*(b.begin()+begin+diff)==0) diff++;
-//    bit_vector::iterator iter = b.begin()+begin;
-//    while(*iter == 0) {
-//      iter++;
-//    }
-//    uint8_t diff = std::distance(b.begin()+begin, iter);
-// TODO: try out with builtin_clz
-//    test = (uint64_t *)&iv[begin];
+
+
+
+
     int offset = begin%bsize;
     int block = begin/bsize;
     uint64_t blokki = *(b.data()+block);
@@ -146,11 +133,6 @@ chrono::steady_clock::time_point time_begin = chrono::steady_clock::now();
     if(0 && val != original[index]) {
       cout << "Did not match: " << val << " vs "  << original[index]   << endl;
       cout << "index " << index << ", begin " << begin << endl;
-      cout << bitset<64>(val) << endl;
-      cout << bitset<64>(original[index]) << endl;
-      cout << bitset<64>(original[index+1]) << endl;
-
-      exit(1);
     }
   }
 

@@ -21,11 +21,11 @@ int main(int argc, char *argv[]) {
   filename.append(argv[1]);
   filename.append("_");
   filename.append(argv[2]);
-  // int maxvalues [8] = {1<<7,1<<8,1<<15,1<<16,1<<23,1<<24,1<<30,1<<31}; // <- all
+   int maxvalues [8] = {1<<7,1<<8,1<<15,1<<16,1<<23,1<<24,1<<30,1<<30}; // <- all
   // int maxvalues [8] = {1<<7,1<<7,1<<7,1<<8,1<<8,1<<8,1<<16,1<<31}; // <- twolarge
   // int maxvalues [8] = {1<<3,1<<4,1<<5,1<<6,1<<7,1<<8,1<<16,1<<31}; // <- vsmall
   //int maxvalues [8] = {1<<2,1<<2,1<<3,1<<3,1<<3,1<<4,1<<4,1<<15}; // <- onelarge
-  int maxvalues [8] = {1<<2,1<<2,1<<3,1<<3,1<<3,1<<4,1<<4,1<<4}; // <- onebyte
+  //int maxvalues [8] = {1<<2,1<<2,1<<3,1<<3,1<<3,1<<4,1<<4,1<<4}; // <- onebyte
   ofstream file(filename, ios::out | ios::binary);
   for (int n=0; n<amount; ++n) {
     int rand = dis(gen)%8;
