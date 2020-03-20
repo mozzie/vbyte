@@ -106,7 +106,7 @@ int main(int argc, char *argv[]) {
       val = (val<<bit_length) + iv[level][index];
       z = z^val;
 
-      if(1 && val != original[*i+counter]) {
+      if(0 && val != original[*i+counter]) {
         cout << "Did not match: " << val << " vs " << original[*i+counter] << endl;
         cout << original[*i+counter]%cap << " " << original[*i+counter]/cap << endl;
       }

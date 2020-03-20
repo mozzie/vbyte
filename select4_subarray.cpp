@@ -138,7 +138,7 @@ chrono::steady_clock::time_point time_begin = chrono::steady_clock::now();
 //      if((int)diff != sls(index+counter+1) - sls(index+counter) -1) {
 //        cout << "Diff:" << (int)diff << " sls diff:" << (sls(index+counter+1) - sls(index+counter) -1) << endl;
 //      }
-      if(1 && val != original[index+counter]) {
+      if(0 && val != original[index+counter]) {
         cout << "diff: " << (int)diff << endl;
         cout << "Did not match: " << val << " vs "  << original[index+counter]   << endl;
         cout << "index " << index+counter << ", counter: " << counter << endl;
