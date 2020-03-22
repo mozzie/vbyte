@@ -23,8 +23,8 @@ int main(int argc, char *argv[]) {
 
   vector<uint64_t> original = read_data_from_file(argv[1]);
 
-  std::array<std::vector<uint32_t>, 8> data;
-  for(int i = 0; i < 8; i++) {
+  std::array<std::vector<uint32_t>, 16> data;
+  for(int i = 0; i < 16; i++) {
     vector<uint32_t> vec;
     data[i] = vec;
   }
