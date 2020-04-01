@@ -55,7 +55,6 @@ int main(int argc, char *argv[]) {
       }
       else {
         vec[index/2] += value%cap;
-
       }
 //      cout << (int)*j <<" " << (int)value << " " << (int)vec[index/2] << endl;
       bv[index] = (*j>>bit_length) & 1;

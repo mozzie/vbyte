@@ -331,9 +331,12 @@ These can be conveniently removed by bit-shifting $w$ right for $o$ bits. Then a
 able to read memory only from byte addresses, there is a corner case where the value is stored in too many bytes for a word. In this setup, this happens if compressed length was 8 blocks and offset was 4.
 Then another step of reading another byte and storing the remaining bits to $w$ is required. This is entirely avoidable if integer length is constrained. In this case maximum integer length would be 28 bits.
 
-The most intuitive way to calculate block length of i-th element is from $select_1$(i+1) and subtract the previously calculated start block index. This however causes a second 
-$select_1$ query, which is costly. A much faster option is to iterate forward in bit array until the next 1. Alternatively, the block length can be calculated by reading an integer 
-from the bit array, aligning it's offset and counting the trailing zeros. Figure~\ref{select_pseudo} contains an example of VB decoding with DAC with $select$ and block size 8. 
+The most intuitive way to calculate block length of i-th element is to subtract $select_1$(i) from $select_1$(i+1). This however causes an additional 
+$select_1$ query, which is costly. A much faster option is to calculate the block length by reading a word from the bit array and bit-shifting the word until the bit representing the start of the i-th
+element is on the rightmost end and then counting the trailing zeros. This counts the number of blocks in the i-th element that do not have the continuation bit set. The number is incremented by one to 
+count in the ending block with the continuation bit.
+ 
+Figure~\ref{select_pseudo} contains an example of VB decoding with DAC with $select$ and block size 8. 
 Different block sizes need extra calculation to get the block location from the byte array. In the example, $CalculateLength$ returns the length of the number in blocks and $ByteMask(k)$ returns 
 a bit mask for k bytes. 
 
@@ -417,40 +420,41 @@ means an increment of 1 in the numbers. In other words, $i-k$ equals to the inte
 between bits is made to reduce the gap sizes.
 This approach can be further optimized by finding clusters in the integers and partitioning the indexes \citep{Ott14}.
 
-\chapter{Sub-array access}
-After locating and decompressing one value from a compressed data structure, compressing the subsequent items gets a lot easier. Because the next compressed value is usually located next to the fetched
-in memory, locating the data is not needed. This is especially beneficial to the VByte decoding with $select$ method, where calculating the start byte location takes majority of he runtime. In 
-addition to this, the length of the next compressed integer is faster to calculate because already manipulated data in memory. 
+\chapter{Subarray access}
 
-The shown $rank$ method by Brisaboa et al. can also effectively decompress the next value but some modifications are needed. When fetching a longer subarray, the goal becomes to minimize $rank$ calls. 
-If an additional pointer array is stored during subarray decompression, only one $rank$ call for each accessed block level is needed. This can be observed from Figure~\ref{bris_ds}; the blocks of a subarray
-are located next to each other in different block levels.
+After locating and decompressing one value from a compressed data structure, decompressing the subsequent elements is significantly easier. Calculating the memory location of the next element is not 
+needed because the next compressed value is usually located next to the previously fetched element. This is especially beneficial to the VByte decoding with $select$ method, where calculating the start 
+byte location takes majority of the runtime. In addition to this, the length of the next compressed integer is very fast to calculate because the required data is already in memory.
+
+Single direct access with $select$ needs to calculate the length of the wanted element. This is done by reading a 64-bit word from the continuation bit array, bit-shifting until the bit representing 
+the first block is on the rightmost end and then counting the trailing zeros in the word. Subsequent length calculations are done by bit-shifting the word equal to the length of the previous element 
+and then counting trailing zeros. Once the word is shifted through, another word is read and process is continued.
+
+The shown $rank$ method by Brisaboa et al. can also effectively decompress the next value with slight modifications. When fetching a longer subarray, the goal becomes to minimize $rank$ calls. 
+When a new block level is reached first time during a subarray query, the index is fetched with $rank_1$ as normal, and the result of the query is stored. Next time the same level is reached, the
+previous stored is incremented by one and that value is used instead of the $rank_1$ query. The amount of $rank_1$ calls needed is equal to the number of $rank_1$ calls needed to decompress the largest 
+number in the subarray.
 
  - examples / visualizaton?
 
 
-
- - TODO get results from this
 \chapter{Experimental results}
 
 The following experiments were run on a AMD Phenom(tm) II X6 1055T Processor@2.8Ghz with 64kB+64kB L1 cache, 512kB L2 cache, 6144kB L3 cache and 32GB of DDR3 1333MHz.
 The computer runs Ubuntu 14.04.4 (3.13.0-91-generic x86\_64). The codes were compiled with \texttt{g++-7 -std=c++11 -DNDEBUG} and with libraries \texttt{-lsdsl -ldivsufsort -ldivsufsort64}.
 
-Five different VB decoding algorithms were compared. The Bris-algorithms are from \citep{Bri09}. All algorithms are implemented using data structures and functions from the SDSL 
+\section{VB decoding comparison}
+Six different VB decoding algorithms were compared. The Bris-algorithms are from \citep{Bri09}. All algorithms are implemented using data structures and functions from the SDSL 
 library \citep{gbmp2014sea}. Each implementation is compressing and decoding uint64\_t type integers.
 
 \begin{itemize}
+  \item Bris4 - Bris implementation with block size 4, using rank support v
   \item Bris4v5 - Bris implementation with block size 4, using rank support v5
   \item Bris8 - Bris implementation with block size 8, using rank support v
   \item Bris8v5 - Bris implementation with block size 8, using rank support v5
   \item Select4 - Proposed implementation with block size 4, using select support mcl
   \item Select8 - Proposed implementation with block size 8, using select support mcl
 \end{itemize}
-
-
-
-
-
 
 Four differently constructed datasets were used and three different sizes of dataset were used (5M, 50M, 500M). 
 
@@ -499,7 +503,7 @@ better compression in data sets containing small integers. Select versions do no
 Interestingly the 4-bit version of $select$ performs better than the 8-bit version with some data sets, even though 4-bit version should execute at least the same commands as the 8-bit version 
 in every scenario. This is most likely due to cache, because the stored data set is smaller in the 4-bit version.
 
-In rank, the v5 version naturally has worse performance because more calculations are needed to locate the correct index. As a trade-off, it requires 
+The v5 version of rank naturally has worse performance because more calculations are needed in the last phase of calculating the rank sum. As a trade-off, it requires 
 significantly less memory, as seen on Figure~\ref{table:supportsize}.
 
 \begin{figure}[ht]
@@ -515,6 +519,7 @@ significantly less memory, as seen on Figure~\ref{table:supportsize}.
     legend pos=north west,
     ymajorgrids=true,
     grid style=dashed,
+    width=13cm, height=8cm
 ]
 
 \addplot[
@@ -554,9 +559,9 @@ coordinates {
 \caption{Rank and select performances} \label{graph:data_comparison}
 \end{figure}
 
-
-Figures \ref{table:results8bit} and \ref{table:results4bit} show memory size requirements for $rank$ and $select$ data structures. The data sets consist of 50 million 64-bit numbers and 
-the compressed size is a sum of continuation bit array and the data blocks.
+\section{Memory usage}
+Table~\ref{table:results8bit} and Table~\ref{table:results4bit} show memory size requirements for $rank$ and $select$ data structures with data sets consisting
+ of 50 million 64-bit numbers. The compressed size column has a sum of continuation bit array and the data blocks.
 
 The static memory requirement of $select$ is easily noticeable, 
 as is the relation between the memory requirement of $rank$ and the total number of blocks. Data structures in versions with smaller block size naturally take more space, but smaller block 
@@ -601,20 +606,26 @@ onlysmall & 31.3MB          & 1.56MB & 391kB   & 1.43MB \\
 \caption{Memory requirement for 50M 64-bit numbers 4bit blocks, smaller is better.\label{table:results4bit}}
 \end{table}
 
+\section{Subarray access results}
+
+Figure~\ref{graph:subarray} shows results for subarray fetching. The data sets used contained mostly 4-bit integers and a few 32-bit integers randomly among them. The number in the x-axis corresponds to the 
+number of large integers within 1000 integers and the y-axis has the average time of fetching 50 subsequent numbers from random location. 
+
 
 \begin{figure}[ht]
 \centering
 \begin{tikzpicture}
 \begin{axis}[
-    xlabel={average integer byte length},
-    ylabel={ms per million queries},
-    xmin=1, xmax=8,
-    ymin=0, ymax=4000,
-    xtick={1,2,3,4,5,6,7,8},
-    ytick={0,500,1000,1500,2000,2500,3000,3500,4000},
+    xlabel={number of 32bit integers per 1000 integers},
+    ylabel={ms per million subarray queries},
+    xmin=1, xmax=16,
+    ymin=400, ymax=600,
+    xtick={1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16},
+    ytick={300,400,500,600,700,800,900,100},
     legend pos=north west,
     ymajorgrids=true,
     grid style=dashed,
+    width=13cm, height=8cm
 ]
 
 \addplot[
@@ -622,76 +633,56 @@ color=blue,
 mark=square,
 ]
 coordinates {
-(1,394.90)(2,654.60)(3,976.20)(4,1282.50)(5,1711.70)(6,2256.70)(7,2954.30)(8,3326.50)
+(1,405.80)(2,416.10)(3,426.10)(4,436.20)(5,444.40)(6,455.20)(8,472.50)(10,490.10)(12,503.50)(14,523.90)(16,539.60)(18,553.90)(20,564.80)(25,596.60)
+};
+\addplot[
+color=blue, dashed,
+mark=square,
+]
+coordinates {
+(1,407.30)(2,422.40)(3,436.70)(4,451.30)(5,466.20)(6,481.80)(8,513.50)(10,553.10)(12,580.40)(14,616.30)(16,653.80)(18,685.80)(20,713.40)(25,810.70)
 };
 \addplot[
 color=red,
-mark=ball,
-]
-coordinates {
-(1,776.70)(2,1484.30)(3,2246.60)(4,2570.30)(5,3476.20)(6,4144.80)(7,4760.40)(8,6771.50)
-};
-\addplot[
-color=green,
 mark=triangle,
 ]
 coordinates {
-(1,393.70)(2,732.00)(3,1087.70)(4,1445.50)(5,1893.60)(6,2423.50)(7,3133.10)(8,3612.80)
+(1,406.20)(2,418.50)(3,429.40)(4,440.60)(5,451.40)(6,461.20)(8,480.90)(10,499.50)(12,520.50)(14,534.60)(16,549.00)(18,570.10)(20,591.00)(25,625.20)
+};
+\addplot[
+color=red, dashed,
+mark=triangle, 
+]
+coordinates {
+(1,423.50)(2,442.20)(3,461.20)(4,479.70)(5,497.50)(6,519.30)(8,559.40)(10,601.10)(12,642.60)(14,688.50)(16,728.40)(18,769.20)(20,793.00)(25,893.50)
 };
 \addplot[
 color=black,
-mark=diamond,
+mark=ball,
 ]
 coordinates {
-(1,804.10)(2,1711.80)(3,2640.60)(4,3080.70)(5,4126.30)(6,5022.10)(7,5788.50)(8,8258.20)
+(1,427.00)(2,428.10)(3,428.70)(4,429.40)(5,430.00)(6,430.50)(8,432.20)(10,433.50)(12,434.30)(14,433.80)(16,435.70)(18,436.90)(20,437.90)(25,440.80)
 };
 \addplot[
-color=orange,
-mark=square*,
+color=black, dashed,
+mark=ball, 
 ]
 coordinates {
-(1,422.00)(2,508.40)(3,547.90)(4,636.30)(5,645.60)(6,664.50)(7,683.70)(8,703.30)
+(1,461.20)(2,461.00)(3,462.70)(4,463.70)(5,465.20)(6,464.80)(8,466.40)(10,468.40)(12,467.90)(14,469.60)(16,472.60)(18,472.70)(20,475.80)(25,480.60)
 };
-\addplot[
-color=blue,
-mark=star,
-]
-coordinates {
-(1,569.40)(2,694.80)(3,676.80)(4,691.70)(5,708.30)(6,716.50)(7,780.10)(8,812.20)
-};
+
+
 \legend{bris8, bris4, bris8v5, bris4v5, select8, select4 }
-
-TODO: create a dataset with low numbers and some large ones (every 40th or so)
-
- - compare and explain
-
 
 \end{axis}
 \end{tikzpicture}
 \caption{Rank and select performances with subarray fetching} \label{graph:subarray}
 \end{figure}
 
-
- - TODO figure out why 4bit crashes sometimes with 500M\_all
-
- - see how cache matters
-
- - better dataset might be something with larger (like 60bit) numbers
-
- - subarray access
- 
- - bris has advantage of different size blocks (in different levels)
-
- - figure out why data size matters
-
- - do we need to support search()?
-
- - $rank$ vs rank? should formulas have a specific style?
-
 \chapter{Future work}
 
 There has already been a few successful attempts to decompress VB encoded integers with SIMD \citep{Lem18,Pla15}. It is worthwhile to check if the presented approach benefits from SIMD. The data needs 
-less manipulation because the data is already written as it is, but calculating the integer block lengths might benefit from SIMD.
+less manipulation because the data is already stored in the correct order, but calculating the integer block lengths might benefit from SIMD.
 
 Another improvement to VB encoding is to see whether the compressed numbers can be changed. This is trivial until the block length of the compressed number changes. Then an additional data structure or 
 cache is needed and the supporting rank/select data structure needs to be recalculated.
@@ -700,3 +691,17 @@ cache is needed and the supporting rank/select data structure needs to be recalc
 \chapter{Conclusions\label{chapter:conclusions}}
 
 It is good to conclude with a summary of findings. You can also use separate chapter for discussion and future work. These details you can negotiate with your supervisor.
+
+TODO:
+
+ - see how cache matters
+
+ - bris has advantage of different size blocks (in different levels)
+
+ - figure out why data size matters
+
+ - do we need to support search()?
+
+ - $rank$ vs rank? should formulas have a specific style?
+
+

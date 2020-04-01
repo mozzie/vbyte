@@ -22,13 +22,19 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {section}{\numberline {4.1}Elias-Fano encoding}{12}{section.4.1}
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{\numberline {5}Sub-array access}{13}{chapter.5}
+\contentsline {chapter}{\numberline {5}Subarray access}{13}{chapter.5}
 \defcounter {refsection}{0}\relax 
 \contentsline {chapter}{\numberline {6}Experimental results}{14}{chapter.6}
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{\numberline {7}Future work}{18}{chapter.7}
+\contentsline {section}{\numberline {6.1}VB decoding comparison}{14}{section.6.1}
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{\numberline {8}Conclusions}{19}{chapter.8}
+\contentsline {section}{\numberline {6.2}Memory usage}{16}{section.6.2}
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {6.3}Subarray access results}{17}{section.6.3}
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{\numberline {7}Future work}{19}{chapter.7}
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{\numberline {8}Conclusions}{20}{chapter.8}
 \defcounter {refsection}{0}\relax 
 \contentsline {chapter}{Bibliography}{21}{section*.14}
 \defcounter {refsection}{0}\relax 
