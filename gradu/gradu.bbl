@@ -51,6 +51,31 @@
     \field{year}{2005}
   \endentry
 
+  \entry{ApaLV}{online}{}
+    \name{author}{1}{}{%
+      {{hash=A}{%
+         family={Apache},
+         familyi={A\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{A1}
+    \strng{fullhash}{A1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{labelyear}{2013}
+    \field{labeldatesource}{year}
+    \field{sortinit}{A}
+    \field{sortinithash}{A}
+    \field{title}{Apache Lucene - Index File Formats}
+    \verb{url}
+    \verb https://lucene.apache.org/core/3_5_0/fileformats.html#VInt
+    \endverb
+    \field{year}{2013}
+    \field{urlday}{10}
+    \field{urlmonth}{04}
+    \field{urlyear}{2020}
+  \endentry
+
   \entry{Bha09}{article}{}
     \name{author}{9}{}{%
       {{hash=BB}{%
@@ -189,6 +214,30 @@
     \field{year}{2009}
   \endentry
 
+  \entry{Cla97}{article}{}
+    \name{author}{1}{}{%
+      {{hash=CD}{%
+         family={Clark},
+         familyi={C\bibinitperiod},
+         given={David},
+         giveni={D\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {University of Waterloo}%
+    }
+    \strng{namehash}{CD1}
+    \strng{fullhash}{CD1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{labelyear}{1997}
+    \field{labeldatesource}{year}
+    \field{sortinit}{C}
+    \field{sortinithash}{C}
+    \field{title}{Compact pat trees}
+    \field{year}{1997}
+  \endentry
+
   \entry{Eli75}{article}{}
     \name{author}{1}{}{%
       {{hash=EP}{%
@@ -223,6 +272,35 @@
     \field{journaltitle}{IEEE Trans. Inf. Theor.}
     \field{month}{09}
     \field{year}{1975}
+  \endentry
+
+  \entry{Eli74}{article}{}
+    \name{author}{1}{}{%
+      {{hash=EP}{%
+         family={Elias},
+         familyi={E\bibinitperiod},
+         given={Peter},
+         giveni={P\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {ACM New York, NY, USA}%
+    }
+    \strng{namehash}{EP2}
+    \strng{fullhash}{EP2}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{labelyear}{1974}
+    \field{labeldatesource}{year}
+    \field{sortinit}{E}
+    \field{sortinithash}{E}
+    \field{number}{2}
+    \field{pages}{246\bibrangedash 260}
+    \field{title}{Efficient storage and retrieval by content and address of
+  static files}
+    \field{volume}{21}
+    \field{journaltitle}{Journal of the ACM (JACM)}
+    \field{year}{1974}
   \endentry
 
   \entry{gbmp2014sea}{inproceedings}{}
@@ -594,6 +672,57 @@
     \field{pages}{222\bibrangedash 229}
     \field{title}{Compression of inverted indexes for fast query evaluation}
     \field{year}{2002}
+  \endentry
+
+  \entry{Vig08}{inproceedings}{}
+    \name{author}{1}{}{%
+      {{hash=VS}{%
+         family={Vigna},
+         familyi={V\bibinitperiod},
+         given={Sebastiano},
+         giveni={S\bibinitperiod},
+      }}%
+    }
+    \list{organization}{1}{%
+      {Springer}%
+    }
+    \strng{namehash}{VS1}
+    \strng{fullhash}{VS1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{labelyear}{2008}
+    \field{labeldatesource}{year}
+    \field{sortinit}{V}
+    \field{sortinithash}{V}
+    \field{booktitle}{International Workshop on Experimental and Efficient
+  Algorithms}
+    \field{pages}{154\bibrangedash 168}
+    \field{title}{Broadword implementation of rank/select queries}
+    \field{year}{2008}
+  \endentry
+
+  \entry{Vig13}{inproceedings}{}
+    \name{author}{1}{}{%
+      {{hash=VS}{%
+         family={Vigna},
+         familyi={V\bibinitperiod},
+         given={Sebastiano},
+         giveni={S\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{VS1}
+    \strng{fullhash}{VS1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{labelyear}{2013}
+    \field{labeldatesource}{year}
+    \field{sortinit}{V}
+    \field{sortinithash}{V}
+    \field{booktitle}{Proceedings of the sixth ACM international conference on
+  Web search and data mining}
+    \field{pages}{83\bibrangedash 92}
+    \field{title}{Quasi-succinct indices}
+    \field{year}{2013}
   \endentry
 
   \entry{Wil99}{article}{}

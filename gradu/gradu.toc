@@ -4,11 +4,11 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {chapter}{\numberline {1}Introduction}{1}{chapter.1}
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{\numberline {2}Variable-bytes}{2}{chapter.2}
+\contentsline {chapter}{\numberline {2}Variable-byte encoding of integers}{2}{chapter.2}
 \defcounter {refsection}{0}\relax 
 \contentsline {section}{\numberline {2.1}VB encoding}{3}{section.2.1}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {2.2}VB decoding}{4}{section.2.2}
+\contentsline {section}{\numberline {2.2}VB decoding}{3}{section.2.2}
 \defcounter {refsection}{0}\relax 
 \contentsline {chapter}{\numberline {3}Directly addressable codes}{6}{chapter.3}
 \defcounter {refsection}{0}\relax 
@@ -18,23 +18,21 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {section}{\numberline {3.3}DAC via rank}{8}{section.3.3}
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{\numberline {4}DAC with select query}{10}{chapter.4}
+\contentsline {chapter}{\numberline {4}DAC with select query}{11}{chapter.4}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {4.1}Elias-Fano encoding}{12}{section.4.1}
+\contentsline {section}{\numberline {4.1}Elias-Fano encoding}{13}{section.4.1}
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{\numberline {5}Subarray access}{13}{chapter.5}
+\contentsline {chapter}{\numberline {5}Subarray access}{14}{chapter.5}
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{\numberline {6}Experimental results}{14}{chapter.6}
+\contentsline {chapter}{\numberline {6}Experimental results}{15}{chapter.6}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {6.1}VB decoding comparison}{14}{section.6.1}
+\contentsline {section}{\numberline {6.1}VB decoding comparison}{15}{section.6.1}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {6.2}Memory usage}{16}{section.6.2}
+\contentsline {section}{\numberline {6.2}Memory usage}{17}{section.6.2}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {6.3}Subarray access results}{17}{section.6.3}
+\contentsline {section}{\numberline {6.3}Subarray access results}{18}{section.6.3}
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{\numberline {7}Future work}{19}{chapter.7}
-\defcounter {refsection}{0}\relax 
-\contentsline {chapter}{\numberline {8}Conclusions}{20}{chapter.8}
+\contentsline {chapter}{\numberline {7}Conclusions Future work}{20}{chapter.7}
 \defcounter {refsection}{0}\relax 
 \contentsline {chapter}{Bibliography}{21}{section*.14}
 \defcounter {refsection}{0}\relax 
