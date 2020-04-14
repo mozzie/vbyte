@@ -214,7 +214,7 @@
     \field{year}{2009}
   \endentry
 
-  \entry{Cla97}{article}{}
+  \entry{Cla97}{thesis}{}
     \name{author}{1}{}{%
       {{hash=CD}{%
          family={Clark},
@@ -235,6 +235,7 @@
     \field{sortinit}{C}
     \field{sortinithash}{C}
     \field{title}{Compact pat trees}
+    \field{type}{phdthesis}
     \field{year}{1997}
   \endentry
 
@@ -411,6 +412,52 @@
     \field{urlday}{26}
     \field{urlmonth}{02}
     \field{urlyear}{2020}
+  \endentry
+
+  \entry{Kon17}{article}{}
+    \name{author}{4}{}{%
+      {{hash=KR}{%
+         family={Konow},
+         familyi={K\bibinitperiod},
+         given={Roberto},
+         giveni={R\bibinitperiod},
+      }}%
+      {{hash=NG}{%
+         family={Navarro},
+         familyi={N\bibinitperiod},
+         given={Gonzalo},
+         giveni={G\bibinitperiod},
+      }}%
+      {{hash=CCL}{%
+         family={Clarke},
+         familyi={C\bibinitperiod},
+         given={Charles\bibnamedelima LA},
+         giveni={C\bibinitperiod\bibinitdelim L\bibinitperiod},
+      }}%
+      {{hash=LOA}{%
+         family={L{\'o}pez-Ort{\'\i}z},
+         familyi={L\bibinitperiod-O\bibinitperiod},
+         given={Alejandro},
+         giveni={A\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {ACM New York, NY, USA}%
+    }
+    \strng{namehash}{KR+1}
+    \strng{fullhash}{KRNGCCLLOA1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{labelyear}{2017}
+    \field{labeldatesource}{year}
+    \field{sortinit}{K}
+    \field{sortinithash}{K}
+    \field{number}{3}
+    \field{pages}{1\bibrangedash 45}
+    \field{title}{Inverted treaps}
+    \field{volume}{35}
+    \field{journaltitle}{ACM Transactions on Information Systems (TOIS)}
+    \field{year}{2017}
   \endentry
 
   \entry{Lem18}{article}{}

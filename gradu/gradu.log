@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2020.2.4)  12 APR 2020 22:59
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2020.2.4)  14 APR 2020 19:20
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -2002,71 +2002,97 @@ Chapter 1.
 [1
 
 
-]
+] [2]
 Chapter 2.
-[2
+[3
 
-] [3] [4] [5]
+] [4] [5] [6]
 Chapter 3.
-[6
+[7
 
-] [7] [8] [9] [10]
+] [8] [9] [10] [11]
 Chapter 4.
-[11
+[12
 
-] [12] [13]
+] [13] [14]
 Chapter 5.
-[14
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <17.28> on input line 441.
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 441.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 441.
+
+[15
 
 ]
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 518.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 518.
+
+[16]
 Chapter 6.
 
-Overfull \hbox (3.79015pt too wide) in paragraph at lines 454--456
+Overfull \hbox (3.79015pt too wide) in paragraph at lines 529--531
 \OT1/lmr/m/n/12 The fol-low-ing ex-per-i-ments were run on a AMD Phe-nom(tm) II
  X6 1055T Pro-ces-sor@2.8Ghz
  []
 
 
-Overfull \hbox (5.82973pt too wide) in paragraph at lines 454--456
+Overfull \hbox (5.82973pt too wide) in paragraph at lines 529--531
 \OT1/lmr/m/n/12 com-piled with \OT1/lmtt/m/n/12 g++-7 -std=c++11 -DNDEBUG -O3 \
 OT1/lmr/m/n/12 and with li-braries \OT1/lmtt/m/n/12 -lsdsl -ldivsufsort
  []
 
-LaTeX Font Info:    Try loading font information for TS1+lmr on input line 462.
+LaTeX Font Info:    Try loading font information for TS1+lmr on input line 537.
 
 (/usr/share/texmf/tex/latex/lm/ts1lmr.fd
 File: ts1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
-) [15
+) [17
 
-] [16] [17] [18] [19]
+] [18] [19] [20] [21]
 Chapter 7.
-) [20
+) [22
 
-] [21
+] [23
 
 
 
-] [22] 
+] [24] 
 AED: lastpage setting LastPage
-***AED Number of Appendices 23
-***AED Number of pages 22\translate {pp}
+***AED Number of Appendices 25
+***AED Number of pages 24\translate {pp}
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 255.
 Package atveryend Info: Empty hook `AfterLastShipout' on input line 255.
 (./gradu.aux (./msc_english_contents.aux))
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 255.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 255.
-Package rerunfilecheck Info: File `gradu.out' has not changed.
-(rerunfilecheck)             Checksum: 6024B71E0EF7E61788A608BDE368D005;2511.
+
+
+Package rerunfilecheck Warning: File `gradu.out' has changed.
+(rerunfilecheck)                Rerun to get outlines right
+(rerunfilecheck)                or use package `bookmark'.
+
+Package rerunfilecheck Info: Checksums for `gradu.out':
+(rerunfilecheck)             Before: 027F4044E324CCEC72D2C04A54D4C6FE;2534
+(rerunfilecheck)             After:  2491C920A6A62571343E61ACB87B758C;2922.
 Package logreq Info: Writing requests to 'gradu.run.xml'.
 \openout1 = `gradu.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 42968 strings out of 494267
- 917205 string characters out of 6162829
- 1310308 words of memory out of 5000000
- 45526 multiletter control sequences out of 15000+600000
- 77367 words of font info for 71 fonts, out of 8000000 for 9000
+ 43267 strings out of 494267
+ 922266 string characters out of 6162829
+ 1316066 words of memory out of 5000000
+ 45819 multiletter control sequences out of 15000+600000
+ 78542 words of font info for 76 fonts, out of 8000000 for 9000
  395 hyphenation exceptions out of 8191
  62i,19n,96p,808b,2377s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texmf/fonts/enc/dvips/lm/lm-rm.enc}{/usr/share/texmf/fonts/enc/dv
@@ -2082,10 +2108,10 @@ e/texmf/fonts/type1/public/lm/lmr8.pfb></usr/share/texmf/fonts/type1/public/lm/
 lmri12.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy10.pfb></usr/share/texmf
 /fonts/type1/public/lm/lmsy8.pfb></usr/share/texmf/fonts/type1/public/lm/lmtt10
 .pfb></usr/share/texmf/fonts/type1/public/lm/lmtt12.pfb>
-Output written on gradu.pdf (28 pages, 378858 bytes).
+Output written on gradu.pdf (30 pages, 384244 bytes).
 PDF statistics:
- 395 PDF objects out of 1000 (max. 8388607)
- 344 compressed objects within 4 object streams
- 77 named destinations out of 1000 (max. 500000)
+ 410 PDF objects out of 1000 (max. 8388607)
+ 357 compressed objects within 4 object streams
+ 83 named destinations out of 1000 (max. 500000)
  160 words of extra memory for PDF output out of 10000 (max. 10000000)
 
