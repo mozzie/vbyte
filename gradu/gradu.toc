@@ -24,9 +24,9 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {chapter}{\numberline {5}Subarray access}{15}{chapter.5}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {5.1}Subarray access with $select$}{15}{section.5.1}
+\contentsline {section}{\numberline {5.1}Subarray access with select}{15}{section.5.1}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {5.2}Subarray access with $rank$}{16}{section.5.2}
+\contentsline {section}{\numberline {5.2}Subarray access with rank}{16}{section.5.2}
 \defcounter {refsection}{0}\relax 
 \contentsline {chapter}{\numberline {6}Experimental results}{17}{chapter.6}
 \defcounter {refsection}{0}\relax 

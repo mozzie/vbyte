@@ -105,7 +105,7 @@ Original number & first block & second block & third block & fourth block &\\
 4  & \texttt{\underline{1}0100}    &                             &                           &  &  \\
 17  & \texttt{\underline{0}0001}   & \texttt{\underline{1}0001}  &                           &  &  \\
 620  & \texttt{\underline{0}1100}  & \texttt{\underline{0}0110} & \texttt{\underline{1}0010} &  &  \\
-60201 & \texttt{\underline{1}1001} & \texttt{\underline{0}0010} & \texttt{\underline{0}1011} & \texttt{\underline{1}1110} &  \\
+60201 & \texttt{\underline{0}1001} & \texttt{\underline{0}0010} & \texttt{\underline{0}1011} & \texttt{\underline{1}1110} &  \\
 
 \hline
 \end{tabular}
@@ -438,7 +438,7 @@ After locating and decompressing one value from a compressed data structure, dec
 needed because the next compressed value is usually located next to the previously fetched element. This is especially beneficial to the select-based VByte decoding, where calculating the start 
 byte location takes majority of the runtime. In addition to this, the length of the next compressed integer is very fast to calculate because the required data is already in memory.
 
-\section{Subarray access with $select$}
+\section{Subarray access with select}
 A single direct access with $select$ needs to calculate the length of the desired element. This is done by reading a word from the continuation bit array, bit-shifting until the bit representing 
 the first block is on the rightmost end, and then counting the trailing zeros in the word. Subsequent length calculations are done by bit-shifting the word equal to the length of the previous element 
 and then counting trailing zeros. Once the word is shifted through, another word is read and process continues.
@@ -515,7 +515,7 @@ repeated. When $w$ has no 1 bits, another word is read from the following bytes.
 zeros is added to the first length calculation after word switch. This number can be calculated either by adding bit shift amounts together and subtracting the result from word-length. Another option is to count 
 leading zeros of the old $w$ before the first switch. In the example, one zero is left over from the byte $B_2$.
 
-\section{Subarray access with $rank$}
+\section{Subarray access with rank}
 The shown $rank$ method by Brisaboa et al. can also effectively decompress the next value with slight modifications. When fetching a longer subarray, the goal becomes to minimize $rank$ calls. 
 When a new block level is reached for the first time during a subarray query, the index is fetched with $rank_1$ as normal, and the result of the query is stored. The next time the same level is reached, the
 previously stored result is incremented by one and that value is used instead of issuing another $rank_1$ query. This way the number of $rank_1$ calls needed is equal to the number of $rank_1$ calls 
