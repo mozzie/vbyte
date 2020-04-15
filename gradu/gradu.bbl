@@ -721,6 +721,53 @@
     \field{year}{2002}
   \endentry
 
+  \entry{Sha16}{article}{}
+    \name{author}{4}{}{%
+      {{hash=SE}{%
+         family={Shareghi},
+         familyi={S\bibinitperiod},
+         given={Ehsan},
+         giveni={E\bibinitperiod},
+      }}%
+      {{hash=PM}{%
+         family={Petri},
+         familyi={P\bibinitperiod},
+         given={Matthias},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=HG}{%
+         family={Haffari},
+         familyi={H\bibinitperiod},
+         given={Gholamreza},
+         giveni={G\bibinitperiod},
+      }}%
+      {{hash=CT}{%
+         family={Cohn},
+         familyi={C\bibinitperiod},
+         given={Trevor},
+         giveni={T\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {MIT Press}%
+    }
+    \strng{namehash}{SE+1}
+    \strng{fullhash}{SEPMHGCT1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{labelyear}{2016}
+    \field{labeldatesource}{year}
+    \field{sortinit}{S}
+    \field{sortinithash}{S}
+    \field{pages}{477\bibrangedash 490}
+    \field{title}{Fast, small and exact: Infinite-order language modelling with
+  compressed suffix trees}
+    \field{volume}{4}
+    \field{journaltitle}{Transactions of the Association for Computational
+  Linguistics}
+    \field{year}{2016}
+  \endentry
+
   \entry{Vig08}{inproceedings}{}
     \name{author}{1}{}{%
       {{hash=VS}{%

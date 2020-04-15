@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2020.2.4)  14 APR 2020 19:23
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2020.2.4)  15 APR 2020 21:37
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -2021,15 +2021,9 @@ Chapter 5.
 ] [16]
 Chapter 6.
 
-Overfull \hbox (3.79015pt too wide) in paragraph at lines 529--531
+Overfull \hbox (3.79015pt too wide) in paragraph at lines 529--532
 \OT1/lmr/m/n/12 The fol-low-ing ex-per-i-ments were run on a AMD Phe-nom(tm) II
  X6 1055T Pro-ces-sor@2.8Ghz
- []
-
-
-Overfull \hbox (5.82973pt too wide) in paragraph at lines 529--531
-\OT1/lmr/m/n/12 com-piled with \OT1/lmtt/m/n/12 g++-7 -std=c++11 -DNDEBUG -O3 \
-OT1/lmr/m/n/12 and with li-braries \OT1/lmtt/m/n/12 -lsdsl -ldivsufsort
  []
 
 LaTeX Font Info:    Try loading font information for TS1+lmr on input line 537.
@@ -2062,30 +2056,31 @@ Package logreq Info: Writing requests to 'gradu.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 43263 strings out of 494267
- 922192 string characters out of 6162829
- 1316069 words of memory out of 5000000
- 45815 multiletter control sequences out of 15000+600000
+ 43269 strings out of 494267
+ 922319 string characters out of 6162829
+ 1311256 words of memory out of 5000000
+ 45820 multiletter control sequences out of 15000+600000
  77367 words of font info for 71 fonts, out of 8000000 for 9000
  395 hyphenation exceptions out of 8191
  62i,19n,96p,808b,2377s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texmf/fonts/enc/dvips/lm/lm-rm.enc}{/usr/share/texmf/fonts/enc/dv
-ips/lm/lm-ts1.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-mathsy.enc}{/usr/shar
-e/texmf/fonts/enc/dvips/lm/lm-mathit.enc}{/usr/share/texmf/fonts/enc/dvips/lm/l
+ips/lm/lm-mathit.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-ts1.enc}{/usr/shar
+e/texmf/fonts/enc/dvips/lm/lm-mathsy.enc}{/usr/share/texmf/fonts/enc/dvips/lm/l
 m-rmtt.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-rmsc.enc}</usr/share/texmf/f
 onts/type1/public/lm/lmbx10.pfb></usr/share/texmf/fonts/type1/public/lm/lmbx12.
 pfb></usr/share/texmf/fonts/type1/public/lm/lmcsc10.pfb></usr/share/texmf/fonts
-/type1/public/lm/lmmi12.pfb></usr/share/texmf/fonts/type1/public/lm/lmmi8.pfb><
-/usr/share/texmf/fonts/type1/public/lm/lmr10.pfb></usr/share/texmf/fonts/type1/
-public/lm/lmr12.pfb></usr/share/texmf/fonts/type1/public/lm/lmr6.pfb></usr/shar
-e/texmf/fonts/type1/public/lm/lmr8.pfb></usr/share/texmf/fonts/type1/public/lm/
-lmri12.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy10.pfb></usr/share/texmf
-/fonts/type1/public/lm/lmsy8.pfb></usr/share/texmf/fonts/type1/public/lm/lmtt10
-.pfb></usr/share/texmf/fonts/type1/public/lm/lmtt12.pfb>
-Output written on gradu.pdf (30 pages, 384764 bytes).
+/type1/public/lm/lmmi10.pfb></usr/share/texmf/fonts/type1/public/lm/lmmi12.pfb>
+</usr/share/texmf/fonts/type1/public/lm/lmmi8.pfb></usr/share/texmf/fonts/type1
+/public/lm/lmr10.pfb></usr/share/texmf/fonts/type1/public/lm/lmr12.pfb></usr/sh
+are/texmf/fonts/type1/public/lm/lmr6.pfb></usr/share/texmf/fonts/type1/public/l
+m/lmr8.pfb></usr/share/texmf/fonts/type1/public/lm/lmri12.pfb></usr/share/texmf
+/fonts/type1/public/lm/lmsy10.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy8
+.pfb></usr/share/texmf/fonts/type1/public/lm/lmtt10.pfb></usr/share/texmf/fonts
+/type1/public/lm/lmtt12.pfb>
+Output written on gradu.pdf (30 pages, 391312 bytes).
 PDF statistics:
- 418 PDF objects out of 1000 (max. 8388607)
- 365 compressed objects within 4 object streams
- 83 named destinations out of 1000 (max. 500000)
+ 425 PDF objects out of 1000 (max. 8388607)
+ 371 compressed objects within 4 object streams
+ 84 named destinations out of 1000 (max. 500000)
  176 words of extra memory for PDF output out of 10000 (max. 10000000)
 

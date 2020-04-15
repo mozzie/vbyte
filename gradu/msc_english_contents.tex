@@ -12,7 +12,7 @@ from the beginning.
 
 A variable-byte encoding based integer compression method with fast random access was first introduced by \citep{Bri09}. They used a clever block 
 reorganizing and a fast $rank$ data structure to achieve random access. Their solution is currently the only published solution for the problem and it 
-has been widely adopted \citep[e.g.][]{Kon17}. 
+has been widely adopted \citep[e.g.][]{Kon17, Sha16}. 
 
 In this thesis, an alternative solution that instead makes use of a $select$ data structure is proposed and explained in detail. Comparison to the $rank$-based 
 implementation by Brisaboa et al is provided with different implementations of $rank$ and $select$ and several different data sets. The proposed method does not use data 
@@ -168,7 +168,6 @@ as the needed indexing array. In this case, $rank_1$(C, i) would give the sum of
 of i-th compressed element.
 
 \section{Rank and Select implementation}
-\label{chap:implementations}
 
 The rank and select implementations used in this thesis are from C++ library 'SDSL-lite' by \citep{gbmp2014sea}. The library has an implementation of a bit array and several implementations
  of both rank and select to support the bit array. Also a few useful functions from the library were used during the implementation phase. Table~\ref{table:supportsize} has $rank$ and $select$ 
@@ -201,9 +200,9 @@ block's index to wanted index. This is at most the size of one relative block an
 \begin{tabular}{l||c} 
 Structure & Extra size taken\\ 
 \hline \hline 
-Rank   & \text{25\% of bit array} \\
-Rankv5 & \text{6.25\% of bit array}\\
-Select & \text{~6-15\% of bit array (TODO: check this}\\
+$Rank_v$   & \text{25\% of bit array} \\
+$Rank_{v5}$ & \text{6.25\% of bit array}\\
+$Select$ & \text{~6-15\% of bit array (TODO: check this}\\
 \hline
 \end{tabular}
 \end{table}
@@ -211,6 +210,7 @@ Select & \text{~6-15\% of bit array (TODO: check this}\\
 
 
 \section{DAC via rank}
+\label{chap:implementations}
 Directly addressable VB codes were first introduced by \citep{Bri09}. In their solution, the chunks are stored in separate arrays by their significance. For each integer, the block 
 of the least significant chunk is stored in the first array $A_1$, and its continuation bit to the first bit array $B_1$. Then if the number was stored in multiple chunks, the block of the next chunk is
 stored to $A_2$ and its continuation bit to $B_2$ and so on. After the data is set, a $rank$ data structure is built for each bit array. The data structure does not require additional space apart
@@ -318,7 +318,7 @@ with block length of 8.
 \end{figure}
 
 \chapter{DAC with select query}
-
+\label{chap:select_impl}
 Using $select_1$ on the continuation bit array to achieve direct access is more intuitive than using $rank_1$. The element locations are already marked with 1's 
 in $B$ and a single $select_1$ query gets the desired starting point, while the forementioned version \citep{Bri09} used one $rank$ query for each chunk beyond 
 the first. Minimizing the amount of $select$ and $rank$ queries is important. They run in constant time but their impact is huge, because rest of the VB decoding 
@@ -527,12 +527,12 @@ needed to decompress the largest number in the subarray.
 \chapter{Experimental results}
 
 The following experiments were run on a AMD Phenom(tm) II X6 1055T Processor@2.8Ghz with 64kB+64kB L1 cache, 512kB L2 cache, 6144kB L3 cache and 32GB of DDR3 1333MHz.
-The computer runs Ubuntu 14.04.4 (3.13.0-91-generic x86\_64). The codes were compiled with \texttt{g++-7 -std=c++11 -DNDEBUG -O3} and with libraries \texttt{-lsdsl -ldivsufsort -ldivsufsort64}.
+The computer runs Ubuntu 14.04.4 (3.13.0-91-generic x86\_64) with minimal programs running in the background. The codes were compiled with \texttt{g++-7 -std=c++11 -DNDEBUG -O3} 
+and with libraries \texttt{-lsdsl -ldivsufsort -ldivsufsort64}.
+
 
 \section{VB decoding comparison}
-Six different VB decoding algorithms were compared. The Bris-algorithms are from \citep{Bri09}. All algorithms are implemented using data structures and functions from the SDSL 
-library \citep{gbmp2014sea}. Each implementation is compressing and decoding uint64\_t type integers. The $rank$ and $select$ implementations are explained in \autoref{chap:implementations}.
-
+Six different VB decoding implementations were compared:
 \begin{itemize}
   \item Bris4 - Bris implementation with block size 4, using $rank_v$
   \item Bris4v5 - Bris implementation with block size 4, using $rank_{v5}$
@@ -542,6 +542,14 @@ library \citep{gbmp2014sea}. Each implementation is compressing and decoding uin
   \item Select8 - Proposed implementation with block size 8, using $select_{MCL}$
 \end{itemize}
 
+The Bris-algorithms are implementations based on \citep{Bri09} using two different $rank$ data structures from the SDSL-library \citep{gbmp2014sea}. The $select$-algorithm is the one proposed in 
+this thesis and it is based on the $select_{MCL}$ data structure from the SDSL-library. Two different block sizes were used to illustrate how block size affects the runtime and memory requirement. Sizes 
+8 and 4 were chosen because they are relatively easy to implement. 
+
+Each implementation is compressing and dompressing 64-bit unsigned integers. The $rank$ and $select$ implementations are explained in detail in \autoref{chap:implementations} 
+and \autoref{chap:select_impl}, respectively.
+
+\pagebreak
 Four differently constructed datasets were used and three different sizes of dataset were used (5M, 50M, 500M). 
 
 \begin{itemize}
@@ -574,9 +582,6 @@ onlysmall (5M)   & \textbf{16.50} & 20.20 & 16.50 & 23.80 & 84.70 & 88.40 \\
 onlysmall (50M)   & \textbf{31.20} & 51.80 & 32.10 & 57.00 & 201.20 & 198.80 \\
 onlysmall (500M)   & \textbf{34.10}  & 56.00 & 35.00 & 63.10 & 297.90 & 293.80 \\
 
-
-
-
 \hline
 \end{tabular}
 \end{table}
@@ -590,8 +595,8 @@ better compression in data sets containing small integers. Select versions do no
 Interestingly the 4-bit version of $select$ performs better than the 8-bit version with some data sets, even though 4-bit version should execute at least the same commands as the 8-bit version 
 in every scenario. This is most likely due to cache, because the stored data set is smaller in the 4-bit version.
 
-The v5 version of rank naturally has worse performance because more calculations are needed in the last phase of calculating the rank sum. As a trade-off, it requires 
-significantly less memory, as seen on Figure~\ref{table:supportsize}.
+The $rank_{v5}$ naturally has worse performance because more calculations are needed in the last phase of calculating the rank sum. As a trade-off, it requires 
+significantly less memory than $rank_v$, as seen on Figure~\ref{table:supportsize}.
 
 \begin{figure}[ht]
 \centering
@@ -606,7 +611,7 @@ significantly less memory, as seen on Figure~\ref{table:supportsize}.
     legend pos=north west,
     ymajorgrids=true,
     grid style=dashed,
-    width=13cm, height=8cm
+    width=13cm, height=8.5cm
 ]
 
 \addplot[
@@ -647,7 +652,7 @@ coordinates {
 \end{figure}
 
 \section{Memory usage}
-Table~\ref{table:results8bit} and Table~\ref{table:results4bit} show memory size requirements for $rank$ and $select$ data structures with data sets consisting
+Tables~\ref{table:results8bit} and~\ref{table:results4bit} show memory size requirements for $rank$ and $select$ data structures with data sets consisting
  of 50 million 64-bit numbers. The compressed size column has a sum of continuation bit array and the data blocks. For $rank$ and $select$ methods used in this thesis, the total 
 space taken by the extra data structures is only a small fraction of the overall size.
 
@@ -696,8 +701,13 @@ onlysmall & 31.3MB          & 1.56MB & 391kB   & 1.43MB \\
 
 \section{Subarray access results}
 
-Figure~\ref{graph:subarray} shows results for subarray fetching. The data sets used contained mostly 4-bit integers and a few 32-bit integers randomly among them. The number in the x-axis corresponds to the 
-number of large integers within 1000 integers and the y-axis has the average time of fetching 50 subsequent numbers from an initially random location. 
+The subarray access experiments were run similarly to the previous experiments. The data sets used contained 50 million numbers each. Most of the numbers were 4-bit long, with a varying amount of 32-bit 
+integers randomly among them. The numbers in the x-axis correspond to the number of 32-bit integers per 1000 integers. One million indexes were randomized and both the index numbers and the data sets were 
+preloaded into memory. A subarray of length 50 was decompressed from each randomized index location. Some precaution was used in the index randomizing to prevent reading from an out of bounds location.
+
+Figure~\ref{graph:subarray} shows results for subarray fetching. The probability of having a long integer within the subarray range is visible from the results of the $rank$ based methods. When the density of the long integers increase, so does the need to access multiple 
+block layers and thus the average time increases. The results of the $select$ based methods visualize the static need of singular $select$ query. The 4-bit version of $select$ requires a few more instructions 
+during the block location phase and therefore is a little bit slower overall.
 
 
 \begin{figure}[ht]
@@ -709,7 +719,7 @@ number of large integers within 1000 integers and the y-axis has the average tim
     xmin=1, xmax=16,
     ymin=400, ymax=600,
     xtick={1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16},
-    ytick={300,400,500,600,700,800,900,100},
+    ytick={300,400,500,600,700},
     legend pos=north west,
     ymajorgrids=true,
     grid style=dashed,
@@ -764,7 +774,7 @@ coordinates {
 
 \end{axis}
 \end{tikzpicture}
-\caption{Rank and select performance with subarray fetching} \label{graph:subarray}
+\caption{$Rank$ and $select$ performance with subarray fetching} \label{graph:subarray}
 \end{figure}
 
 \chapter{Conclusions and Future work}
@@ -785,10 +795,6 @@ TODO:
  - see how cache matters
 
  - figure out why data size matters
-
- - add subarray examples / visualization
-
- - write more about subarray access in results
 
  - more text / references
 
