@@ -10,7 +10,7 @@ need to fulfill. However, random access to compressed data is very useful in com
 increases the likelihood of data already being in cache \citep{Sch02}. In most compression methods, the only way to do this is to decompress data 
 from the beginning. 
 
-Variable-byte encoding is a method for compressing integers of different byte length. An additional $continuous bit$ is added to the data to denote whether the compressed integer
+Variable-byte encoding is a method for compressing integers of different byte length. An additional \textit{continuous bit} is added to the data to denote whether the compressed integer
 is continued to the next byte or not. A light-weight data structure is built over the continuous bit array. The fact that the compressed data blocks are of the same size is used
 with the data structure to allow direct access to the compressed variable-byte data.
 
