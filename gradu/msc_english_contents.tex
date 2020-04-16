@@ -10,6 +10,10 @@ need to fulfill. However, random access to compressed data is very useful in com
 increases the likelihood of data already being in cache \citep{Sch02}. In most compression methods, the only way to do this is to decompress data 
 from the beginning. 
 
+Variable-byte encoding is a method for compressing integers of different byte length. An additional $continuous bit$ is added to the data to denote whether the compressed integer
+is continued to the next byte or not. A light-weight data structure is built over the continuous bit array. The fact that the compressed data blocks are of the same size is used
+with the data structure to allow direct access to the compressed variable-byte data.
+
 A variable-byte encoding based integer compression method with fast random access was first introduced by \citep{Bri09}. They used a clever block 
 reorganizing and a fast $rank$ data structure to achieve random access. Their solution is currently the only published solution for the problem and it 
 has been widely adopted \citep[e.g.][]{Kon17, Sha16}. 
@@ -19,8 +23,10 @@ implementation by Brisaboa et al is provided with different implementations of $
 reorganizing, but rather capitalizes on the assumption that data is encoded the same way it is in the source. Because variable-byte encoding does not assign 
 new codewords to data when encoding, data can be read straight from the memory and reassembling the integer from blocks is not needed.
 
-The $rank$ method is found superior when dataset contains mostly small integers. With larger integers, the decoding needs multiple $rank$ calls and the new $select$-based 
-method performs better. Additionally, due to how the data is stored, the proposed $select$ method offers fast access to the next or previous element. This makes a subarray fetch 
+Because of the block reorganizing, the $rank$ does not infact need a $rank$ query when fetching small elements. This makes the $rank$ method superior when dataset contains 
+mostly small integers. With larger integers, the decoding needs multiple $rank$ calls and the new $select$-based method performs better. 
+
+Additionally, due to how the data is stored, the proposed $select$ method offers fast access to the next or previous element. This makes a subarray fetch 
 very convenient and fast. A solution for subarray fetching and comparison is proposed in this thesis.
 
 
@@ -779,10 +785,12 @@ coordinates {
 
 \chapter{Conclusions and Future work}
 
-It is good to conclude with a summary of findings. You can also use separate chapter for discussion and future work. These details you can negotiate with your supervisor.
+When the dataset contains mostly small integers, the $rank$ based method by Brisaboa et al. is superior to the proposed $select$ based method. The benefit of using a direct array index instead of a $rank$ 
+call for the first block gives a huge advantage. The $rank$ query is also slightly faster than a $select$ query, and therefore the dataset needs to have a large portion of longer elements. This can be seen 
+from figure~\ref{graph:data_comparison}.
 
-
-
+The order of how data is stored with $select$ compression enables an efficient fetching of a subarray. Only one $select$ query is needed in the beginning, and the decoding of the elements past the first one 
+consists of just a few bit operations. 
 
 
 There has already been a few successful attempts to decompress VB encoded integers with SIMD instructions \citep{Lem18,Pla15}. It is worthwhile to check if the select-based approach presented 
@@ -797,8 +805,6 @@ TODO:
  - figure out why data size matters
 
  - more text / references
-
- - write conclusions
 
  - write introduction
 
