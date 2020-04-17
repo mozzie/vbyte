@@ -45,7 +45,7 @@ instead of the actual number \citep{Man08}. Common words have a lot of entries i
 In contrast, rare words have only a few entries but the integers stored are larger. These lists are thus excellent candidates for VB encoding. 
 
 Variable-byte encoding originates from and is used in the MIDI music file format \citep{Mid96} and several applications have a similar implementation of VB. Apache 
-Lucene has the vInt datatype \citep{ApaLV}. The Wireless Application Protocol has a variable length unsigned integer uintvar, Google Protocol Buffers has a Base 128 Varint \citep{GooPB},
+Lucene has the vInt datatype \citep{ApaLV} which works well with short inverted index lists \citep{Wan09}. The Wireless Application Protocol has a variable length unsigned integer uintvar, Google Protocol Buffers has a Base 128 Varint \citep{GooPB},
  Microsoft .Net framework offers "7BitEncodedInt" in BinaryReader and BinaryWriter classes and IBM DB2 uses variable byte encoding to store record identifier lists \citep{Bha09}.
 
 Later, VB encoding was found to be efficient for compressing integer lists. It was first experimented as a tool for compressing inverted index lists of word locations in documents by \citep{Sch02}. 
@@ -158,7 +158,9 @@ $n = $\texttt{101010} (bit representation of 42). The continuation bit of this c
 
 The ability to handle large amounts of data fast is one of the key challenges in the field of search engines. Compressed data structures are applied to fit the 
 data into cache, memory or even hard drive. Direct access to any element in a compressed list or array is one of the usual requirements in compressed data 
-structures. It is not natively possible to decode the i-th element in variable-byte compression algorithms, because the position of the element in the compressed
+structures. For example, it is needed in inverted index compression \citep{Cul07} and compressed text search \citep{Mou00}.
+
+It is not natively possible to decode the i-th element in variable-byte compression algorithms, because the position of the element in the compressed
 list depends on the length of the preceding compressed data. Direct access is achievable with supporting data structures. A naive solution is to store the location 
 of each element to an array, but it adds a very large overhead which removes the benefit of compression.
 

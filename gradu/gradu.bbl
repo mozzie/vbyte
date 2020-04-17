@@ -239,6 +239,39 @@
     \field{year}{1997}
   \endentry
 
+  \entry{Cul07}{inproceedings}{}
+    \name{author}{2}{}{%
+      {{hash=CJS}{%
+         family={Culpepper},
+         familyi={C\bibinitperiod},
+         given={J\bibnamedelima Shane},
+         giveni={J\bibinitperiod\bibinitdelim S\bibinitperiod},
+      }}%
+      {{hash=MA}{%
+         family={Moffat},
+         familyi={M\bibinitperiod},
+         given={Alistair},
+         giveni={A\bibinitperiod},
+      }}%
+    }
+    \list{organization}{1}{%
+      {Springer}%
+    }
+    \strng{namehash}{CJSMA1}
+    \strng{fullhash}{CJSMA1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{labelyear}{2007}
+    \field{labeldatesource}{year}
+    \field{sortinit}{C}
+    \field{sortinithash}{C}
+    \field{booktitle}{International Symposium on String Processing and
+  Information Retrieval}
+    \field{pages}{137\bibrangedash 148}
+    \field{title}{Compact set representation for information retrieval}
+    \field{year}{2007}
+  \endentry
+
   \entry{Eli75}{article}{}
     \name{author}{1}{}{%
       {{hash=EP}{%
@@ -560,6 +593,54 @@
     \field{year}{1996}
   \endentry
 
+  \entry{Mou00}{article}{}
+    \name{author}{4}{}{%
+      {{hash=SdME}{%
+         prefix={Silva\bibnamedelima de},
+         prefixi={S\bibinitperiod\bibinitdelim d\bibinitperiod},
+         family={Moura},
+         familyi={M\bibinitperiod},
+         given={Edleno},
+         giveni={E\bibinitperiod},
+      }}%
+      {{hash=NG}{%
+         family={Navarro},
+         familyi={N\bibinitperiod},
+         given={Gonzalo},
+         giveni={G\bibinitperiod},
+      }}%
+      {{hash=ZN}{%
+         family={Ziviani},
+         familyi={Z\bibinitperiod},
+         given={Nivio},
+         giveni={N\bibinitperiod},
+      }}%
+      {{hash=BYR}{%
+         family={Baeza-Yates},
+         familyi={B\bibinitperiod-Y\bibinitperiod},
+         given={Ricardo},
+         giveni={R\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {ACM New York, NY, USA}%
+    }
+    \strng{namehash}{MESd+1}
+    \strng{fullhash}{MESdNGZNBYR1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{labelyear}{2000}
+    \field{labeldatesource}{year}
+    \field{sortinit}{M}
+    \field{sortinithash}{M}
+    \field{number}{2}
+    \field{pages}{113\bibrangedash 139}
+    \field{title}{Fast and flexible word searching on compressed text}
+    \field{volume}{18}
+    \field{journaltitle}{ACM Transactions on Information Systems (TOIS)}
+    \field{year}{2000}
+  \endentry
+
   \entry{Ott14}{inproceedings}{}
     \name{author}{2}{}{%
       {{hash=OG}{%
@@ -817,6 +898,40 @@
     \field{pages}{83\bibrangedash 92}
     \field{title}{Quasi-succinct indices}
     \field{year}{2013}
+  \endentry
+
+  \entry{Wan09}{inproceedings}{}
+    \name{author}{2}{}{%
+      {{hash=WJ}{%
+         family={Wan},
+         familyi={W\bibinitperiod},
+         given={Jian},
+         giveni={J\bibinitperiod},
+      }}%
+      {{hash=PS}{%
+         family={Pan},
+         familyi={P\bibinitperiod},
+         given={Shengyi},
+         giveni={S\bibinitperiod},
+      }}%
+    }
+    \list{organization}{1}{%
+      {IEEE}%
+    }
+    \strng{namehash}{WJPS1}
+    \strng{fullhash}{WJPS1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{labelyear}{2009}
+    \field{labeldatesource}{year}
+    \field{sortinit}{W}
+    \field{sortinithash}{W}
+    \field{booktitle}{2009 International Conference on Research Challenges in
+  Computer Science}
+    \field{pages}{178\bibrangedash 181}
+    \field{title}{Performance evaluation of compressed inverted index in
+  lucene}
+    \field{year}{2009}
   \endentry
 
   \entry{Wil99}{article}{}
