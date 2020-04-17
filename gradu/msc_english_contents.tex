@@ -55,7 +55,7 @@ More recent studies have taken a look into the machine code level for VB and app
 operations in VB are simple and therefore modifying the code to use SIMD instructions is straightforward and the speed improvements are significant. 
 
 Elias Delta and Gamma codes \citep{Eli75} are popular encoding methods for the aforementioned data sets. Their encoding process assigns short bit sequences to small integers, 
-which is why they outperform in trems of compression VB encoding on datasets containing a lot of small integers \citep{Wil99}, such as inverted indexes \citep{Anh05, Pib19}. In this thesis, 
+which is why they outperform in terms of compression VB encoding on datasets containing a lot of small integers \citep{Wil99}, such as inverted indexes \citep{Anh05, Pib19}. In this thesis, 
 the data sets used for experimentation will have the focus on slightly larger, unordered numbers.
 
 \section{VB encoding}
@@ -363,7 +363,7 @@ a bit mask for k bytes.
 \State $i \gets $ wanted index
 \State $A \gets $ block byte array
 \State $B \gets $ continuation bit array
-\State $begin \gets \Call{Select}{index}$
+\State $begin \gets \Call{Select}{B, index}$
 \State $len \gets \Call{CalculateLength}{begin}$
 \State $mask \gets \Call{ByteMask}{len}$
 \State $word \gets A[begin]$ \Comment{read a word from the byte array}
@@ -810,5 +810,6 @@ TODO:
 
  - write abstract
 
+ - remove lists from algorithms and data sets in results, explain whe data sets were roughly chosen like that
 
 

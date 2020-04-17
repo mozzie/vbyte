@@ -845,7 +845,7 @@
 
 \put(5,  601){\makebox(100, 8)[l]{\abst@small \@author}}
 \put(5,  564)%
-    {\parbox{450pt}{\abst@small \@title}}
+    {\parbox{450pt}{\abst@small Select-based random access to variable-byte encodings}}
  
 \put(5,  527)%
     {\parbox{450pt}{\abst@small \@supervisors}}

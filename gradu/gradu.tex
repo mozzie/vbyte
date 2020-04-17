@@ -150,11 +150,11 @@
 %% Replace classification terms with the ones that match your work. ACM
 %% ACM Digital library provides a taxonomy and a tool for classification
 %% in computer science. Use 1-3 paths, and use right arrows between the
-%% about three levels in the path; each path requires a new line.
+%% about three levels in the path; each path requires a new line.    
 
 \classification{\protect{\ \\
-\  General and reference $\rightarrow$ Document types  $\rightarrow$ Surveys and overviews\  \\
-\  Applied computing  $\rightarrow$ Document management and text processing  $\rightarrow$ Document management $\rightarrow$ Text editing
+\  Information systems $\rightarrow$ Data management systems  $\rightarrow$ Data structures $\rightarrow$ Data layout $\rightarrow$ Data compression \  \\
+\  probably $\rightarrow$ something $\rightarrow$ else $\rightarrow$ too \\
 }}
 
 %% if you want to quote someone special. You can comment this line out and there will be nothing on the document.
@@ -200,17 +200,13 @@
 %% language as well, in between the abstract definitions.
 
 \begin{abstract}
-Use this otherlanguage environment to write your abstract in another language if needed.
 
-Topics are classified according to the ACM Computing Classification System
-(CCS), see 
-\url{https://www.acm.org/about-acm/class}:
-check command \verb+\classification{}+. A small set of paths (1--3) should be used, starting from any top nodes
-referred to bu the root term CCS leading to the leaf nodes. The elements
-in the path are separated by right arrow, and emphasis of each element individually can be indicated
-by the use of bold face for high importance or italics for intermediate
-level. The combination of individual boldface terms may give the reader
-additional insight. 
+Enormous datasets are a common occurence today and compressing them is often beneficial. Variable-byte encoding is a method for compressing integers of different byte lenghts. It removes the zero bytes 
+and adds an additional \textit{continuation bit} to each byte to denote whether the compressed integer continues to the next byte or not. Two bit array data structures, $rank$ and $select$  are built on top of the array of 
+continuation bits. These data structures enable a fast direct access to the elements in the compressed data. The $rank$ implementation performs better on data containing mostly small integers. The $select$ 
+implementation benefits on larger integers. An experiment on fetching a subarray is explained and implemented. The $select$ implementation has significant advantages on subarray fetching due to how the data 
+is compressed.
+
 \end{abstract}
 
 
