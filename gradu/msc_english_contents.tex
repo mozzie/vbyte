@@ -351,9 +351,9 @@ happens if compressed length was 8 blocks and offset was 4. Then another step of
 length is constrained. In this case the maximum integer length would be 28 bits.
 
 The most intuitive way to calculate the block length of the $i$-th element is to subtract $select_1$(i) from $select_1$(i+1). This however causes an additional 
-$select_1$ query, which is costly. A much faster option is to calculate the block length by reading a word from the bit array and bit-shifting the word until the bit representing the start of the i-th
-element is on the rightmost end and then counting the trailing zeros. This counts the number of blocks in the i-th element that do not have the continuation bit set. This number is then incremented by one to 
-also count the ending block which has the continuation bit set to 1.
+$select_1$ query, which is costly. A much faster option is to calculate the block length from the continuation bit array. This can be done by reading a word from the bit array and bit-shifting the word 
+until the bit representing the start of the i-th element is on the rightmost end and then counting the trailing zeros. This counts the number of blocks in the i-th element that do not have the continuation bit set. 
+This number is then incremented by one to also count the ending block which has the continuation bit set to 1.
  
 Figure~\ref{select_pseudo} contains an example of VB decoding with DAC with $select$ and block size 8. 
 Different block sizes need extra calculation to get the block location from the byte array. In the example, \textsc{CalculateLength} returns the length of the number in blocks and \textsc{ByteMask}(k) returns 
@@ -808,9 +808,13 @@ TODO:
 
  - more text / references
 
- - write introduction
+ - write more introduction
 
- - write abstract
+ - write more abstract
+
+ - find ACL classifications
+ 
+ - write keywords
 
  - remove lists from algorithms and data sets in results, explain whe data sets were roughly chosen like that
 
