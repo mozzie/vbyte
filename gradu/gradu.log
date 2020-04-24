@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2020.2.4)  18 APR 2020 02:50
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2020.2.4)  24 APR 2020 20:31
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1955,13 +1955,13 @@ LaTeX Font Info:    Try loading font information for U+msb on input line 202.
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <10> on input line 205.
+(Font)              <10> on input line 211.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <7> on input line 205.
+(Font)              <7> on input line 211.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <5> on input line 205.
+(Font)              <5> on input line 211.
 
-Underfull \hbox (badness 10000) in paragraph at lines 210--210
+Underfull \hbox (badness 10000) in paragraph at lines 214--214
 
  []
 
@@ -1969,12 +1969,12 @@ pdfTeX warning (ext4): destination with the same identifier (name{page.}) has b
 een already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.214 \newpage
+l.218 \newpage
                [-997]pdfTeX warning (ext4): destination with the same identifie
 r (name{page.}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.215 \mytableofcontents
+l.219 \mytableofcontents
                          [-996
 
 ] (./gradu.toc)
@@ -1985,12 +1985,12 @@ pdfTeX warning (ext4): destination with the same identifier (name{page.}) has b
 een already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.215 \mytableofcontents
+l.219 \mytableofcontents
                          [-995]pdfTeX warning (ext4): destination with the same
  identifier (name{page.}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.215 \mytableofcontents
+l.219 \mytableofcontents
                          [-994
 
 ]
@@ -2025,12 +2025,12 @@ Chapter 5.
 ] [16]
 Chapter 6.
 
-Overfull \hbox (3.79015pt too wide) in paragraph at lines 544--547
+Overfull \hbox (3.79015pt too wide) in paragraph at lines 550--553
 \OT1/lmr/m/n/12 The fol-low-ing ex-per-i-ments were run on a AMD Phe-nom(tm) II
  X6 1055T Pro-ces-sor@2.8Ghz
  []
 
-LaTeX Font Info:    Try loading font information for TS1+lmr on input line 552.
+LaTeX Font Info:    Try loading font information for TS1+lmr on input line 558.
 
 (/usr/share/texmf/tex/latex/lm/ts1lmr.fd
 File: ts1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
@@ -2048,37 +2048,29 @@ Chapter 7.
 AED: lastpage setting LastPage
 ***AED Number of Appendices 25
 ***AED Number of pages 24\translate {pp}
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 251.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 251.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 255.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 255.
 (./gradu.aux (./msc_english_contents.aux))
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 251.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 251.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 255.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 255.
 Package rerunfilecheck Info: File `gradu.out' has not changed.
 (rerunfilecheck)             Checksum: 2491C920A6A62571343E61ACB87B758C;2922.
-
-
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
-
-
-Package biblatex Warning: Please rerun LaTeX.
-(biblatex)                Page breaks have changed.
-
 Package logreq Info: Writing requests to 'gradu.run.xml'.
 \openout1 = `gradu.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 43286 strings out of 494267
- 922691 string characters out of 6162829
- 1313993 words of memory out of 5000000
- 45834 multiletter control sequences out of 15000+600000
+ 43284 strings out of 494267
+ 922646 string characters out of 6162829
+ 1312962 words of memory out of 5000000
+ 45832 multiletter control sequences out of 15000+600000
  81274 words of font info for 71 fonts, out of 8000000 for 9000
  395 hyphenation exceptions out of 8191
  62i,19n,96p,808b,2377s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texmf/fonts/enc/dvips/lm/lm-ts1.enc}{/usr/share/texmf/fonts/enc/d
-vips/lm/lm-mathsy.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-rm.enc}{/usr/shar
-e/texmf/fonts/enc/dvips/lm/lm-mathit.enc}{/usr/share/texmf/fonts/enc/dvips/lm/l
-m-rmtt.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-rmsc.enc}</usr/share/texmf/f
+vips/lm/lm-mathsy.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-mathit.enc}{/usr/
+share/texmf/fonts/enc/dvips/lm/lm-rmtt.enc}{/usr/share/texmf/fonts/enc/dvips/lm
+/lm-rm.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-rmsc.enc}</usr/share/texmf/f
 onts/type1/public/lm/lmbx10.pfb></usr/share/texmf/fonts/type1/public/lm/lmbx12.
 pfb></usr/share/texmf/fonts/type1/public/lm/lmcsc10.pfb></usr/share/texmf/fonts
 /type1/public/lm/lmmi10.pfb></usr/share/texmf/fonts/type1/public/lm/lmmi12.pfb>
@@ -2089,10 +2081,10 @@ m/lmr8.pfb></usr/share/texmf/fonts/type1/public/lm/lmri10.pfb></usr/share/texmf
 /fonts/type1/public/lm/lmri12.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy1
 0.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy8.pfb></usr/share/texmf/fonts
 /type1/public/lm/lmtt12.pfb>
-Output written on gradu.pdf (30 pages, 385018 bytes).
+Output written on gradu.pdf (30 pages, 386543 bytes).
 PDF statistics:
- 432 PDF objects out of 1000 (max. 8388607)
- 378 compressed objects within 4 object streams
+ 433 PDF objects out of 1000 (max. 8388607)
+ 379 compressed objects within 4 object streams
  87 named destinations out of 1000 (max. 500000)
  176 words of extra memory for PDF output out of 10000 (max. 10000000)
 

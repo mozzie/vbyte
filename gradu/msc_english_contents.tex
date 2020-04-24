@@ -12,12 +12,13 @@ However, random access to compressed data is very useful in compressed data stru
 increases the likelihood of data already being in cache \citep{Sch02}. In most compression methods, the only way to do this is to decompress data 
 from the beginning. 
 
-Variable-byte encoding is a method for compressing integers of different byte length. An additional \textit{continuous bit} is added to the data to denote whether the compressed integer
-is continued to the next byte or not. A light-weight data structure is built over the continuous bit array. The fact that the compressed data blocks are of the same size is used
-with the data structure to allow direct access to the compressed variable-byte data.
+Variable-byte encoding is a method for compressing integers of different byte length. An additional \textit{continuation bit} is added to the data to denote whether the compressed integer
+is continued to the next byte or not. Two different light-weight data structures are built over the continuation bit array. $Rank_1$($i$) returns the number of 1 bits in the bit array between 
+indexes 0 and $i$-1. $Select_1$($i$) returns the index of the i-th 1 bit in the array. The fact that the compressed data blocks are of the same size is used
+with the data structures to allow direct access to the compressed variable-byte data.
 
 A variable-byte encoding based integer compression method with fast random access was first introduced by \citep{Bri09}. They used a clever block 
-reorganizing and a fast $rank$ data structure to achieve random access. Their solution is currently the only published solution for the problem and it 
+reorganizing and a $rank$ data structure to achieve random access. Their solution is currently the only published solution for the problem and it 
 has been widely adopted \citep[e.g.][]{Kon17, Sha16}. 
 
 In this thesis, an alternative solution that instead makes use of a $select$ data structure is proposed and explained in detail. Comparison to the $rank$-based 
@@ -28,11 +29,9 @@ new codewords to data when encoding, data can be read straight from the memory a
 Because of the block reorganizing, the $rank$ does not infact need a $rank$ query when fetching small elements. This makes the $rank$ method superior when dataset contains 
 mostly small integers. With larger integers, the decoding needs multiple $rank$ calls and the new $select$-based method performs better. 
 
-Additionally, due to how the data is stored, the proposed $select$ method offers fast access to the next or previous element. This makes a subarray fetch 
-very convenient and fast. A solution for subarray fetching and comparison is proposed in this thesis.
-
-
-
+Decompressing a subarray is experimented later in this thesis. Due to how the data is stored, the proposed $select$ method offers fast access to the next or previous element. This makes a 
+subarray decompression very convenient and fast. Solutions for subarray fetching with both $rank$ and $select$ methods are proposed and compared. $Select$ based method performs better due to its 
+single $select$ call requirement, while the $rank$ call amount depends on the size of the largest element in the subarray.
 
 \chapter{Variable-byte encoding of integers}
 
@@ -61,10 +60,11 @@ which is why they outperform in terms of compression VB encoding on datasets con
 the data sets used for experimentation will have the focus on slightly larger, unordered numbers.
 
 \section{VB encoding}
-The name \textit{variable-byte} is reflected in how the integers are stored. An array stores all the elements with the same bit length. This is very inefficient if a lot of the values are very small but the 
-array also has to support very large integers. VB encoding attempts to eliminate the unneeded leading zeros. The bits in an integer are split into blocks of length $b$ and empty blocks from the beginning are 
-discarded. Because the lengths of the integers may now be different, the data cannot be stored as it is. Instead a \textit{continuation bit} is added in front of each block to form a $chunk$. This bit is set 
-to 0 on all chunks except for the last one which contains the least significant bits. The continuation bit is used in decoding to signal whether or not the current integer continues in the next chunk.
+The name \textit{variable-byte} is reflected in how the integers are stored. When stored in an array, each element requires the same amount of space. This is very inefficient if a lot of the values are 
+very small but the array also has to support very large integers. VB encoding attempts to eliminate the unneeded leading zeros. The bits in an integer are split into blocks of length $b$ and empty blocks 
+from the beginning are discarded. Because the lengths of the integers may now be different, the data cannot be stored as it is. Instead a \textit{continuation bit} is added in front of each block to form 
+a $chunk$. This bit is set to 0 on all chunks except for the last one which contains the least significant bits. The continuation bit is used in decoding to signal whether or not the current integer 
+continues in the next chunk.
 
 For example, the standard 16-bit representation of an unsigned integer 42 is \texttt{00000000 00101010}. Assuming the block length is 4, it is split to \texttt{0000 0000 0010 1010}. The empty blocks 
 are removed from the beginning and then the continuation bits are added. 1 is added in front of the last block (containing the least significant bits) and 0 to the other blocks, resulting in 
@@ -271,7 +271,7 @@ from the $rank$ structure. Figure~\ref{bris_ds} contains a visualization of the 
     
 
 \node[X, below=5ex of b1] (a2) {$A_{1,2}$};
-\node [left=1ex of a2]{\textbf{$A_1$ =}};
+\node [left=1ex of a2]{\textbf{$A_2$ =}};
 \node[X] {$A_{3,2}$};
 \node[X] {$A_{4,2}$};
 \node[X] {...};
@@ -301,10 +301,16 @@ With small integers, this is all that is required. If the data has a lot of smal
 different array levels. This opens a possibility for further compression optimization.
 
 However if the element was stored in multiple blocks, the index of the next block in $A_2$ is obtained from $i \gets rank_0$($A_1$, $i$). $Rank_0$ 
-returns the number of zeros in the bit array preceding index $i$. In other words, the number of elements before $i$ that continue to the next array. 
-This in turn means that $i$ now has the index of the element's next block in array $A_2$.
-This process is repeated until the i-th bit of the bit array of the current level is set. The resulting integer is constructed from the blocks of the fetched chunks. A pseudo code example of DAC with $rank$ is shown in Figure~\ref{bris_pseudo} 
-with block length of 8.
+returns the number of zeros in the bit array preceding index $i$. In other words, it returns the number of elements before $i$ that continue to the next array. 
+This in turn means that $i$ is the index of desired element's next block in array $A_2$. This process is repeated until the i-th bit of the bit array of the current level (the continuation bit for the current 
+block) is set to 1. The resulting integer is constructed from the blocks of the fetched chunks. 
+
+A pseudo code example of DAC with $rank$ is shown in Figure~\ref{bris_pseudo} with block length of 8. The C array is the original VB encoded data, which is split into separate block arrays $A_k$ and 
+contiuation bit arrays $B_k$. 
+
+As an example, the fourth element from the data structure shown in Figure~\ref{bris_ds} is decoded. The first block of data is fetched by directly accessing $A_1$[3]. Then the 
+continuation bit $B_1$[3] is checked. It is not set, which indicates that the element continues to the next block. The index of the next block is obtained via a \textsc{Rank}($B_1$, 3) call. There are two zero 
+bits in $B_1$ before $B_1$[3], which means the next block is in $A_2$[2]. The continuation bit at $B_2$[1] is set to 1 so the decompression is completed.
 
 
 \begin{figure}[ht]
@@ -815,10 +821,6 @@ TODO:
 
  - more text / references
 
- - write more introduction
-
- - write more abstract
-
  - find ACL classifications
  
  - write keywords
@@ -826,5 +828,11 @@ TODO:
  - remove lists from algorithms and data sets in results, explain whe data sets were roughly chosen like that
 
  - a real life situation where to use subarray
+
+
+ - explain rank/select in introduction
+
+ - 1.1 research questions
+
 
 

@@ -201,11 +201,15 @@
 
 \begin{abstract}
 
-Enormous datasets are a common occurence today and compressing them is often beneficial. Variable-byte encoding is a method for compressing integers of different byte lenghts. It removes the zero bytes 
-and adds an additional \textit{continuation bit} to each byte to denote whether the compressed integer continues to the next byte or not. Two bit array data structures, $rank$ and $select$  are built on top of the array of 
-continuation bits. These data structures enable a fast direct access to the elements in the compressed data. The $rank$ implementation performs better on data containing mostly small integers. The $select$ 
-implementation benefits on larger integers. An experiment on fetching a subarray is explained and implemented. The $select$ implementation has significant advantages on subarray fetching due to how the data 
-is compressed.
+Enormous datasets are a common occurence today and compressing them is often beneficial. Fast direct access to any element in the compressed data is a requirement in the field of compressed 
+data structures, which is not possible with traditional compression methods.
+
+Variable-byte encoding is a method for compressing integers of different byte lengths. It removes unused leading bytes and adds an additional \textit{continuation bit} to each byte to 
+denote whether the compressed integer continues to the next byte or not. An existing solution using \textsc{rank} data structure performs well in this given task. This thesis introduces an 
+alternative solution using \textsc{select} data structure and compares the two implementations. An experimentation is also done on retrieving a subarray from the compressed data structure.
+
+The $rank$ implementation performs better on data containing mostly small integers. The $select$ implementation benefits on larger integers. The $select$ implementation has significant 
+advantages on subarray fetching due to how the data is compressed.
 
 \end{abstract}
 
