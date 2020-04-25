@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2020.2.4)  24 APR 2020 20:31
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2020.2.4)  25 APR 2020 16:28
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1712,17 +1712,17 @@ File: tikzlibraryplotmarks.code.tex 2008/01/09 v3.0.1a (rcs-revision 1.1)
 de.tex
 File: pgflibraryplotmarks.code.tex 2015/08/03 v3.0.1a (rcs-revision 1.14)
 )))
-Package hyperref Info: Option `unicode' set `true' on input line 184.
+Package hyperref Info: Option `unicode' set `true' on input line 183.
  (/usr/share/texlive/texmf-dist/tex/latex/hyperref/puenc.def
 File: puenc.def 2018/02/06 v6.86b Hyperref: PDF Unicode definition (HO)
 Now handling font encoding PU ...
 ... no UTF-8 mapping file for font encoding PU
 )
-Package hyperref Info: Option `pdftoolbar' set `true' on input line 184.
-Package hyperref Info: Option `pdfmenubar' set `true' on input line 184.
-Package hyperref Info: Option `pdffitwindow' set `false' on input line 184.
-Package hyperref Info: Option `pdfnewwindow' set `true' on input line 184.
-Package hyperref Info: Option `colorlinks' set `true' on input line 184.
+Package hyperref Info: Option `pdftoolbar' set `true' on input line 183.
+Package hyperref Info: Option `pdfmenubar' set `true' on input line 183.
+Package hyperref Info: Option `pdffitwindow' set `false' on input line 183.
+Package hyperref Info: Option `pdfnewwindow' set `true' on input line 183.
+Package hyperref Info: Option `colorlinks' set `true' on input line 183.
 Package csquotes Info: Checking for multilingual support...
 Package csquotes Info: ... found 'babel' package.
 Package csquotes Info: Adjusting default style.
@@ -1747,31 +1747,31 @@ File: swedish.lbx 2017/12/19 v3.10 biblatex localization (PK/JW/AB)
 ) (./gradu.aux (./msc_english_contents.aux))
 \openout1 = `gradu.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 188.
-LaTeX Font Info:    ... okay on input line 188.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 188.
-LaTeX Font Info:    ... okay on input line 188.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 188.
-LaTeX Font Info:    ... okay on input line 188.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 188.
-LaTeX Font Info:    ... okay on input line 188.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 188.
-LaTeX Font Info:    ... okay on input line 188.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 188.
-LaTeX Font Info:    ... okay on input line 188.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 188.
-LaTeX Font Info:    Try loading font information for TS1+cmr on input line 188.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 187.
+LaTeX Font Info:    ... okay on input line 187.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 187.
+LaTeX Font Info:    ... okay on input line 187.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 187.
+LaTeX Font Info:    ... okay on input line 187.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 187.
+LaTeX Font Info:    ... okay on input line 187.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 187.
+LaTeX Font Info:    ... okay on input line 187.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 187.
+LaTeX Font Info:    ... okay on input line 187.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 187.
+LaTeX Font Info:    Try loading font information for TS1+cmr on input line 187.
 
 
 (/usr/share/texlive/texmf-dist/tex/latex/base/ts1cmr.fd
 File: ts1cmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
-LaTeX Font Info:    ... okay on input line 188.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 188.
-LaTeX Font Info:    ... okay on input line 188.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 188.
-LaTeX Font Info:    ... okay on input line 188.
-LaTeX Font Info:    Try loading font information for OT1+lmr on input line 188.
+LaTeX Font Info:    ... okay on input line 187.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 187.
+LaTeX Font Info:    ... okay on input line 187.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 187.
+LaTeX Font Info:    ... okay on input line 187.
+LaTeX Font Info:    Try loading font information for OT1+lmr on input line 187.
 
 
 (/usr/share/texmf/tex/latex/lm/ot1lmr.fd
@@ -1814,7 +1814,7 @@ File: ot1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
 
 Package lastpage Info: Please have a look at the pageslts package at
 (lastpage)             https://www.ctan.org/pkg/pageslts
-(lastpage)             ! on input line 188.
+(lastpage)             ! on input line 187.
 (./translator-UHCSthesis-coverpage-dictionary-English.dict
 Dictionary: translator-UHCSthesis-coverpage-dictionary, Language: English 
 )
@@ -1874,10 +1874,10 @@ Package biblatex Warning: BibTeX reported the following issues
 (biblatex)                - Invalid format of field 'month'.
 
 )
-Package biblatex Info: Reference section=0 on input line 188.
-Package biblatex Info: Reference segment=0 on input line 188.
+Package biblatex Info: Reference section=0 on input line 187.
+Package biblatex Info: Reference segment=0 on input line 187.
 \AtBeginShipoutBox=\box45
-Package hyperref Info: Link coloring ON on input line 188.
+Package hyperref Info: Link coloring ON on input line 187.
  (/usr/share/texlive/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2016/05/21 v2.44 Cross-referencing by name of section
 
@@ -1886,9 +1886,9 @@ Package: gettitlestring 2016/05/16 v1.5 Cleanup title references (HO)
 )
 \c@section@level=\count385
 )
-LaTeX Info: Redefining \ref on input line 188.
-LaTeX Info: Redefining \pageref on input line 188.
-LaTeX Info: Redefining \nameref on input line 188.
+LaTeX Info: Redefining \ref on input line 187.
+LaTeX Info: Redefining \pageref on input line 187.
+LaTeX Info: Redefining \nameref on input line 187.
 
 (./gradu.out) (./gradu.out)
 \@outlinefile=\write6
@@ -1899,13 +1899,13 @@ LaTeX Info: Redefining \nameref on input line 188.
 Package pgfplots Warning: running in backwards compatibility mode (unsuitable t
 ick labels; missing features). Consider writing \pgfplotsset{compat=1.15} into 
 your preamble.
- on input line 188.
+ on input line 187.
 
-Package hyperref Info: Option `pageanchor' set `true' on input line 192.
+Package hyperref Info: Option `pageanchor' set `true' on input line 191.
 <HY-logo-ml.png, id=83, 270.0489pt x 254.8722pt>
 File: HY-logo-ml.png Graphic file (type png)
 <use HY-logo-ml.png>
-Package pdftex.def Info: HY-logo-ml.png  used on input line 192.
+Package pdftex.def Info: HY-logo-ml.png  used on input line 191.
 (pdftex.def)             Requested size: 142.26378pt x 134.2688pt.
 [-999
 
@@ -1914,67 +1914,62 @@ arning (ext4): destination with the same identifier (name{page.}) has been alre
 ady used, duplicate ignored
 <to be read again> 
                    \relax 
-l.202 \begin{abstract}
+l.201 \begin{abstract}
                        [-998]
-LaTeX Font Info:    Try loading font information for OML+lmm on input line 202.
+LaTeX Font Info:    Try loading font information for OML+lmm on input line 201.
 
  (/usr/share/texmf/tex/latex/lm/omllmm.fd
 File: omllmm.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
-LaTeX Font Info:    Try loading font information for OMS+lmsy on input line 202
+LaTeX Font Info:    Try loading font information for OMS+lmsy on input line 201
 .
 
 (/usr/share/texmf/tex/latex/lm/omslmsy.fd
 File: omslmsy.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
-LaTeX Font Info:    Try loading font information for OMX+lmex on input line 202
+LaTeX Font Info:    Try loading font information for OMX+lmex on input line 201
 .
 
 (/usr/share/texmf/tex/latex/lm/omxlmex.fd
 File: omxlmex.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <12> on input line 202.
+(Font)              <12> on input line 201.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <8> on input line 202.
+(Font)              <8> on input line 201.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <6> on input line 202.
-LaTeX Font Info:    Try loading font information for U+lasy on input line 202.
+(Font)              <6> on input line 201.
+LaTeX Font Info:    Try loading font information for U+lasy on input line 201.
 
 (/usr/share/texlive/texmf-dist/tex/latex/base/ulasy.fd
 File: ulasy.fd 1998/08/17 v2.2e LaTeX symbol font definitions
 )
-LaTeX Font Info:    Try loading font information for U+msa on input line 202.
+LaTeX Font Info:    Try loading font information for U+msa on input line 201.
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 202.
+LaTeX Font Info:    Try loading font information for U+msb on input line 201.
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <10> on input line 211.
+(Font)              <10> on input line 210.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <7> on input line 211.
+(Font)              <7> on input line 210.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <5> on input line 211.
-
-Underfull \hbox (badness 10000) in paragraph at lines 214--214
-
- []
-
+(Font)              <5> on input line 210.
 pdfTeX warning (ext4): destination with the same identifier (name{page.}) has b
 een already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.218 \newpage
+l.217 \newpage
                [-997]pdfTeX warning (ext4): destination with the same identifie
 r (name{page.}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.219 \mytableofcontents
+l.218 \mytableofcontents
                          [-996
 
 ] (./gradu.toc)
@@ -1985,12 +1980,12 @@ pdfTeX warning (ext4): destination with the same identifier (name{page.}) has b
 een already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.219 \mytableofcontents
+l.218 \mytableofcontents
                          [-995]pdfTeX warning (ext4): destination with the same
  identifier (name{page.}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.219 \mytableofcontents
+l.218 \mytableofcontents
                          [-994
 
 ]
@@ -2025,12 +2020,12 @@ Chapter 5.
 ] [16]
 Chapter 6.
 
-Overfull \hbox (3.79015pt too wide) in paragraph at lines 550--553
+Overfull \hbox (3.79015pt too wide) in paragraph at lines 556--560
 \OT1/lmr/m/n/12 The fol-low-ing ex-per-i-ments were run on a AMD Phe-nom(tm) II
  X6 1055T Pro-ces-sor@2.8Ghz
  []
 
-LaTeX Font Info:    Try loading font information for TS1+lmr on input line 558.
+LaTeX Font Info:    Try loading font information for TS1+lmr on input line 565.
 
 (/usr/share/texmf/tex/latex/lm/ts1lmr.fd
 File: ts1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
@@ -2048,11 +2043,11 @@ Chapter 7.
 AED: lastpage setting LastPage
 ***AED Number of Appendices 25
 ***AED Number of pages 24\translate {pp}
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 255.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 255.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 254.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 254.
 (./gradu.aux (./msc_english_contents.aux))
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 255.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 255.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 254.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 254.
 Package rerunfilecheck Info: File `gradu.out' has not changed.
 (rerunfilecheck)             Checksum: 2491C920A6A62571343E61ACB87B758C;2922.
 Package logreq Info: Writing requests to 'gradu.run.xml'.
@@ -2062,7 +2057,7 @@ Package logreq Info: Writing requests to 'gradu.run.xml'.
 Here is how much of TeX's memory you used:
  43284 strings out of 494267
  922646 string characters out of 6162829
- 1312962 words of memory out of 5000000
+ 1312991 words of memory out of 5000000
  45832 multiletter control sequences out of 15000+600000
  81274 words of font info for 71 fonts, out of 8000000 for 9000
  395 hyphenation exceptions out of 8191
@@ -2081,7 +2076,7 @@ m/lmr8.pfb></usr/share/texmf/fonts/type1/public/lm/lmri10.pfb></usr/share/texmf
 /fonts/type1/public/lm/lmri12.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy1
 0.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy8.pfb></usr/share/texmf/fonts
 /type1/public/lm/lmtt12.pfb>
-Output written on gradu.pdf (30 pages, 386543 bytes).
+Output written on gradu.pdf (30 pages, 388329 bytes).
 PDF statistics:
  433 PDF objects out of 1000 (max. 8388607)
  379 compressed objects within 4 object streams

@@ -8,7 +8,7 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {section}{\numberline {2.1}VB encoding}{4}{section.2.1}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {2.2}VB decoding}{5}{section.2.2}
+\contentsline {section}{\numberline {2.2}VB decoding}{6}{section.2.2}
 \defcounter {refsection}{0}\relax 
 \contentsline {chapter}{\numberline {3}Directly addressable codes}{7}{chapter.3}
 \defcounter {refsection}{0}\relax 
