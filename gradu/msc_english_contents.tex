@@ -172,8 +172,9 @@ list depends on the length of the preceding compressed data. Direct access is ac
 of each element to an array, but it adds a very large overhead which removes the benefit of compression.
 
 \section{Rank and Select}
-$Rank$ and $select$ are two bit array operations. $Rank_1$(i) gives the number of bits set to 1 in the bit array before index i. $Select_1$(i) gives the index of i-th bit that is set to 1. 
-Both operations can be implemented to work in constant time \citep[see, e.g.,][]{gbmp2014sea}. The two methods are related to each other: when used on a bit array 
+$Rank$ and $select$ are two array operations that are widely used in compressed data structures. $Rank_x$($i$) counts the number of occurences of $x$ before index $i$ in the data. $Select_x$($i$) returns the index of the i-th 
+occurence of $x$ in the data. In this thesis, these two operations are assumed to work with a bit array. $Rank_1$($i$) counts the number of bits set to 1 before $i$ and $select_1$($i$) returns the index 
+of the i-th bit set to 1. Both operations can be implemented to work in constant time \citep[see, e.g.,][]{gbmp2014sea}. The two methods are related to each other: when used on a bit array 
 $B$ = \texttt{0100 1101 \underline{1}011}, $select$(5) returns 8 (underlined) and therefore $rank$(8) returns 4. 
 
 To use $rank$ or $select$ in indexing, the set 1 bits in the bit array should reflect to the element locations in the encoded data. For most compression algorithms, this requires the bit array to be 
