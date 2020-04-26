@@ -447,6 +447,72 @@
     \field{urlyear}{2020}
   \endentry
 
+  \entry{Hon10}{inproceedings}{}
+    \name{author}{3}{}{%
+      {{hash=HWK}{%
+         family={Hon},
+         familyi={H\bibinitperiod},
+         given={Wing-Kai},
+         giveni={W\bibinitperiod-K\bibinitperiod},
+      }}%
+      {{hash=SR}{%
+         family={Shah},
+         familyi={S\bibinitperiod},
+         given={Rahul},
+         giveni={R\bibinitperiod},
+      }}%
+      {{hash=VJS}{%
+         family={Vitter},
+         familyi={V\bibinitperiod},
+         given={Jeffrey\bibnamedelima Scott},
+         giveni={J\bibinitperiod\bibinitdelim S\bibinitperiod},
+      }}%
+    }
+    \list{organization}{1}{%
+      {Springer}%
+    }
+    \strng{namehash}{HWK+1}
+    \strng{fullhash}{HWKSRVJS1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{labelyear}{2010}
+    \field{labeldatesource}{year}
+    \field{sortinit}{H}
+    \field{sortinithash}{H}
+    \field{booktitle}{Annual Symposium on Combinatorial Pattern Matching}
+    \field{pages}{260\bibrangedash 274}
+    \field{title}{Compression, indexing, and retrieval for massive string data}
+    \field{year}{2010}
+  \endentry
+
+  \entry{Huf52}{article}{}
+    \name{author}{1}{}{%
+      {{hash=HDA}{%
+         family={Huffman},
+         familyi={H\bibinitperiod},
+         given={David\bibnamedelima A},
+         giveni={D\bibinitperiod\bibinitdelim A\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {IEEE}%
+    }
+    \strng{namehash}{HDA1}
+    \strng{fullhash}{HDA1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{labelyear}{1952}
+    \field{labeldatesource}{year}
+    \field{sortinit}{H}
+    \field{sortinithash}{H}
+    \field{number}{9}
+    \field{pages}{1098\bibrangedash 1101}
+    \field{title}{A method for the construction of minimum-redundancy codes}
+    \field{volume}{40}
+    \field{journaltitle}{Proceedings of the IRE}
+    \field{year}{1952}
+  \endentry
+
   \entry{Kon17}{article}{}
     \name{author}{4}{}{%
       {{hash=KR}{%
@@ -536,8 +602,8 @@
     \endverb
     \field{volume}{130}
     \field{journaltitle}{Information Processing Letters}
+    \field{month}{02}
     \field{year}{2018}
-    \warn{\item Invalid format of field 'month'}
   \endentry
 
   \entry{Man08}{book}{}
@@ -849,6 +915,60 @@
     \field{year}{2016}
   \endentry
 
+  \entry{Tro03}{article}{}
+    \name{author}{1}{}{%
+      {{hash=TA}{%
+         family={Trotman},
+         familyi={T\bibinitperiod},
+         given={Andrew},
+         giveni={A\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {Springer}%
+    }
+    \strng{namehash}{TA1}
+    \strng{fullhash}{TA1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{labelyear}{2003}
+    \field{labeldatesource}{year}
+    \field{sortinit}{T}
+    \field{sortinithash}{T}
+    \field{number}{1}
+    \field{pages}{5\bibrangedash 19}
+    \field{title}{Compressing inverted files}
+    \field{volume}{6}
+    \field{journaltitle}{Information Retrieval}
+    \field{year}{2003}
+  \endentry
+
+  \entry{Ven13}{book}{}
+    \name{author}{1}{}{%
+      {{hash=VR}{%
+         family={Venturini},
+         familyi={V\bibinitperiod},
+         given={Rossano},
+         giveni={R\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {Springer Science \& Business Media}%
+    }
+    \strng{namehash}{VR1}
+    \strng{fullhash}{VR1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{labelyear}{2013}
+    \field{labeldatesource}{year}
+    \field{sortinit}{V}
+    \field{sortinithash}{V}
+    \field{title}{Compressed Data Structures for Strings: On Searching and
+  Extracting Strings from Compressed Textual Data}
+    \field{volume}{4}
+    \field{year}{2013}
+  \endentry
+
   \entry{Vig08}{inproceedings}{}
     \name{author}{1}{}{%
       {{hash=VS}{%
@@ -963,6 +1083,40 @@
     \field{volume}{42}
     \field{journaltitle}{COMPJ: The Computer Journal}
     \field{year}{1999}
+  \endentry
+
+  \entry{Ziv77}{article}{}
+    \name{author}{2}{}{%
+      {{hash=ZJ}{%
+         family={Ziv},
+         familyi={Z\bibinitperiod},
+         given={Jacob},
+         giveni={J\bibinitperiod},
+      }}%
+      {{hash=LA}{%
+         family={Lempel},
+         familyi={L\bibinitperiod},
+         given={Abraham},
+         giveni={A\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {IEEE}%
+    }
+    \strng{namehash}{ZJLA1}
+    \strng{fullhash}{ZJLA1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{labelyear}{1977}
+    \field{labeldatesource}{year}
+    \field{sortinit}{Z}
+    \field{sortinithash}{Z}
+    \field{number}{3}
+    \field{pages}{337\bibrangedash 343}
+    \field{title}{A universal algorithm for sequential data compression}
+    \field{volume}{23}
+    \field{journaltitle}{IEEE Transactions on information theory}
+    \field{year}{1977}
   \endentry
 
   \entry{Zob95}{article}{}

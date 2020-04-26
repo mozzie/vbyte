@@ -28,17 +28,19 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {section}{\numberline {5.2}Subarray access with rank}{16}{section.5.2}
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{\numberline {6}Experimental results}{17}{chapter.6}
+\contentsline {chapter}{\numberline {6}Experimental results}{18}{chapter.6}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {6.1}VB decoding comparison}{17}{section.6.1}
+\contentsline {section}{\numberline {6.1}VB decoding comparison}{18}{section.6.1}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {6.2}Memory usage}{19}{section.6.2}
+\contentsline {section}{\numberline {6.2}Memory usage}{20}{section.6.2}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {6.3}Subarray access results}{20}{section.6.3}
+\contentsline {section}{\numberline {6.3}Subarray access results}{21}{section.6.3}
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{\numberline {7}Conclusions and Future work}{22}{chapter.7}
+\contentsline {chapter}{\numberline {7}Conclusions and Future work}{23}{chapter.7}
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{Bibliography}{23}{section*.15}
+\contentsline {chapter}{Bibliography}{25}{section*.15}
 \defcounter {refsection}{0}\relax 
 \cftpagenumbersoff {chapter}
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{\numberline {A}Template instructions}{i}{appendix.A}
 \contentsfinish 

@@ -1,6 +1,6 @@
 \chapter{Introduction}
-Enormous datasets are a common case in today's applications. Compressing these datasets is often beneficial, because doing so 
-naturally decreases memory requirements, but also can make it faster to transfer data from disk to memory \citep{Zob95}. 
+Enormous datasets are a common case in today's applications. Some datasets are too large to handle in memory and thus must be stored in another, slower storage \citep{Hon10}. 
+Compressing these datasets is often beneficial, because doing so naturally decreases memory requirements, but also can make it faster to transfer data from disk to memory \citep{Zob95, Wil99}.
 
 Fundamental method for data compression is variable-length coding \citep{Sal99}. The main idea of variable-length encoding is that 
 frequent sequences of data are represented with shorter codewords. Because the sequences of data have different lengths when compressed, it is 
@@ -8,7 +8,7 @@ not trivial to determine the exact location of a certain element in the compress
 data compression algorithms are inefficient. Fortunately, such random access to elements is not a requirement compression algorithms usually 
 need to fulfill. 
 
-However, random access to compressed data is very useful in compressed data structures. It saves storage space, bandwidth and 
+However, efficient random access to compressed data is very useful in compressed data structures \citep{Ven13}. It saves storage space, bandwidth and 
 increases the likelihood of data already being in cache \citep{Sch02}. In most compression methods, the only way to do this is to decompress data 
 from the beginning. 
 
@@ -33,31 +33,33 @@ Decompressing a subarray is experimented later in this thesis. Due to how the da
 subarray decompression very convenient and fast. Solutions for subarray fetching with both $rank$ and $select$ methods are proposed and compared. $Select$ based method performs better due to its 
 single $select$ call requirement, while the $rank$ call amount depends on the size of the largest element in the subarray.
 
+ - TODO: introduce each chapter briefly
+
 \chapter{Variable-byte encoding of integers}
 
-Variable-byte (VB) encoding \citep{Wil99} is a method for compressing unsigned integers via omitting leading zero bits that would be present in a longer fixed 
-width word. In normal data sets, VB encoding loses in compression performance to generic algorithms like Huffman encoding or Lempel-Ziv encoding, but 
-is generally faster to decode \citep{Bri09} and so is sometimes preferred, also  due to its simplicity of implementation.
+Variable-byte (VB) encoding \citep{Mid96, Wil99} is a method for compressing unsigned integers via omitting leading zero bits that would be present in a longer fixed 
+width word. In normal data sets such as text files or images, leading zero bits are usually not present in large quantitites and thus VB encoding loses in compression performance to generic algorithms 
+like Huffman encoding \citep{Huf52} or Lempel-Ziv encoding \citep{Ziv77}. 
 
-A good data set for VB encoding is a list of mostly small integers with a need to support larger ones. A search engine may use an inverted index of 
-words in documents. For each word, a list of document IDs where the word appears is stored. It may also store locations of the word in document for 
-advanced search purposes. Usually these lists are preprocessed to an inverted index, storing each number as its difference to the previous number 
-instead of the actual number \citep{Man08}. Common words have a lot of entries in these lists, but inverted index encoding makes the integers are small. 
-In contrast, rare words have only a few entries but the integers stored are larger. These lists are thus excellent candidates for VB encoding. 
+Elias Delta and Gamma codes \citep{Eli75} are popular encoding methods for the integer data sets. Their encoding process assigns short bit sequences to small integers, 
+which is why they outperform in terms of compression VB encoding on datasets containing a lot of small integers \citep{Wil99}, such as inverted indexes \citep{Anh05, Pib19}. VB is generally faster 
+to decode \citep{Wil99, Tro03} and so is sometimes preferred, also due to its simplicity of implementation. In this thesis, the data sets used for experimentation will have the focus on slightly larger, 
+unordered integers. 
 
 Variable-byte encoding originates from and is used in the MIDI music file format \citep{Mid96} and several applications have a similar implementation of VB. Apache 
 Lucene has the vInt datatype \citep{ApaLV} which works well with short inverted index lists \citep{Wan09}. The Wireless Application Protocol has a variable length unsigned integer uintvar, Google Protocol Buffers has a Base 128 Varint \citep{GooPB},
  Microsoft .Net framework offers "7BitEncodedInt" in BinaryReader and BinaryWriter classes and IBM DB2 uses variable byte encoding to store record identifier lists \citep{Bha09}.
 
-Later, VB encoding was found to be efficient for compressing integer lists. It was first experimented as a tool for compressing inverted index lists of word locations in documents by \citep{Sch02}. 
-In that setting, VB codes yielded excellent results, and since then many different approaches have been introduced. 
+VB encoding was first experimented as a tool for compressing inverted index lists of word locations in documents by \citep{Sch02}. 
+In that setting, VB codes yielded excellent results, and since then many different approaches have been introduced. A search engine may use an inverted index of 
+words in documents. For each word, a list of document IDs where the word appears is stored. It may also store locations of the word in document for 
+advanced search purposes. Usually these lists are preprocessed to an inverted index, storing each number as its difference to the previous number 
+instead of the actual number \citep{Man08}. Common words have a lot of entries in these lists, but inverted index encoding makes the integers are small. 
+In contrast, rare words have only a few entries but the integers stored are larger. These lists are mostly small integers with a need to support larger ones and thus are excellent candidates for VB encoding.
 
 More recent studies have taken a look into the machine code level for VB and applied SIMD (Single instruction, multiple data) instructions for VB decoding \citep{Lem18,Pla15}. The bit 
 operations in VB are simple and therefore modifying the code to use SIMD instructions is straightforward and the speed improvements are significant. 
 
-Elias Delta and Gamma codes \citep{Eli75} are popular encoding methods for the aforementioned data sets. Their encoding process assigns short bit sequences to small integers, 
-which is why they outperform in terms of compression VB encoding on datasets containing a lot of small integers \citep{Wil99}, such as inverted indexes \citep{Anh05, Pib19}. In this thesis, 
-the data sets used for experimentation will have the focus on slightly larger, unordered numbers.
 
 \section{VB encoding}
 The name \textit{variable-byte} is reflected in how the integers are stored. When stored in an array, each element requires the same amount of space. This is very inefficient if a lot of the values are 
@@ -193,7 +195,7 @@ The rank and select implementations used in this thesis are from C++ library 'SD
 size requirements of implementations used in this experiment. Both rank implementations have a constant space requirement over the bit array, while select's needed size depends on 
 the number of 1's in the data. This chapter describes a way to achieve fast random access to variable length codes. The described method also has a low space overhead, increasing the size of the 
 compressed sequence by much less than one bit per element. Two versions of $rank$ from the 'SDSL-lite' library are used in this thesis, $rank_v$ and $rank_{v5}$ and the $select$ version is $select_{MCL}$. 
-All these were chosen, because they are fast and can be created over a regular bit array.
+These implementations were chosen because they are fast and can be created over a regular bit array.
 
 \begin{table}
 \centering
@@ -228,7 +230,8 @@ relative to the superblock. With similar calculations, the location of closest 6
  is a practical variant of a PAT tree \citep{Cla97}. The memory requirement of the $select$ implementation depends on the portion of 1 bits in the bit array.
 
 In both cases, one function call always gets a value from the superblock and then from the superblock's relative block. The only variable factor is the manual bit count from relative
-block's index to wanted index. This is at most the size of one relative block and thus both of the functions can be made work in constant time using modern popcount instructions \citep{Gon05}.
+block's index to wanted index. This is at most the size of one relative block and thus both of the functions can be made work in constant time using modern popcount instructions \citep{Gon05}. The 
+implementations are explained in greater detail in \citep{gbmp2014sea}.
 
 
 \section{DAC via rank}
@@ -259,7 +262,8 @@ contiuation bit arrays $B_k$.
 \node[X] {$C_{2,1}$};
 \node[X] {$C_{3,3}C_{3,2}C_{3,1}$};
 \node[X] {$C_{4,2}C_{4,1}$};
-\node[X] {$C_{5,1}$...};
+\node[X] {$C_{5,1}$};
+\node[X] {...};
 
 \node[X, below=5ex of start] (a1) {$A_{1,1}$};
 \node [left=1ex of a1]{\textbf{$A_1$ =}};
@@ -365,7 +369,7 @@ At this point, $w$ contains the wanted bits, but also has extra bits from the pr
 These can be conveniently removed by bit-shifting $w$ right for $o$ bits. Then a pre-calculated bitmask (0xFFFFF in this case) is applied and $w$ contains the desire value. Most systems are
 able to read memory only from byte addresses, which leads to a corner case where the compressed integer is stored in more bytes than are contained in a word. In the aforementioned situation, this 
 happens if compressed length was 8 blocks and offset was 4. Then another step of reading another byte and storing the remaining bits to $w$ is required. This is entirely avoidable if the integer 
-length is constrained. In this case the maximum integer length would be 28 bits.
+length is constrained. In this case the maximum integer length of 28 bits would eliminate the handling of the second byte.
 
 The most intuitive way to calculate the block length of the $i$-th element is to subtract $select_1$(i) from $select_1$(i+1). This however causes an additional 
 $select_1$ query, which is costly. A much faster option is to calculate the block length from the continuation bit array. This can be done by reading a word from the bit array and bit-shifting the word 
@@ -373,7 +377,7 @@ until the bit representing the start of the i-th element is on the rightmost end
 This number is then incremented by one to also count the ending block which has the continuation bit set to 1.
  
 Figure~\ref{select_pseudo} contains an example of VB decoding with DAC with $select$ and block size 8. 
-Different block sizes need extra calculation to get the block location from the byte array. In the example, \textsc{CalculateLength} returns the length of the number in blocks and \textsc{ByteMask}(k) returns 
+Different block sizes need extra calculation to get the block location from the byte array. In the pseudo code, \textsc{CalculateLength} returns the length of the number in blocks and \textsc{ByteMask}(k) returns 
 a bit mask for k bytes. In line 8, a long word is read from the memory starting at memory address $A$[$begin$].
 
 \begin{figure}[ht]
@@ -449,7 +453,7 @@ are removed either with a bitmask or by double bit shifting, resulting in k-th e
 
 
 \section{Elias-Fano encoding}
-Direct access via select can also be implemented with Elias-Fano encoding, but the data has to be sorted, which is usually a given in inverted index lists of search engines. In Elias-Fano encoding \citep{Eli74, Vig13}, 
+Direct access via select can also be implemented with Elias-Fano encoding, but the data has to be sorted. This is usually a given in inverted index lists of search engines. In Elias-Fano encoding \citep{Eli74, Vig13}, 
 the data is at first split into low and 
 high bits. Low bits, the k least significant bits, are stored to their own array. Direct access to the lower bit array is trivial. The higher bits are gap-encoded and then encoded in unary. 
 For example, [1,3,5,8,11] becomes [1,2,2,3,3] and then is encoded as unary bit array B = \texttt{0100100100010001}. 
@@ -458,7 +462,10 @@ $Select_1$ has an interesting interaction with gap encoded unary arrays. $k = Se
 returns the location of i-th 1 in B. Up to index $k$, the bit array has had $i$ ones and $i-k$ zeros. The $i$ corresponds to the number of compressed integers in $B$ and every zero in the array 
 means an increment of 1 in the numbers. In other words, $i-k$ equals to the integer at position $i$ before gap-encoding. Therefore $select_1(i)$ - i returns the original higher bit number. The split 
 between bits is made to reduce the gap sizes.
-This approach can be further optimized by finding clusters in the integers and partitioning the indexes \citep{Ott14}.
+
+Elias-fano encoding is an excellent tool if the elements are sorted and the higher bits are reasonably small, because large integers cause a very inefficient unary encoding. This can be further optimized 
+by finding clusters in the integers and partitioning the indexes \citep{Ott14}. Elias-Fano encoding is not compared in this thesis, because the restriction of sorted data is relaxed.
+
 
 \chapter{Subarray access}
 
@@ -544,13 +551,20 @@ zeros is added to the first length calculation after word switch. This number ca
 leading zeros of the old $w$ before the first switch. In the example, one zero is left over from the byte $B_2$.
 
 \section{Subarray access with rank}
-The shown $rank$ method by Brisaboa et al. can also effectively decompress the next value with slight modifications. When fetching a longer subarray, the goal becomes to minimize $rank$ calls. 
-When a new block level is reached for the first time during a subarray query, the index is fetched with $rank_1$ as normal, and the result of the query is stored. The next time the same level is reached, the
-previously stored result is incremented by one and that value is used instead of issuing another $rank_1$ query. This way the number of $rank_1$ calls needed is equal to the number of $rank_1$ calls 
-needed to decompress the largest number in the subarray.
+The shown $rank$ method by Brisaboa et al. can also effectively decompress the next value with slight modifications. When fetching a subarray, the goal becomes to minimize $rank$ calls. 
+When a new block level is reached for the first time during a subarray query, the index is fetched with $rank$ as normal, and the result of the query is stored. When a new index is needed from a previously 
+used level, the desired block is known to be right next to the previously fetched one. Therefore the stored index value is incremented by one and that value is used instead of issuing another $rank$ query. 
+This way the number of $rank$ calls needed is equal to the number of $rank$ calls needed to decompress the largest number in the subarray.
 
- - examples / visualizaton for rank?
+The following example decompresses first four values from Figure~\ref{bris_ds} and assumes the maximum length of integers to be 4 blocks. Array $P$ is used to store the block indices. Initially $P$ = 
+[-1,-1,-1,-1], where -1 denotes that the value is unset and that level has not been reached yet. The start of the subarray is index 0. $P$[0] is -1, which means the value is unset. Because the $rank$ method 
+does not need an actual $rank$ call in the first block array, $P$[1] = 0 and that value is used to fetch the first block. $B_1$[0] shows that the element is continued to the next block level. $P$[1] is also -1, 
+so $P$[1] = $rank_0$($B_1$,0) is used to fetch the second block. $B_2$[0] indicates that the element is not continued anymore.
 
+Currently $P$ is [0,0,-1,-1]. The location of the first block of the next element is fetched by increasing $P$[0] by 1 and then using the incremented value. The bit array shows that this element is only 
+one block long. The first two blocks of the third element is fetched the same way. $P$[2] is unset, so $P$[2] = $rank_0$($B_2$,0) is used for the third block, which is the last block of that element. After 
+these elements, $P$ is [2,1,0,-1]. The index locations of the fourth element are fetched from $P$ the same way. In the end $P$ is [3,2,0,-1] and the process could potentially go on indefinitely with only a 
+very small amount of $rank$ calls.
 
 \chapter{Experimental results}
 
@@ -561,7 +575,11 @@ and with libraries \texttt{-lsdsl -ldivsufsort -ldivsufsort64}.
 
 
 \section{VB decoding comparison}
-Six different VB decoding implementations were compared:
+Three different VB decoding implementations were compared with two different block lengths. Two $rank$ implementations used are based on \citep{Bri09} and use $rank_v$ and $rank_{v5}$ data structures 
+from the SDSL-library \citep{gbmp2014sea}. The different $rank$ data structures illustrate the trade-off between memory and speed. the $select$ algorithm is the one proposed in this thesis and it is 
+implemented using the $select_{MCL}$ data structure from the SDSL-library. Different block lengths were used to illustrate how block size affects the runtime and memory requirement. Lengths 
+8 and 4 were chosen because they are relatively easy to implement. 
+
 \begin{itemize}
   \item Bris4 - Bris implementation with block size 4, using $rank_v$
   \item Bris4v5 - Bris implementation with block size 4, using $rank_{v5}$
@@ -570,10 +588,6 @@ Six different VB decoding implementations were compared:
   \item Select4 - Proposed implementation with block size 4, using $select_{MCL}$
   \item Select8 - Proposed implementation with block size 8, using $select_{MCL}$
 \end{itemize}
-
-The Bris-algorithms are implementations based on \citep{Bri09} using two different $rank$ data structures from the SDSL-library \citep{gbmp2014sea}. The $select$-algorithm is the one proposed in 
-this thesis and it is based on the $select_{MCL}$ data structure from the SDSL-library. Two different block sizes were used to illustrate how block size affects the runtime and memory requirement. Sizes 
-8 and 4 were chosen because they are relatively easy to implement. 
 
 Each implementation is compressing and decompressing 64-bit unsigned integers. The $rank$ and $select$ implementations are explained in detail in \autoref{chap:implementations} 
 and \autoref{chap:select_impl}, respectively. 
@@ -682,14 +696,15 @@ coordinates {
 
 \section{Memory usage}
 Tables~\ref{table:results8bit} and~\ref{table:results4bit} show memory size requirements for $rank$ and $select$ data structures with data sets consisting
- of 50 million 64-bit numbers. The compressed size column has a sum of continuation bit array and the data blocks. For $rank$ and $select$ methods used in this thesis, the total 
+ of 50 million 64-bit numbers. The compressed size column has a sum of continuation bit array and the data blocks. The tables show that the static requirement of $rank_{v5}$ is superior with these datasets.
+If the dataset had even larger integers, $select$ would be dominant. For $rank$ and $select$ methods used in this thesis, the total 
 space taken by the extra data structures is only a small fraction of the overall size.
 
 The static memory requirement of $select$ is easily noticeable, 
 as is the relation between the memory requirement of $rank$ and the total number of blocks. Data structures in versions with smaller block size naturally take more space, but smaller block 
 size allows better compression in some data sets and therefore a smaller total size. This can be seen when comparing the two forementioned figures: All 4-bit versions of the algorithms require
 more space than the 8-bit versions, but the compressed size of the data is significantly smaller in the bottom two data sets. The data structure memory usage for the bottom row is similar in both versions 
-due to the fact that the continuation bit array is exactly the same.
+due to the fact that the continuation bit array is exactly the same in both cases.
 
 
 
@@ -831,6 +846,31 @@ TODO:
  - a real life situation of where to use subarray
 
  - list research questions somewhere? (introduction 1.1?)
+
+ - should the c++ code be added as appendix?
+
+ - is metatext necessary? i.e. starting each chapter with "This chapter contains..."
+
+ - explain "X is done", "Y is used" in more detail (why is this done / why is this used)
+
+
+ - Some abbreviations are used. Should there be a list of them in the beginning?
+
+ - is Elias-Fano important or relevant to mention?
+
+ - should terms / practices be opened more (for people who don't know the field)
+ 
+ 
+results:
+
+ - what do the differences in speed or memory usage mean in practice. Is one better than the other? 
+ 
+ - the differences in general need more explaining
+
+7. 
+ - write a recap about what was done
+
+ 
 
 
 
