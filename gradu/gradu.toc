@@ -10,35 +10,37 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {section}{\numberline {2.2}VB decoding}{6}{section.2.2}
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{\numberline {3}Directly addressable codes}{7}{chapter.3}
+\contentsline {chapter}{\numberline {3}Rank and Select}{7}{chapter.3}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {3.1}Rank and Select}{7}{section.3.1}
+\contentsline {section}{\numberline {3.1}Rank and Select implementation}{7}{section.3.1}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {3.2}Rank and Select implementation}{8}{section.3.2}
+\contentsline {chapter}{\numberline {4}Directly addressable codes}{10}{chapter.4}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {3.3}DAC via rank}{9}{section.3.3}
+\contentsline {section}{\numberline {4.1}DAC via rank}{10}{section.4.1}
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{\numberline {4}DAC with select query}{12}{chapter.4}
+\contentsline {chapter}{\numberline {5}DAC with select query}{13}{chapter.5}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {4.1}Elias-Fano encoding}{14}{section.4.1}
+\contentsline {section}{\numberline {5.1}Elias-Fano encoding}{15}{section.5.1}
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{\numberline {5}Subarray access}{15}{chapter.5}
+\contentsline {chapter}{\numberline {6}Subarray access}{16}{chapter.6}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {5.1}Subarray access with select}{15}{section.5.1}
+\contentsline {section}{\numberline {6.1}Subarray access with select}{16}{section.6.1}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {5.2}Subarray access with rank}{16}{section.5.2}
+\contentsline {section}{\numberline {6.2}Subarray access with rank}{17}{section.6.2}
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{\numberline {6}Experimental results}{18}{chapter.6}
+\contentsline {chapter}{\numberline {7}Experimental results}{19}{chapter.7}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {6.1}VB decoding comparison}{18}{section.6.1}
+\contentsline {section}{\numberline {7.1}VB decoding comparison}{19}{section.7.1}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {6.2}Memory usage}{20}{section.6.2}
+\contentsline {section}{\numberline {7.2}Memory usage}{21}{section.7.2}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {6.3}Subarray access results}{21}{section.6.3}
+\contentsline {section}{\numberline {7.3}Subarray access results}{22}{section.7.3}
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{\numberline {7}Conclusions and Future work}{23}{chapter.7}
+\contentsline {chapter}{\numberline {8}Conclusions and Future work}{24}{chapter.8}
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{Bibliography}{25}{section*.15}
+\contentsline {section}{\numberline {8.1}Future work}{24}{section.8.1}
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{Bibliography}{27}{section*.15}
 \defcounter {refsection}{0}\relax 
 \cftpagenumbersoff {chapter}
 \defcounter {refsection}{0}\relax 

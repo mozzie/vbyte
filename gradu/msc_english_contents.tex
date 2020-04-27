@@ -21,17 +21,17 @@ A variable-byte encoding based integer compression method with fast random acces
 reorganizing and a $rank$ data structure to achieve random access. Their solution is currently the only published solution for the problem and it 
 has been widely adopted \citep[e.g.][]{Kon17, Sha16}. 
 
-In this thesis, an alternative solution that instead makes use of a $select$ data structure is proposed and explained in detail. Comparison to the $rank$-based 
-implementation by Brisaboa et al is provided with different implementations of $rank$ and $select$ and several different data sets. The proposed method does not use data 
+In this thesis, an alternative solution that instead makes use of a $select$ data structure is proposed and explained in detail. The proposed method does not use data 
 reorganizing, but rather capitalizes on the assumption that data is encoded the same way it is in the source. Because variable-byte encoding does not assign 
 new codewords to data when encoding, data can be read straight from the memory and reassembling the integer from blocks is not needed.
 
-Because of the block reorganizing, the $rank$ does not infact need a $rank$ query when fetching small elements. This makes the $rank$ method superior when dataset contains 
-mostly small integers. With larger integers, the decoding needs multiple $rank$ calls and the new $select$-based method performs better. 
+Comparison of the proposed method and $rank$-based implementation by Brisaboa et al is provided with different implementations of $rank$ and $select$. The $rank$ method 
+is assumed to perform better on data sets containing mostly small integers. It is assumed that larger numbers cause problems in performance. The performance of the proposed $select$ method is indifferent 
+of the size of the elements in the data. Different kinds of data sets are used to see how each algorithm performs. The assumption is that $select$ works better with data sets with very large integers. It
+remains to be seen how large the integers need to be for the $select$ method to outperform the $rank$ method.
 
-Decompressing a subarray is experimented later in this thesis. Due to how the data is stored, the proposed $select$ method offers fast access to the next or previous element. This makes a 
-subarray decompression very convenient and fast. Solutions for subarray fetching with both $rank$ and $select$ methods are proposed and compared. $Select$ based method performs better due to its 
-single $select$ call requirement, while the $rank$ call amount depends on the size of the largest element in the subarray.
+Another interesting point is to compare the algorithms when decompressing a long subarray. Due to how the data is stored, the proposed $select$ method offers fast access to the next or previous element 
+and is expected to perform well with any given data set or subarray length. Solutions for subarray fetching with both $rank$ and $select$ methods are proposed and compared. 
 
  - TODO: introduce each chapter briefly
 
@@ -161,22 +161,10 @@ $n = $\texttt{101010} (bit representation of 42). The continuation bit of this c
 \caption{VByte decoding} \label{vbyte_dec}
 \end{figure}
 
-
-
-\chapter{Directly addressable codes} \label{chapter:DAC}
-
-The ability to handle large amounts of data fast is one of the key challenges in the field of search engines. Compressed data structures are applied to fit the 
-data into cache, memory or even hard drive. Direct access to any element in a compressed list or array is one of the usual requirements in compressed data 
-structures. For example, it is needed in inverted index compression \citep{Cul07} and compressed text search \citep{Mou00}.
-
-It is not natively possible to decode the i-th element in variable-byte compression algorithms, because the position of the element in the compressed
-list depends on the length of the preceding compressed data. Direct access is achievable with supporting data structures. A naive solution is to store the location 
-of each element to an array, but it adds a very large overhead which removes the benefit of compression.
-
-\section{Rank and Select}
+\chapter{Rank and Select}
 $Rank$ and $select$ are two array operations that are widely used in compressed data structures. $Rank_x$($i$) counts the number of occurences of $x$ before index $i$ in the data. $Select_x$($i$) returns the index of the i-th 
 occurence of $x$ in the data. In this thesis, these two operations are assumed to work with a bit array. $Rank_1$($i$) counts the number of bits set to 1 before $i$ and $select_1$($i$) returns the index 
-of the i-th bit set to 1. Both operations can be implemented to work in constant time \citep[see, e.g.,][]{gbmp2014sea}. The two methods are related to each other: when used on a bit array 
+of the i-th bit set to 1. Both operations can be implemented to work in constant time \citep[see, e.g.,][]{gbmp2014sea}. The two operations are related to each other: when used on a bit array 
 $B$ = \texttt{0100 1101 \underline{1}011}, $select$(5) returns 8 (underlined) and therefore $rank$(8) returns 4. 
 
 To use $rank$ or $select$ in indexing, the set 1 bits in the bit array should reflect to the element locations in the encoded data. For most compression algorithms, this requires the bit array to be 
@@ -234,11 +222,27 @@ block's index to wanted index. This is at most the size of one relative block an
 implementations are explained in greater detail in \citep{gbmp2014sea}.
 
 
+
+
+\chapter{Directly addressable codes} \label{chapter:DAC}
+
+The ability to handle large amounts of data fast is one of the key challenges in the field of search engines. Compressed data structures are applied to fit the 
+data into cache, memory or even hard drive. Direct access to any element in a compressed list or array is one of the usual requirements in compressed data 
+structures. For example, it is needed in inverted index compression \citep{Cul07} and compressed text search \citep{Mou00}.
+
+It is not natively possible to decode the $i$-th element in variable-byte compression algorithms, because the position of the element in the compressed
+list depends on the length of the preceding compressed data. Direct access is achievable with supporting data structures. A naive solution is to store the location 
+of each element to an array, but it adds a very large overhead which removes the benefit of compression. 
+
+
+
 \section{DAC via rank}
 \label{chap:implementations}
 Directly addressable VB codes were first introduced by \citep{Bri09}. In their solution, the chunks are stored in separate arrays by their significance. For each integer, the block 
 of the least significant chunk is stored in the first array $A_1$, and its continuation bit to the first bit array $B_1$. Then if the number was stored in multiple chunks, the block of the next chunk is
-stored to $A_2$ and its continuation bit to $B_2$ and so on. After the data is set, a $rank$ data structure is built for each bit array. The data structure does not require additional space apart
+stored to $A_2$ and its continuation bit to $B_2$ and so on.
+
+After the data is set, a $rank$ data structure is built for each bit array. The data structure does not require additional space apart
 from the $rank$ structure. Figure~\ref{bris_ds} contains a visualization of the data structure. The C array is the original VB encoded data, which is split into separate block arrays $A_k$ and 
 contiuation bit arrays $B_k$. 
 
@@ -309,8 +313,9 @@ contiuation bit arrays $B_k$.
 \end{figure}
 
 To decode an element from index $i$, first block is fetched from $A_1[i]$. Because each encoded element is composed of at least one block, the first block is obtainable via directly indexing $A_1$. 
-With small integers, this is all that is required. If the data has a lot of small integers, the $rank$ method thus has a huge advantage. In addition, the block length of this method can change within 
-different array levels which opens a possibility for further compression optimization. 
+With small integers, this is all that is required. If the data has a lot of small integers, the $rank$ method thus has a huge advantage. 
+
+\pagebreak
 
 However if the element was stored in multiple blocks, the index of the next block in $A_2$ is obtained from $i \gets rank_0$($A_1$, $i$). $Rank_0$ 
 returns the number of zeros in the bit array preceding index $i$. In other words, it returns the number of elements before $i$ that continue to the next array. 
@@ -321,6 +326,9 @@ As an example, the fourth element from the data structure shown in Figure~\ref{b
 continuation bit $B_1$[3] is checked. It is not set, which indicates that the element continues to the next block. The index of the next block is obtained via a \textsc{Rank}($B_1$, 3) call. There are two zero 
 bits in $B_1$ before $B_1$[3], which means the next block is in $A_2$[2]. The continuation bit at $B_2$[1] is set to 1 so the decompression is completed.
 
+Interestingly the block length of this method can change within different array levels which opens a possibility for further compression optimization. \citep{Bri09} experiments a few different block 
+length setups and leaves open the problem of finding optimal block lengths. While the problem of finding the optimal block length for each data set in regular VB encoding is interesting, the possibility to
+optimize it for each block level separately is surely more challenging.
 \begin{figure}[ht]
 \centering
 \begin{minipage}{0.5\linewidth}
@@ -563,8 +571,7 @@ so $P$[1] = $rank_0$($B_1$,0) is used to fetch the second block. $B_2$[0] indica
 
 Currently $P$ is [0,0,-1,-1]. The location of the first block of the next element is fetched by increasing $P$[0] by 1 and then using the incremented value. The bit array shows that this element is only 
 one block long. The first two blocks of the third element is fetched the same way. $P$[2] is unset, so $P$[2] = $rank_0$($B_2$,0) is used for the third block, which is the last block of that element. After 
-these elements, $P$ is [2,1,0,-1]. The index locations of the fourth element are fetched from $P$ the same way. In the end $P$ is [3,2,0,-1] and the process could potentially go on indefinitely with only a 
-very small amount of $rank$ calls.
+these elements, $P$ is [2,1,0,-1]. The index locations of the fourth element are fetched from $P$ the same way. In the end $P$ is [3,2,0,-1] and the process could continue if needed.
 
 \chapter{Experimental results}
 
@@ -698,7 +705,7 @@ coordinates {
 Tables~\ref{table:results8bit} and~\ref{table:results4bit} show memory size requirements for $rank$ and $select$ data structures with data sets consisting
  of 50 million 64-bit numbers. The compressed size column has a sum of continuation bit array and the data blocks. The tables show that the static requirement of $rank_{v5}$ is superior with these datasets.
 If the dataset had even larger integers, $select$ would be dominant. For $rank$ and $select$ methods used in this thesis, the total 
-space taken by the extra data structures is only a small fraction of the overall size.
+space taken by the extra data structures is only a small fraction of the overall size. 
 
 The static memory requirement of $select$ is easily noticeable, 
 as is the relation between the memory requirement of $rank$ and the total number of blocks. Data structures in versions with smaller block size naturally take more space, but smaller block 
@@ -823,14 +830,20 @@ coordinates {
 
 \chapter{Conclusions and Future work}
 
+This thesis explained variable-byte encoding, a compression method that stores the data in fixed length blocks and omits empty leading blocks. A continuation bit is added to each block to signal where an 
+element ends and a new one begins. $Rank$ and $select$, the two bit array operations were also explained. Existing solution for direct access with VB using $rank$ was explained. A new solution for direct 
+access with $select$ was proposed and results were compared between the two solutions. A method of extracting an array of data with VB encoding was proposed for both $rank$ and $select$.
+
 When the dataset contains mostly small integers, the $rank$ based method by Brisaboa et al. is superior to the proposed $select$ based method. The benefit of using a direct array index instead of a $rank$ 
 call for the first block gives a huge advantage. The $rank$ query is also slightly faster than a $select$ query, and therefore the dataset needs to have a large portion of longer elements until $select$ 
 performs better. This can be seen from figure~\ref{graph:data_comparison}.
 
 The order of how data is stored with $select$ compression enables an efficient fetching of a subarray. Only one $select$ query is needed in the beginning, and the decoding of the elements past the first one 
-consists of just a few bit operations.  
+consists of just a few bit operations. The amount of $rank$ queries depend on the length of the subarray and the average size of the elements. Therefore even a small amount of large elements in an array 
+otherwise filled with small elements causes the runtime to go up. This leads to the conclusion that the $select$ method, if not strictly superior, is a strong contender and a good option for decompressing 
+a subarray.
 
-
+\section{Future work}
 There has already been a few successful attempts to decompress VB encoded integers with SIMD instructions \citep{Lem18,Pla15}. It is worthwhile to check if the select-based approach presented 
 in this thesis benefits from SIMD. The data needs less manipulation because the data is already stored in the correct order, but calculating the integer block lengths might benefit from SIMD.
 
@@ -844,8 +857,6 @@ TODO:
  - remove lists from algorithms and data sets in results? 
 
  - a real life situation of where to use subarray
-
- - list research questions somewhere? (introduction 1.1?)
 
  - should the c++ code be added as appendix?
 
@@ -867,10 +878,7 @@ results:
  
  - the differences in general need more explaining
 
-7. 
- - write a recap about what was done
-
- 
+ - write more in conclusions 
 
 
 
