@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2020.2.4)  28 APR 2020 21:21
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2020.2.4)  29 APR 2020 00:28
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1996,7 +1996,7 @@ Chapter 2.
 [3
 
 ]
-LaTeX Font Info:    Try loading font information for OT1+lmtt on input line 71.
+LaTeX Font Info:    Try loading font information for OT1+lmtt on input line 70.
 
  (/usr/share/texmf/tex/latex/lm/ot1lmtt.fd
 File: ot1lmtt.fd 2009/10/30 v1.6 Font defs for Latin Modern
@@ -2019,12 +2019,12 @@ Chapter 6.
 ] [17] [18]
 Chapter 7.
 
-Overfull \hbox (3.79015pt too wide) in paragraph at lines 679--683
+Overfull \hbox (3.79015pt too wide) in paragraph at lines 676--680
 \OT1/lmr/m/n/12 The fol-low-ing ex-per-i-ments were run on a AMD Phe-nom(tm) II
  X6 1055T Pro-ces-sor@2.8Ghz
  []
 
-LaTeX Font Info:    Try loading font information for TS1+lmr on input line 692.
+LaTeX Font Info:    Try loading font information for TS1+lmr on input line 689.
 
 (/usr/share/texmf/tex/latex/lm/ts1lmr.fd
 File: ts1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
@@ -2077,7 +2077,7 @@ Package logreq Info: Writing requests to 'gradu.run.xml'.
 Here is how much of TeX's memory you used:
  43657 strings out of 494267
  928983 string characters out of 6162829
- 1322094 words of memory out of 5000000
+ 1322146 words of memory out of 5000000
  46178 multiletter control sequences out of 15000+600000
  84220 words of font info for 72 fonts, out of 8000000 for 9000
  395 hyphenation exceptions out of 8191
@@ -2097,10 +2097,10 @@ m/lmr8.pfb></usr/share/texmf/fonts/type1/public/lm/lmri10.pfb></usr/share/texmf
 2.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy10.pfb></usr/share/texmf/font
 s/type1/public/lm/lmsy8.pfb></usr/share/texmf/fonts/type1/public/lm/lmtt12.pfb>
 
-Output written on gradu.pdf (38 pages, 425731 bytes).
+Output written on gradu.pdf (38 pages, 425754 bytes).
 PDF statistics:
- 515 PDF objects out of 1000 (max. 8388607)
- 451 compressed objects within 5 object streams
+ 514 PDF objects out of 1000 (max. 8388607)
+ 450 compressed objects within 5 object streams
  111 named destinations out of 1000 (max. 500000)
  192 words of extra memory for PDF output out of 10000 (max. 10000000)
 

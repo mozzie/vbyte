@@ -33,7 +33,6 @@ remains to be seen how large the integers need to be for the $select$ method to 
 Another interesting point is to compare the algorithms when decompressing a long subarray. Due to how the data is stored, the proposed $select$ method offers fast access to the next or previous element 
 and is expected to perform well with any given data set or subarray length. Solutions for subarray fetching with both $rank$ and $select$ methods are proposed and compared. 
 
- - TODO: introduce each chapter briefly
 
 \chapter{Variable-byte encoding of integers}
 
@@ -566,14 +565,19 @@ When a new block level is reached for the first time during a subarray query, th
 used level, the desired block is known to be right next to the previously fetched one. Therefore the stored index value is incremented by one and that value is used instead of issuing another $rank$ query. 
 This way the number of $rank$ calls needed is equal to the number of $rank$ calls needed to decompress the largest number in the subarray.
 
-The following example decompresses first four values from Figure~\ref{bris_ds} and assumes the maximum length of integers to be 4 blocks. Array $P$ is used to store the block indices. Initially $P$ = 
-[-1,-1,-1,-1], where -1 denotes that the value is unset and that level has not been reached yet. The start of the subarray is index 0. $P$[0] is -1, which means the value is unset. Because the $rank$ method 
-does not need an actual $rank$ call in the first block array, $P$[1] = 0 and that value is used to fetch the first block. $B_1$[0] shows that the element is continued to the next block level. $P$[1] is also -1, 
-so $P$[1] = $rank_0$($B_1$,0) is used to fetch the second block. $B_2$[0] indicates that the element is not continued anymore.
 
-Currently $P$ is [0,0,-1,-1]. The location of the first block of the next element is fetched by increasing $P$[0] by 1 and then using the incremented value. The bit array shows that this element is only 
-one block long. The first two blocks of the third element is fetched the same way. $P$[2] is unset, so $P$[2] = $rank_0$($B_2$,0) is used for the third block, which is the last block of that element. After 
-these elements, $P$ is [2,1,0,-1]. The index locations of the fourth element are fetched from $P$ the same way. In the end $P$ is [3,2,0,-1] and the process could continue if needed.
+An example situation from a previous chapter is pictured in Figure~\ref{bris_subarray}. A subarray of four elements will be decoded from the start of the array. The starting location could very well be 
+anything, but the start was chosen for simplicity. The array $P$ is used to store the block indices. Initially the values in $P$ are set to -1 to denote that the value is unset and that level has not been 
+reached yet. When a block level is queried for the first time, the index value from the $rank$ call is stored in $P$ and used instead of further $rank$ calls. 
+
+The subarray is in this case started from index 0. The value of $P$ for the current level is checked at the start of every block fetch. $P$[1] is unset, so a value needs to fetched and stored there. Because 
+the $rank$ method does not need an actual $rank$ call in the first block array, $P$[1] is set to the starting index 0 and that value is used to fetch the first block. $B_1$[0] shows that the element is 
+continued to the next block level. $P$[2] is -1 (because this is the first time the second level is reached), so a $P$[2] = $rank_0$($B_1$,0) call is needed to fetch the second block. $B_2$[0] indicates 
+that the element is not continued anymore.
+
+For the location of the first block of the second element, $P[1]$ is checked. It is set, so the value it contains is increased by one and used as the index. The bit array shows that this element is only 
+one block long. The first two blocks of the third element are fetched the same way. $P$[2] is unset and a  $P$[2] = $rank_0$($B_2$,0) is used to fetch the index. The fourth element does not reach to a new 
+block level, so each block location is fetched from $P$.
 
 \begin{figure}[ht]
 \centering
@@ -663,16 +667,9 @@ these elements, $P$ is [2,1,0,-1]. The index locations of the fourth element are
 \node[Y] {-1};
 
 \end{tikzpicture}
-\caption{TODO this}\label{bris_subarray}
+\caption{Index lookup array demonstration in $rank$ based subarray query}\label{bris_subarray}
 
 \end{figure}
-
-
- - TODO: does this need a picture?
-
- - TODO: is referring to Figure~\ref{bris_ds} enough or should this part have another image of the (maybe different) block setup
-
- - TODO: is the explanation unclear?
 
 \chapter{Experimental results}
 
