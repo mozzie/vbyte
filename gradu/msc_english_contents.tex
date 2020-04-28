@@ -26,7 +26,7 @@ reorganizing, but rather capitalizes on the assumption that data is encoded the 
 new codewords to data when encoding, data can be read straight from the memory and reassembling the integer from blocks is not needed.
 
 Comparison of the proposed method and $rank$-based implementation by Brisaboa et al is provided with different implementations of $rank$ and $select$. The $rank$ method 
-is assumed to perform better on data sets containing mostly small integers. It is assumed that larger numbers cause problems in performance. The performance of the proposed $select$ method is indifferent 
+is expected to perform better on data sets containing mostly small integers. It is assumed that larger numbers cause problems in performance. The performance of the proposed $select$ method is indifferent 
 of the size of the elements in the data. Different kinds of data sets are used to see how each algorithm performs. The assumption is that $select$ works better with data sets with very large integers. It
 remains to be seen how large the integers need to be for the $select$ method to outperform the $rank$ method.
 
@@ -543,6 +543,8 @@ and then counting trailing zeros. Once the word is shifted through, another word
 \node [below=1ex of byte3]{$B_3$};
 \node [below=1ex of byte4]{$B_4$};
 \draw[arrow] (index.south) to (select.north);
+\draw [decorate,decoration={brace,amplitude=5pt,mirror,raise=10ex}]
+  (1.8,0) -- (9.5,0) node[midway,yshift=-6em]{The word $w$};
 \end{tikzpicture}
 \caption{Continuation bit array, the bits are grouped by the bytes they are in} \label{subarray}
 \end{figure}
@@ -572,6 +574,105 @@ so $P$[1] = $rank_0$($B_1$,0) is used to fetch the second block. $B_2$[0] indica
 Currently $P$ is [0,0,-1,-1]. The location of the first block of the next element is fetched by increasing $P$[0] by 1 and then using the incremented value. The bit array shows that this element is only 
 one block long. The first two blocks of the third element is fetched the same way. $P$[2] is unset, so $P$[2] = $rank_0$($B_2$,0) is used for the third block, which is the last block of that element. After 
 these elements, $P$ is [2,1,0,-1]. The index locations of the fourth element are fetched from $P$ the same way. In the end $P$ is [3,2,0,-1] and the process could continue if needed.
+
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}
+[node distance=0pt,
+ start chain = A going right,
+ arrow/.style = {draw=#1,-{Stealth[]}, 
+                shorten >=1mm, shorten <=1mm}, % styles of arrows
+ arrow/.default = black,
+ X/.style = {rectangle, draw,% styles of nodes in string (chain)
+                minimum width=7ex, minimum height=4ex,
+                outer sep=0pt, on chain},
+ Y/.style = {rectangle, draw,% styles of nodes in string (chain)
+                minimum width=4ex, minimum height=3ex,
+                outer sep=0pt, on chain}
+ ]
+
+\node[X] (a1) {$A_{1,1}$};
+\node [left=1ex of a1]{\textbf{$A_1$ =}};
+\node[X] {$A_{2,1}$};
+\node[X] {$A_{3,1}$};
+\node[X] {$A_{4,1}$};
+\node[X] {$A_{5,1}$};
+\node[X] {...};
+
+\node[X, below=0ex of a1] (b1) {0};
+\node [left=1ex of b1]{\textbf{$B_1$ =}};
+\node[X] {1};
+\node[X] {0};
+\node[X] {0};
+\node[X] {1};
+\node[X] {...};
+    
+
+\node[X, below=5ex of b1] (a2) {$A_{1,2}$};
+\node [left=1ex of a2]{\textbf{$A_2$ =}};
+\node[X] {$A_{3,2}$};
+\node[X] {$A_{4,2}$};
+\node[X] {...};
+
+\node[X, below=0ex of a2] (b2) {1};
+\node [left=1ex of b2]{\textbf{$B_2$ =}};
+\node[X] {0};
+\node[X] {1};
+\node[X] {...};
+
+\node[X, below=5ex of b2] (a3) {$A_{3,3}$};
+\node [left=1ex of a3]{\textbf{$A_3$ =}};
+\node[X] {...};
+
+\node[X, below=0ex of a3] (b3) {1};
+\node [left=1ex of b3]{\textbf{$B_3$ =}};
+\node[X] {...};
+
+\node [Y, right=55ex of a1] (p1){-1};
+\node [left=2ex of p1]{\textbf{Initial:}};
+\node[Y] (p1_2) {-1};
+\node[Y] (p1_3) {-1};
+\node[Y] (p1_4) {-1};
+\node [above=1ex of p1]{\textbf{$P_1$}};
+\node [above=1ex of p1_2]{\textbf{$P_2$}};
+\node [above=1ex of p1_3]{\textbf{$P_3$}};
+\node [above=1ex of p1_4]{\textbf{$P_4$}};
+
+\node [Y, below=3ex of p1] (p2){0};
+\node [left=2ex of p2]{\textbf{After $C_1$:}};
+\node[Y] (p2_2){0};
+\node[Y] (p2_3){-1};
+\node[Y] (p2_4){-1};
+
+\node [Y, below=3ex of p2] (p3){1};
+\node [left=2ex of p3]{\textbf{After $C_2$:}};
+\node[Y] {0};
+\node[Y] {-1};
+\node[Y] {-1};
+
+\node [Y, below=3ex of p3] (p4){2};
+\node [left=2ex of p4]{\textbf{After $C_3$:}};
+\node[Y] {1};
+\node[Y] {0};
+\node[Y] {-1};
+
+\node [Y, below=3ex of p4] (p5){3};
+\node [left=2ex of p5]{\textbf{After $C_4$:}};
+\node[Y] {2};
+\node[Y] {0};
+\node[Y] {-1};
+
+\end{tikzpicture}
+\caption{TODO this}\label{bris_subarray}
+
+\end{figure}
+
+
+ - TODO: does this need a picture?
+
+ - TODO: is referring to Figure~\ref{bris_ds} enough or should this part have another image of the (maybe different) block setup
+
+ - TODO: is the explanation unclear?
 
 \chapter{Experimental results}
 
@@ -754,11 +855,13 @@ onlysmall & 31.3MB          & 1.56MB & 391kB   & 1.43MB \\
 
 The subarray access experiments were run similarly to the previous experiments. The data sets used contained 50 million numbers each. Most of the numbers were 4-bit long, with a varying amount of 32-bit 
 integers randomly among them. The numbers in the x-axis correspond to the number of 32-bit integers per 1000 integers. One million indexes were randomized and both the index numbers and the data sets were 
-preloaded into memory. A subarray of length 50 was decompressed from each randomized index location. Some precaution was used in the index randomizing to prevent reading from an out of bounds location.
+preloaded into memory. A subarray of length 50 was decompressed from each randomized index location. Some precaution was used in the index randomizing to prevent reading from an out of bounds location. The 
+time shown in the figure is milliseconds taken to decompress one million subarrays. Each result is an average of 10 runs. 
 
 Figure~\ref{graph:subarray} shows results for subarray fetching. The probability of having a long integer within the subarray range is visible from the results of the $rank$ based methods. When the density of the long integers increase, so does the need to access multiple 
 block layers and thus the average time increases. The results of the $select$ based methods visualize the static need of singular $select$ query. The 4-bit version of $select$ requires a few more instructions 
-during the block location phase and therefore is a little bit slower overall.
+during the block location phase and therefore is a little bit slower overall. It is worth noting that the lower bound of the figure starts at 400ms. This was done to clarify the results, which are are very 
+close to each other.
 
 
 \begin{figure}[ht]
