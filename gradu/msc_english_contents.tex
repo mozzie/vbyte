@@ -21,7 +21,8 @@ A variable-byte encoding based integer compression method with fast random acces
 reorganizing and a $rank$ data structure to achieve random access. Their solution is currently the only published solution for the problem and it 
 has been widely adopted \citep[e.g.][]{Kon17, Sha16}. 
 
-In this thesis, an alternative solution that instead makes use of a $select$ data structure is proposed and explained in detail. The proposed method does not use data 
+In this thesis, an alternative solution that instead makes use of a $select$ data structure is proposed and explained in detail. The underlying question is if a $select$ based method is viable for random 
+access. The proposed method does not use data 
 reorganizing, but rather capitalizes on the assumption that data is encoded the same way it is in the source. Because variable-byte encoding does not assign 
 new codewords to data when encoding, data can be read straight from the memory and reassembling the integer from blocks is not needed.
 
@@ -192,7 +193,7 @@ Structure & Extra size taken\\
 \hline \hline 
 $Rank_v$   & \text{25\% of bit array} \\
 $Rank_{v5}$ & \text{6.25\% of bit array}\\
-$Select$ & \text{~6-15\% of bit array (TODO: check this}\\
+$Select$ & \text{~8-23\% of bit array (depends on the data)}\\
 \hline
 \end{tabular}
 \end{table}
@@ -678,34 +679,52 @@ The computer runs Ubuntu 14.04.4 (3.13.0-91-generic x86\_64) with minimal progra
 \texttt{g++-7 -std=c++11 -DNDEBUG -O3} 
 and with libraries \texttt{-lsdsl -ldivsufsort -ldivsufsort64}.
 
+The implementations for these results can be found online at \href{https://github.com/mozzie/vbyte}{https://github.com/mozzie/vbyte}.
 
 \section{VB decoding comparison}
-Three different VB decoding implementations were compared with two different block lengths. Two $rank$ implementations used are based on \citep{Bri09} and use $rank_v$ and $rank_{v5}$ data structures 
+The list of implementations is depicted in Table~\ref{table:algorithms}. Three different VB decoding implementations were compared with two different block lengths. Two $rank$ implementations used are based on \citep{Bri09} and use $rank_v$ and $rank_{v5}$ data structures 
 from the SDSL-library \citep{gbmp2014sea}. The different $rank$ data structures illustrate the trade-off between memory and speed. the $select$ algorithm is the one proposed in this thesis and it is 
 implemented using the $select_{MCL}$ data structure from the SDSL-library. Different block lengths were used to illustrate how block size affects the runtime and memory requirement. Lengths 
 8 and 4 were chosen because they are relatively easy to implement. 
 
-\begin{itemize}
-  \item Bris4 - Bris implementation with block size 4, using $rank_v$
-  \item Bris4v5 - Bris implementation with block size 4, using $rank_{v5}$
-  \item Bris8 - Bris implementation with block size 8, using $rank_v$
-  \item Bris8v5 - Bris implementation with block size 8, using $rank_{v5}$
-  \item Select4 - Proposed implementation with block size 4, using $select_{MCL}$
-  \item Select8 - Proposed implementation with block size 8, using $select_{MCL}$
-\end{itemize}
+\begin{table}
+\centering
+\caption{Generated datasets
+\label{table:algorithms}}
+\begin{tabular}{l|c} 
+Algorithm & Explanation \\
+ \hline 
+  Bris4  & Bris implementation with block size 4, using $rank_v$ \\
+ Bris4v5 & Bris implementation with block size 4, using $rank_{v5}$ \\
+ Bris8   & Bris implementation with block size 8, using $rank_v$ \\
+ Bris8v5 & Bris implementation with block size 8, using $rank_{v5}$ \\
+ Select4 & Proposed implementation with block size 4, using $select_{MCL}$ \\
+ Select8 & Proposed implementation with block size 8, using $select_{MCL}$ \\
+
+\hline
+\end{tabular}
+\end{table}
 
 Each implementation is compressing and decompressing 64-bit unsigned integers. The $rank$ and $select$ implementations are explained in detail in \autoref{chap:implementations} 
 and \autoref{chap:select_impl}, respectively. 
 
-Four differently constructed datasets were used and three different sizes of dataset were used (5M, 50M, 500M). The content of the datasets were chosen as such to see how different implementations 
-work with different sized data.
+Table~\ref{table:datasets} contains four differently constructed datasets that were used for the experiments. Each dataset was generated to three different sizes (5M, 50M, 500M). 
+The content of the datasets were chosen as such to see how different implementations work with different sized data.
+\begin{table}
+\centering
+\caption{Generated datasets
+\label{table:datasets}}
+\begin{tabular}{l|c} 
+Dataset & Explanation \\
+ \hline 
+all (5M)   & all integers randomly 1-4 bytes long \\
+twolarge   & one eighth of integers 4 bytes long, one eighth 2 bytes long, rest 1 byte \\
+onelarge    & one eighth of integers 2 bytes long, rest 4 bits or less \\
+onlysmall    & all integers 4 bits or less \\
 
-\begin{itemize}
-  \item all - all integers randomly 1-4 bytes long
-  \item twolarge - one eighth of integers 4 bytes long, one eighth 2 bytes long, rest 1 byte    
-  \item onelarge - one eighth of integers 2 bytes long, rest 4 bits or less
-  \item onlysmall - all integers 4 bits or less
-\end{itemize}
+\hline
+\end{tabular}
+\end{table}
 
 All implementations read the data set from a file and compress it to memory, randomize one million query indexes and store results to an array. The times shown in Table~\ref{table:results1} 
 are times taken from looping through the index array and VB decoding the number in the index. Additionally, each run is iterated multiple times and an average of the runtimes is taken. 
@@ -931,54 +950,28 @@ coordinates {
 \chapter{Conclusions and Future work}
 
 This thesis explained variable-byte encoding, a compression method that stores the data in fixed length blocks and omits empty leading blocks. A continuation bit is added to each block to signal where an 
-element ends and a new one begins. $Rank$ and $select$, the two bit array operations were also explained. Existing solution for direct access with VB using $rank$ was explained. A new solution for direct 
-access with $select$ was proposed and results were compared between the two solutions. A method of extracting an array of data with VB encoding was proposed for both $rank$ and $select$.
+element ends and a new one begins. $Rank$ and $select$, two array operations were explained and efficient implementations over bit arrays were introduced in detail. 
 
-When the dataset contains mostly small integers, the $rank$ based method by Brisaboa et al. is superior to the proposed $select$ based method. The benefit of using a direct array index instead of a $rank$ 
-call for the first block gives a huge advantage. The $rank$ query is also slightly faster than a $select$ query, and therefore the dataset needs to have a large portion of longer elements until $select$ 
-performs better. This can be seen from figure~\ref{graph:data_comparison}.
+An efficient solution to direct access to any element in a compressed data structure was previously introduced by Brisaboa et al. Their solution is using VB encoding and a $rank$ data structure. 
+Another solution using $select$ was proposed in this thesis. Both solutions were experimented with a few different data structure implementations. As expected, the $rank$ version performed better with data sets that contain small integers. This is largely due to the 
+clever block reorganizing technique that allows the first block to be fetched with just an array lookup. The $rank$ query is also slightly faster than a $select$ query, and therefore the dataset needs 
+to have a large portion of longer elements until $select$ performs better. 
 
-The order of how data is stored with $select$ compression enables an efficient fetching of a subarray. Only one $select$ query is needed in the beginning, and the decoding of the elements past the first one 
-consists of just a few bit operations. The amount of $rank$ queries depend on the length of the subarray and the average size of the elements. Therefore even a small amount of large elements in an array 
-otherwise filled with small elements causes the runtime to go up. This leads to the conclusion that the $select$ method, if not strictly superior, is a strong contender and a good option for decompressing 
-a subarray.
+All implementations were slightly modified to support subarray fetching. The order of how data is stored with $select$ compression enables an efficient fetching of a subarray. Only one $select$ query 
+is needed in the beginning, and the decoding of the elements past the first one consists of just a few bit operations. The amount of $rank$ queries depend on the length of the subarray and the average 
+size of the elements. Therefore even a small amount of large elements in an array otherwise filled with small elements causes the runtime to go up. This leads to the conclusion that the $select$ method, 
+if not strictly superior, is a strong contender and a good option for decompressing a subarray.
 
 \section{Future work}
-There has already been a few successful attempts to decompress VB encoded integers with SIMD instructions \citep{Lem18,Pla15}. It is worthwhile to check if the select-based approach presented 
-in this thesis benefits from SIMD. The data needs less manipulation because the data is already stored in the correct order, but calculating the integer block lengths might benefit from SIMD.
+There has already been a few successful attempts to decompress VB encoded integers with SIMD instructions \citep{Lem18,Pla15}. It is worthwhile to check if the $select$ based approach presented 
+in this thesis benefits from SIMD. The data needs less manipulation because it is already stored in the correct order, but calculating the integer block lengths might benefit from SIMD.
 
 Another improvement to VB encoding is to see whether the compressed numbers can be changed. This is trivial until the block length of the compressed number changes. Then an additional data structure or 
 cache is needed and the supporting rank/select data structure needs to be recalculated.
 
 TODO:
 
- - more text / references
+ - clean up code
 
- - remove lists from algorithms and data sets in results? 
-
- - a real life situation of where to use subarray
-
- - should the c++ code be added as appendix?
-
- - is metatext necessary? i.e. starting each chapter with "This chapter contains..."
-
- - explain "X is done", "Y is used" in more detail (why is this done / why is this used)
-
-
- - Some abbreviations are used. Should there be a list of them in the beginning?
-
- - is Elias-Fano important or relevant to mention?
-
- - should terms / practices be opened more (for people who don't know the field)
- 
- 
-results:
-
- - what do the differences in speed or memory usage mean in practice. Is one better than the other? 
- 
- - the differences in general need more explaining
-
- - write more in conclusions 
-
-
+ - see if metatext is needed somewhere
 

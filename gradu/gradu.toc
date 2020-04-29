@@ -32,17 +32,15 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {section}{\numberline {7.1}VB decoding comparison}{19}{section.7.1}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {7.2}Memory usage}{21}{section.7.2}
+\contentsline {section}{\numberline {7.2}Memory usage}{22}{section.7.2}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {7.3}Subarray access results}{22}{section.7.3}
+\contentsline {section}{\numberline {7.3}Subarray access results}{23}{section.7.3}
 \defcounter {refsection}{0}\relax 
 \contentsline {chapter}{\numberline {8}Conclusions and Future work}{24}{chapter.8}
 \defcounter {refsection}{0}\relax 
 \contentsline {section}{\numberline {8.1}Future work}{24}{section.8.1}
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{Bibliography}{27}{section*.16}
+\contentsline {chapter}{Bibliography}{27}{section*.18}
 \defcounter {refsection}{0}\relax 
 \cftpagenumbersoff {chapter}
-\defcounter {refsection}{0}\relax 
-\contentsline {chapter}{\numberline {A}Template instructions}{i}{appendix.A}
 \contentsfinish 
