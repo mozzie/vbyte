@@ -43,14 +43,8 @@ int main(int argc, char *argv[]) {
 
   bit_vector::select_1_type sls(&b);
 
-  //select_support_mcl<> sls(&b);
 
-  cout << "continue-stop vector memory size: " << size_in_bytes(b) + sizeof(bit_vector) << "bytes" <<endl;
-  cout << "select support vector memory size: " << size_in_bytes(sls) + sizeof(select_support_mcl<>) << "bytes" << endl;
-  cout << "Data vector memory size: " << sizeof(uint8_t) * data.size() << "bytes" << endl;
   srand((unsigned) time(0));
-
-  cout << "number of numbers: " << original.size() << endl;
 
   vector<unsigned int> indices(random_accesses, 0);
   for(vector<uint64_t>::size_type i = 0; i < indices.size(); i++) {
@@ -58,17 +52,12 @@ int main(int argc, char *argv[]) {
     indices[i] = rand()%(original.size()-50);
   }
 
-  uint64_t z = 0;
-//  CALLGRIND_START_INSTRUMENTATION;
+uint64_t z = 0;
 uint64_t *test;
-int end;
 uint8_t diff;
 uint64_t val;
 int bsize = 64;
 cout << "bsize" << bsize << endl;
-int shiftamt;
-uint64_t maxuint = 0-1;
-cout << maxuint << endl;
 uint64_t bitmasks[8];
 val = 0;
 for(int i = 0;i < 8; i++) {
@@ -80,9 +69,7 @@ uint8_t loopcount = 50;
 chrono::steady_clock::time_point time_begin = chrono::steady_clock::now();
   for (vector<unsigned int>::const_iterator i = indices.begin(); i != indices.end(); i++) {
     index = *i;
-//TODO CALLGRIND THIS
     int begin = index == 0 ? 0 : sls(index)+1;
-//TODO see if ternary above can be substituted with just sls call
     int offset = (begin)%bsize;
     int block = begin>>6;
     uint64_t* blockpointer = b.data()+block;
@@ -92,8 +79,7 @@ chrono::steady_clock::time_point time_begin = chrono::steady_clock::now();
     int total_diff = offset;
 
     if(!bit_offset) {
-      uint64_t blokki2 = *(++blockpointer);
-      bit_offset = blokki2;
+      bit_offset = *(++blockpointer);
 
       diff = bits::lo(bit_offset);
       bit_offset = bit_offset >> (diff+1);
@@ -106,23 +92,18 @@ chrono::steady_clock::time_point time_begin = chrono::steady_clock::now();
       total_diff = total_diff + diff+1;
     }
     for(int counter=0;counter<loopcount;counter++) {
-//TODO see if this can be read on byte level instead of 64bit level - would save the extra calculation
 
       test = (uint64_t *)&iv[begin];
       val = *test & bitmasks[diff];
+      // the following is for accessing the value so it's not optimized out
       z = z^val;
-//      if((int)diff != sls(index+counter+1) - sls(index+counter) -1) {
-//        cout << "Diff:" << (int)diff << " sls diff:" << (sls(index+counter+1) - sls(index+counter) -1) << endl;
-//      }
+      // sanity check for debugging the values
       if(0 && val != original[index+counter]) {
         cout << "Did not match: " << val << " vs "  << original[index+counter]   << endl;
-        cout << "index " << index+counter << ", counter: " << counter << endl;
-        cout << "bit_offset " << bit_offset << ", total_diff " << (int)total_diff << endl;
       }
       begin = begin+diff+1;
       if(!bit_offset) {
-        uint64_t blokki2 = *(++blockpointer);
-        bit_offset = blokki2;
+        bit_offset = *(++blockpointer);
 
         diff = bits::lo(bit_offset);
         int tempdiff = diff+1;
@@ -134,7 +115,6 @@ chrono::steady_clock::time_point time_begin = chrono::steady_clock::now();
         diff = bits::lo(bit_offset);
         bit_offset = bit_offset >> (diff+1);
         total_diff = total_diff + diff + 1;
-
       }
     }
   }

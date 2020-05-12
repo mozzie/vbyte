@@ -28,8 +28,6 @@ int main(int argc, char *argv[]) {
     vector<uint32_t> vec;
     data[i] = vec;
   }
-  //uint8_t *iv  = new uint8_t[8][original.size()];
-  int data_size = 0;
   for(vector<uint64_t>::const_iterator i = original.begin(); i != original.end(); i++) {
     vector<uint32_t> v = vb_encode_number(*i, cap);
     v.front() += cap;
@@ -37,9 +35,7 @@ int main(int argc, char *argv[]) {
     for(auto j = v.rbegin(); j != v.rend(); j++) {
       data[level].push_back(*j);
       level++;
-      data_size++;
     }
-  //  data.insert(data.end(), v.begin(), v.end());
   }
   bit_vector b[8];
   std::array<std::vector<uint8_t>, 8> iv;
@@ -64,14 +60,8 @@ int main(int argc, char *argv[]) {
     rank_support_v5<0> r(&b[i]);
     rb[i] = r;
   }
-  //select_support_mcl<> sls(&b);
-
-//  cout << "continue-stop vector memory size: " << size_in_bytes(b) + sizeof(bit_vector) << "bytes" <<endl;
-//  cout << "select support vector memory size: " << size_in_bytes(sls) + sizeof(select_support_mcl<>) << "bytes" << endl;
 
   srand((unsigned) time(0));
-
-  cout << "number of numbers: " << original.size() << endl;
 
   vector<unsigned int> indices(random_accesses, 0);
   for(vector<uint64_t>::size_type i = 0; i < indices.size(); i++) {
@@ -80,35 +70,36 @@ int main(int argc, char *argv[]) {
 
   chrono::steady_clock::time_point time_begin = chrono::steady_clock::now();
   uint64_t z = 0;
-  int level = 0;
   uint64_t val = 0;
-  uint8_t loopcount = 50;
+  uint8_t subarray_len = 50;
   uint32_t level_indices[8];
   int max_level=-1;
   for (vector<unsigned int>::const_iterator i = indices.begin(); i != indices.end(); i++) {
     index = *i;
     max_level = -1;
-    for(int counter=0;counter<loopcount;counter++) {
+    int current_level = 0;
+    for(int counter=0;counter<subarray_len;counter++) {
       index = *i + counter;
-      level = 0;
+      current_level = 0;
       val = 0;
-      while(b[level][index] == 0) {
-        uint8_t d = iv[level][index];
+      while(b[current_level][index] == 0) {
+        uint8_t d = iv[current_level][index];
         val = (val<<bit_length) + d;
-        if(max_level < level) {
-          level_indices[level] = rb[level](index);
-          max_level = level;
+        if(max_level < current_level) {
+          level_indices[current_level] = rb[current_level](index);
+          max_level = current_level;
         }
-        index = level_indices[level];
-        level_indices[level]++;
-        level++;
+        index = level_indices[current_level];
+        level_indices[current_level]++;
+        current_level++;
       }
-      val = (val<<bit_length) + iv[level][index];
-      z = z^val;
+      val = (val<<bit_length) + iv[current_level][index];
 
+      // the following is for accessing the value so it's not optimized out
+      z = z^val;
+      // sanity check for debugging the values
       if(0 && val != original[*i+counter]) {
         cout << "Did not match: " << val << " vs " << original[*i+counter] << endl;
-        cout << original[*i+counter]%cap << " " << original[*i+counter]/cap << endl;
       }
     }
   }
@@ -116,15 +107,5 @@ int main(int argc, char *argv[]) {
   chrono::steady_clock::time_point time_end = chrono::steady_clock::now();
   cout << "checksum: " << z << endl;
   cout << "Time taken: " << chrono::duration_cast<chrono::milliseconds> (time_end - time_begin).count() << "[ms]" << endl;
-  int sum = 0;
-  int bit_vec_size = 0;
-  for(int i = 0; i < 8; i++) {
-    sum += size_in_bytes(rb[i]);
-    bit_vec_size += size_in_bytes(b[i]);
-  }
-  cout << "rank support size: " << sum << endl;
-  cout << "bit vector size: " << bit_vec_size << endl;
-  cout << "Data size: " << sizeof(uint8_t)*data_size << endl;
-  cout << "total data size:" << bit_vec_size + sizeof(uint8_t)*data_size << endl;
   return 0;
 }

@@ -28,8 +28,7 @@ int main(int argc, char *argv[]) {
     vector<uint32_t> vec;
     data[i] = vec;
   }
-  //uint8_t *iv  = new uint8_t[8][original.size()];
-  int data_size = 0;
+
   for(vector<uint64_t>::const_iterator i = original.begin(); i != original.end(); i++) {
     vector<uint32_t> v = vb_encode_number(*i, cap);
     v.front() += cap;
@@ -37,9 +36,7 @@ int main(int argc, char *argv[]) {
     for(auto j = v.rbegin(); j != v.rend(); j++) {
       data[level].push_back(*j);
       level++;
-      data_size++;
     }
-  //  data.insert(data.end(), v.begin(), v.end());
   }
   bit_vector b[16];
   std::array<std::vector<uint8_t>, 16> iv;
@@ -56,7 +53,6 @@ int main(int argc, char *argv[]) {
       else {
         vec[index/2] += value%cap;
       }
-//      cout << (int)*j <<" " << (int)value << " " << (int)vec[index/2] << endl;
       bv[index] = (*j>>bit_length) & 1;
     }
 
@@ -70,14 +66,9 @@ int main(int argc, char *argv[]) {
     rank_support_v<0> r(&b[i]);
     rb[i] = r;
   }
-  //select_support_mcl<> sls(&b);
-
-//  cout << "continue-stop vector memory size: " << size_in_bytes(b) + sizeof(bit_vector) << "bytes" <<endl;
-//  cout << "select support vector memory size: " << size_in_bytes(sls) + sizeof(select_support_mcl<>) << "bytes" << endl;
 
   srand((unsigned) time(0));
 
-  cout << "number of numbers: " << original.size() << endl;
 
   vector<unsigned int> indices(random_accesses, 0);
   for(vector<uint64_t>::size_type i = 0; i < indices.size(); i++) {
@@ -88,14 +79,11 @@ int main(int argc, char *argv[]) {
   uint64_t z = 0;
   int level = 0;
   uint64_t val = 0;
-  CALLGRIND_START_INSTRUMENTATION;
   for (vector<unsigned int>::const_iterator i = indices.begin(); i != indices.end(); i++) {
     index = *i;
     level = 0;
     val = 0;
     while(b[level][index] == 0) {
-//      cout << "orig:" << original[*i] << endl;
-//      cout << "l:" <<level << " " << index << endl;
       uint8_t d = iv[level][index/2];
       if(index%2==1) {
         d=d&15;
@@ -103,14 +91,10 @@ int main(int argc, char *argv[]) {
       else {
         d=d>>4;
       }
-//      cout << (int)d << endl;
       val = (val<<bit_length) + d;
-//      cout << "val " << val << endl;
       index = rb[level](index);
       level++;
     }
-//    cout << "orig:" << original[*i] << endl;
-//    cout << "l:"<<level << " " << index << endl;
     uint8_t e = iv[level][index/2];
     if(index%2==1) {
       e=e&15;
@@ -120,48 +104,16 @@ int main(int argc, char *argv[]) {
     }
 
     val = (val<<bit_length) + e;
-//    cout << "val " << val << endl;
-
-  //  int begin = index == 0 ? 0 : sls(index)+1;
-
-//    bit_vector::iterator iter = b.begin()+begin;
-//    while(*iter == 0) {
-//      iter++;
-//    }
-//    uint8_t diff = std::distance(b.begin()+begin, iter);
-
-    //uint64_t *test = (uint64_t *)&iv[begin];
-
-    //int end = sls(index+1);
-    //uint8_t diff = end-begin;
-
-    //uint64_t val = *test%(256<<(8*diff));
-
+    // the following is for accessing the value so it's not optimized out
     z = z^val;
-
-
+    // sanity check for debugging the values
     if(0 && val != original[*i]) {
       cout << "Did not match: " << val << " vs " << original[*i] << endl;
-      cout << original[*i]%cap << " " << original[*i]/cap << endl;
-//      cout << "index " << index << endl;
     }
   }
-  CALLGRIND_STOP_INSTRUMENTATION;
-  CALLGRIND_DUMP_STATS;
 
   chrono::steady_clock::time_point time_end = chrono::steady_clock::now();
   cout << "checksum: " << z << endl;
   cout << "Time taken: " << chrono::duration_cast<chrono::milliseconds> (time_end - time_begin).count() << "[ms]" << endl;
-  int sum = 0;
-  int bit_vec_size = 0;
-  for(int i = 0; i < 8; i++) {
-    sum += size_in_bytes(rb[i]);
-    bit_vec_size += size_in_bytes(b[i]);
-  }
-  cout << "rank support size: " << sum << endl;
-  cout << "bit vector size: " << bit_vec_size << endl;
-  cout << "Data size: " << sizeof(uint8_t)*data_size/2 << endl;
-  cout << "total data size:" << bit_vec_size + sizeof(uint8_t)*data_size/2 << endl;
-
   return 0;
 }

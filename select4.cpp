@@ -67,33 +67,19 @@ int main(int argc, char *argv[]) {
 
   bit_vector::select_1_type sls(&b);
 
-  //select_support_mcl<> sls(&b);
-
-  cout << "continue-stop vector memory size: " << size_in_bytes(b) + sizeof(bit_vector) << "bytes" <<endl;
-  cout << "select support vector memory size: " << size_in_bytes(sls) + sizeof(select_support_mcl<>) << "bytes" << endl;
-  cout << "Data vector memory size: " << sizeof(uint8_t) * data.size() << "bytes" << endl;
-  cout << "total data size:" << size_in_bytes(b) + sizeof(uint8_t)*data.size()/2 << endl;
-
   srand((unsigned) time(0));
-
-  cout << "number of numbers: " << original.size() << endl;
 
   vector<unsigned int> indices(random_accesses, 0);
   for(vector<uint64_t>::size_type i = 0; i < indices.size(); i++) {
     indices[i] = rand()%original.size();
   }
 
-  uint64_t z = 0;
-//  CALLGRIND_START_INSTRUMENTATION;
+uint64_t z = 0;
 uint64_t *test;
-int end;
 uint8_t diff;
 uint64_t val;
 int begin;
 cout << "bsize" << bsize << endl;
-int shiftamt;
-uint64_t maxuint = 0-1;
-cout << maxuint << endl;
 uint64_t bitmasks[16];
 val = 0;
 for(int i = 0;i < 16; i++) {
@@ -105,11 +91,7 @@ chrono::steady_clock::time_point time_begin = chrono::steady_clock::now();
   for (vector<unsigned int>::const_iterator i = indices.begin(); i != indices.end(); i++) {
     index = *i;
 
-
     begin = index == 0 ? 0 : sls(index)+1;
-
-
-
 
     int offset = begin%bsize;
     int block = begin/bsize;
@@ -128,11 +110,11 @@ chrono::steady_clock::time_point time_begin = chrono::steady_clock::now();
 
     val = val & bitmasks[diff];
 
+    // the following is for accessing the value so it's not optimized out
     z = z^val;
-
+    // sanity check for debugging the values
     if(0 && val != original[index]) {
       cout << "Did not match: " << val << " vs "  << original[index]   << endl;
-      cout << "index " << index << ", begin " << begin << endl;
     }
   }
 
