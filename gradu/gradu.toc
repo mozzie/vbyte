@@ -6,9 +6,9 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {chapter}{\numberline {2}Variable-byte encoding of integers}{3}{chapter.2}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {2.1}VB encoding}{4}{section.2.1}
+\contentsline {section}{\numberline {2.1}Variable-byte encoding}{4}{section.2.1}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {2.2}VB decoding}{6}{section.2.2}
+\contentsline {section}{\numberline {2.2}Variable-byte decoding}{6}{section.2.2}
 \defcounter {refsection}{0}\relax 
 \contentsline {chapter}{\numberline {3}Rank and Select}{7}{chapter.3}
 \defcounter {refsection}{0}\relax 
