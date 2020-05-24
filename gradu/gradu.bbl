@@ -737,6 +737,84 @@
     \field{year}{2014}
   \endentry
 
+  \entry{Pan17b}{article}{}
+    \name{author}{3}{}{%
+      {{hash=PP}{%
+         family={Pandey},
+         familyi={P\bibinitperiod},
+         given={Prashant},
+         giveni={P\bibinitperiod},
+      }}%
+      {{hash=BMA}{%
+         family={Bender},
+         familyi={B\bibinitperiod},
+         given={Michael\bibnamedelima A},
+         giveni={M\bibinitperiod\bibinitdelim A\bibinitperiod},
+      }}%
+      {{hash=JR}{%
+         family={Johnson},
+         familyi={J\bibinitperiod},
+         given={Rob},
+         giveni={R\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{PP+1}
+    \strng{fullhash}{PPBMAJR1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{labelyear}{2017}
+    \field{extradate}{1}
+    \field{labeldatesource}{year}
+    \field{sortinit}{P}
+    \field{sortinithash}{P}
+    \field{title}{A fast x86 implementation of select}
+    \field{journaltitle}{arXiv preprint arXiv:1706.00990}
+    \field{year}{2017}
+  \endentry
+
+  \entry{Pan17a}{inproceedings}{}
+    \name{author}{4}{}{%
+      {{hash=PP}{%
+         family={Pandey},
+         familyi={P\bibinitperiod},
+         given={Prashant},
+         giveni={P\bibinitperiod},
+      }}%
+      {{hash=BMA}{%
+         family={Bender},
+         familyi={B\bibinitperiod},
+         given={Michael\bibnamedelima A},
+         giveni={M\bibinitperiod\bibinitdelim A\bibinitperiod},
+      }}%
+      {{hash=JR}{%
+         family={Johnson},
+         familyi={J\bibinitperiod},
+         given={Rob},
+         giveni={R\bibinitperiod},
+      }}%
+      {{hash=PR}{%
+         family={Patro},
+         familyi={P\bibinitperiod},
+         given={Rob},
+         giveni={R\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{PP+1}
+    \strng{fullhash}{PPBMAJRPR1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{labelyear}{2017}
+    \field{extradate}{2}
+    \field{labeldatesource}{year}
+    \field{sortinit}{P}
+    \field{sortinithash}{P}
+    \field{booktitle}{Proceedings of the 2017 ACM international conference on
+  Management of Data}
+    \field{pages}{775\bibrangedash 787}
+    \field{title}{A general-purpose counting filter: Making every bit count}
+    \field{year}{2017}
+  \endentry
+
   \entry{Pib19}{misc}{}
     \name{author}{2}{}{%
       {{hash=PGE}{%
@@ -1083,6 +1161,45 @@
     \field{volume}{42}
     \field{journaltitle}{COMPJ: The Computer Journal}
     \field{year}{1999}
+  \endentry
+
+  \entry{Zho13}{inproceedings}{}
+    \name{author}{3}{}{%
+      {{hash=ZD}{%
+         family={Zhou},
+         familyi={Z\bibinitperiod},
+         given={Dong},
+         giveni={D\bibinitperiod},
+      }}%
+      {{hash=ADG}{%
+         family={Andersen},
+         familyi={A\bibinitperiod},
+         given={David\bibnamedelima G},
+         giveni={D\bibinitperiod\bibinitdelim G\bibinitperiod},
+      }}%
+      {{hash=KM}{%
+         family={Kaminsky},
+         familyi={K\bibinitperiod},
+         given={Michael},
+         giveni={M\bibinitperiod},
+      }}%
+    }
+    \list{organization}{1}{%
+      {Springer}%
+    }
+    \strng{namehash}{ZD+1}
+    \strng{fullhash}{ZDADGKM1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{labelyear}{2013}
+    \field{labeldatesource}{year}
+    \field{sortinit}{Z}
+    \field{sortinithash}{Z}
+    \field{booktitle}{International Symposium on Experimental Algorithms}
+    \field{pages}{151\bibrangedash 163}
+    \field{title}{Space-efficient, high-performance rank and select structures
+  on uncompressed bit sequences}
+    \field{year}{2013}
   \endentry
 
   \entry{Ziv77}{article}{}

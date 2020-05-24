@@ -965,7 +965,15 @@ if not strictly superior, is a strong contender and a good option in particular 
 There has already been a few successful attempts to decompress VB encoded integers sequentially with SIMD instructions \citep{Lem18,Pla15}. It is worthwhile to check if the $select$ based approach presented 
 in this thesis benefits from SIMD. The data needs less manipulation because it is already stored in the correct order, but calculating the integer block lengths might benefit from SIMD.
 
-Another improvement to VB encoding is to see whether the compressed numbers can be changed. This is trivial until the block length of the compressed number changes. Then an additional data structure or 
+The $rank$ operation can be created with a small number of instructions utilizing a modern \textsc{POPCOUNT} machine instruction \citep{Zho13}. The $select$ approach is 
+known to be slower, ranging from 50 to 80 machine instructions. Intel's Haswell CPUs offer two new interesting machine instructions, \textsc{PDEP} and \textsc{TZCNT}. \textsc{PDEP} stores bits
+from its first operand based on the location of 1 bits in the second operand. \textsc{TZCNT} is a machine instruction to count trailing zeros. These two can be used to create a $select_1$ query on 
+a machine word with just 4 instructions \citep{Pan17a}. They have been tested with the $select$ of the SDSL-library and show an improvement of 2-15\% \citep{Pan17b}. Additionally, the 
+$select$ implementation proposed in this thesis uses a trailing zero count to calculate the length of the element. Some improvement in speed may happen if the implementation is changed 
+to use \textsc{TZCNT} instead.
+
+
+One more interesting improvement to VB encoding is to see whether the compressed numbers can be changed. This is trivial until the block length of the compressed number changes. Then an additional data structure or 
 cache is needed and the supporting rank/select data structure needs to be recalculated.
 
-TODO: a few paragraphs about haswell instructions
+

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2020.2.4)  24 MAY 2020 13:56
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2020.2.4)  24 MAY 2020 14:58
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -2261,10 +2261,10 @@ Package logreq Info: Writing requests to 'gradu.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 45245 strings out of 494267
- 966212 string characters out of 6162829
- 1351159 words of memory out of 5000000
- 47763 multiletter control sequences out of 15000+600000
+ 45261 strings out of 494267
+ 966564 string characters out of 6162829
+ 1352898 words of memory out of 5000000
+ 47776 multiletter control sequences out of 15000+600000
  80899 words of font info for 70 fonts, out of 8000000 for 9000
  395 hyphenation exceptions out of 8191
  62i,19n,96p,808b,2377s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -2281,10 +2281,10 @@ hare/texmf/fonts/type1/public/lm/lmr8.pfb></usr/share/texmf/fonts/type1/public/
 lm/lmri10.pfb></usr/share/texmf/fonts/type1/public/lm/lmri12.pfb></usr/share/te
 xmf/fonts/type1/public/lm/lmsy10.pfb></usr/share/texmf/fonts/type1/public/lm/lm
 sy8.pfb></usr/share/texmf/fonts/type1/public/lm/lmtt12.pfb>
-Output written on gradu.pdf (36 pages, 401083 bytes).
+Output written on gradu.pdf (36 pages, 403218 bytes).
 PDF statistics:
- 500 PDF objects out of 1000 (max. 8388607)
- 439 compressed objects within 5 object streams
- 117 named destinations out of 1000 (max. 500000)
+ 506 PDF objects out of 1000 (max. 8388607)
+ 445 compressed objects within 5 object streams
+ 120 named destinations out of 1000 (max. 500000)
  184 words of extra memory for PDF output out of 10000 (max. 10000000)
 
