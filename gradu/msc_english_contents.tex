@@ -968,9 +968,9 @@ in this thesis benefits from SIMD. The data needs less manipulation because it i
 The $rank$ operation can be created with a small number of instructions utilizing a modern \textsc{POPCOUNT} machine instruction \citep{Zho13}. The $select$ approach is 
 known to be slower, ranging from 50 to 80 machine instructions. Intel's Haswell CPUs offer two new interesting machine instructions, \textsc{PDEP} and \textsc{TZCNT}. \textsc{PDEP} stores bits
 from its first operand based on the location of 1 bits in the second operand. \textsc{TZCNT} is a machine instruction to count trailing zeros. These two can be used to create a $select_1$ query on 
-a machine word with just 4 instructions \citep{Pan17a}. They have been tested with the $select$ of the SDSL-library and show an improvement of 2-15\% \citep{Pan17b}. Additionally, the 
-$select$ implementation proposed in this thesis uses a trailing zero count to calculate the length of the element. Some improvement in speed may happen if the implementation is changed 
-to use \textsc{TZCNT} instead.
+a machine word with just 4 instructions \citep{Pan17a}. They have been tested with the $select$ algorithm of the SDSL-library (which is also used in the proposed method of this thesis) 
+and show an improvement of 2-15\% \citep{Pan17b}. Additionally, a trailing zero count function is used to calculate the length of the element. 
+Some improvement in speed may happen if the implementation is changed to use \textsc{TZCNT} machine instruction instead.
 
 
 One more interesting improvement to VB encoding is to see whether the compressed numbers can be changed. This is trivial until the block length of the compressed number changes. Then an additional data structure or 
