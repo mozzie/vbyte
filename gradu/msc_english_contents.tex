@@ -5,7 +5,7 @@ Compressing these datasets is often beneficial, because doing so naturally decre
 A fundamental method for data compression is variable-length coding \citep{Sal99}. The main idea of variable-length encoding is that 
 frequent sequences of data are represented with shorter codewords. Because the sequences of data have different lengths when compressed, it is 
 not trivial to determine the exact location of a certain element within the compressed data. If this is required, the usual 
-data compression algorithms are inefficient, because data must be decompressed from the beginning to the point where the the sought element is located. 
+data compression algorithms are inefficient, because data must be decompressed from the beginning to the point where the sought element is located. 
 Fortunately, such random access to elements is not a requirement compression algorithms usually need to fulfill. 
 
 However, efficient random access to compressed data is very useful in compressed data structures \citep{Ven13}.  In addition to saving storage space and bandwidth, the compression 
@@ -165,7 +165,7 @@ $n$ = \texttt{101010} (bit representation of 42). The continuation bit of this c
 $Rank$ and $select$ are two array operations that are widely used in compressed data structures. $Rank_x$($i$) counts the number of occurences of $x$ before index $i$ in the data. $Select_x$($i$) returns the index of the i-th 
 occurence of $x$ in the data. In this thesis, these two operations are assumed to work with a bit array. $Rank_1$($i$) counts the number of bits set to 1 before $i$ and $select_1$($i$) returns the index 
 of the i-th bit set to 1. Both operations can be implemented to work in constant time \citep[see, e.g.,][]{gbmp2014sea}. The two operations are related to each other: when used on a bit array 
-$B$ = \texttt{0100 1101 \underline{1}011}, $select$(5) returns 8 (underlined) and therefore $rank$(8) returns 4. 
+$B$ = \texttt{0100 1101 \underline{1}011}, $select_1$(5) returns 8 (underlined) and therefore $rank_1$(8) returns 4. 
 
 To use $rank$ or $select$ in indexing, the set 1 bits in the bit array should reflect the element locations in the encoded data. For most compression algorithms, this requires the bit array to be 
 created in addition to the existing data. The length of the bit array in these cases usually has to be close to the length of the data, because encoded element lengths vary. This spatial increment makes 
@@ -173,7 +173,7 @@ the compression ineffective and therefore $rank$ and $select$ cannot be applied 
 
 VB encoding has several advantages with $select$ and $rank$: the data is compressed in 
 blocks of equal length which significantly shrinks the length of $B$. Moreover the bit array $C$ formed from the continuation bits already stores the locations of items and works
-as the needed indexing array. In this case, $rank_1$(C, i) would give the number of end blocks before the i-th index and $select_1$(C, i) would give the location of the ending block 
+as the needed indexing array. In this case, $rank_1$(i) from $C$ would give the number of end blocks before the i-th index and $select_1$(i) would give the location of the ending block 
 of i-th compressed element.
 
 \section{Rank and Select implementation}
@@ -207,7 +207,7 @@ but reduces memory requirements to a quarter.
 
 The $rank$ data structures are based on \citep{Vig08}. A $rank_v$ superblock covers 512 bits and is divided to 512/64 = 8 relative blocks. This means a relative block needs to be able to store a number up to 512 in itself, which takes $\log_2 512$ = 9 bits. 
 The first relative block always equals 0, because a relative block counts the number of 1 bits from the start of the superblock. Therefore the remaining 7 relative blocks take 63 bits and fit into one 
-64-bit word. For every 512 bits, this implementation requires 64 bits for the superblock and another 64 blocks for the relative blocks, resulting in additional 128/512 = 25\% space.
+64-bit word. For every 512 bits, this implementation requires 64 bits for the superblock and another 64 bits for the relative blocks, resulting in additional 128/512 = 25\% space.
 
 The $rank_{v5}$ superblock covers 2048 bits and is divided to 6 relative blocks of 384 bits, requiring $\log_2 2048$ = 11 bits each. The first relative block again equals 0, so the rest 
 of the blocks fit to a 64-bit word. The $rank_{v5}$ implementation requires an additional (64+64)/2048 = 6.25\% space.
@@ -355,12 +355,12 @@ optimize it for each block level separately is surely more challenging.
 
 \chapter{DAC with select query}
 \label{chap:select_impl}
-Using $select_1$ on the continuation bit array to achieve direct access is more intuitive than using $rank_1$. The element locations are already marked with 1's 
+Using $select$ on the continuation bit array to achieve direct access is more intuitive than using $rank$. The element locations are already marked with 1's 
 in $B$ and a single $select_1$ query gets the desired starting point, while the aforementioned version \citep{Bri09} used one $rank$ query for each chunk beyond 
 the first. Minimizing the amount of $select$ and $rank$ queries is important. They run in constant time but their impact is huge, because rest of the VB decoding 
 consists of just a few bit operations. 
 
-To use $select_1$ with VB, continuation bits need to be separated from chunks to their own bit array and a $select_1$ structure built over it. Because every compressed element has 1
+To use $select$ with VB, continuation bits need to be separated from chunks to their own bit array and a $select_1$ structure built over it. Because every compressed element has 1
 only on its last block, $Select_1$($i$) returns the location of the end byte of $i$-th element. Therefore the start of  $j$-th element in the block array is at 
 block $b_s$ = $select_1$($j$-1) + 1. In this thesis, the implementation was simplified by using only block sizes 4 and 8 to prevent block splitting between bytes.
 
@@ -368,9 +368,9 @@ Unlike the standard VB encoding, the continuation bits are removed from the chun
 compressed number to be read from the memory block and removes the need to do block concatenation. The data in blocks is written into memory as they appear in the original integer, so that 
 when reading a word from the block byte array, the bits and bytes are already in correct order. 
 
-For example, let the integer bit length be 32 and the original data be compressed to 5 blocks of 4 bits. First, the byte location of the first block is needed. $Select_1$($i$) gets the index location
-of needed block, but since the block length differs from byte length, the starting byte location $s$ needs to be calculated $s = (select_1(i) \times 4) \div 8$, the latter operand being for integer division.
-The first block might not be at the start of the byte $s$. This is why offset $o = (select_1(i) \times 4)$ $mod$ $8$ is needed (in the example case, $o$ is equal to either 0 or 4). Then a 32-bit word $w$ is read from memory from byte location $s$. 
+For example, let the integer bit length be 32 and the original data be compressed to 5 blocks of 4 bits. First, the byte location of the first block is needed. The index location $x$ of the desired block
+ is calculated $x = select_1$($i$-1) + 1, but since the block length differs from byte length, the starting byte location $s$ needs to be calculated $s = (x \times 4) \div 8$, the latter operand being for integer division.
+The first block might not be at the start of the byte $s$. This is why offset $o = (x \times 4)$ $mod$ $8$ is needed (in the example case, $o$ is equal to either 0 or 4). Then a 32-bit word $w$ is read from memory from byte location $s$. 
 
 At this point, $w$ contains the wanted bits, but also has extra bits from the previous and next compressed integers. If the offset was not zero, there are $o$ trailing bits in $w$ from the previous integer. 
 These can be conveniently removed by bit-shifting $w$ right for $o$ bits. Then a pre-calculated bitmask (0xFFFFF in this case) is applied and $w$ contains the desired value. Most systems are
@@ -378,7 +378,7 @@ able to read memory only from byte addresses, which leads to a corner case where
 happens if the compressed length was 8 blocks and offset was 4. In this case, another step of reading another byte and storing the remaining bits to $w$ is required. This is entirely avoidable if the integer 
 length can be constrained. If the maximum integer length was set to 28 bits, the bits would be within a single word in memory and reading the extra byte would not be needed.
 
-The most intuitive way to calculate the block length of the $i$-th element is to subtract $select_1$(i) from $select_1$(i+1). This however causes an additional 
+The most intuitive way to calculate the block length of the $i$-th element is to subtract $select_1$($i$-1) from $select_1$($i$). This however causes an additional 
 $select_1$ query, which is costly. A much faster option is to calculate the block length from the continuation bit array. This can be done by reading a word from the bit array and bit-shifting the word 
 until the bit representing the start of the $i$-th element is on the rightmost end and then counting the trailing zeros (for example, by using the GCC function \texttt{\_\_builtin\_ctz}). The trailing zeros equal to the number of blocks in the $i$-th element that do not have the continuation bit set. 
 This number is then incremented by one to also count the ending block which has the continuation bit set to 1.
@@ -476,7 +476,7 @@ by finding clusters in the integers and partitioning the indexes \citep{Ott14}. 
 
 \chapter{Subarray access}
 
-After locating and decompressing one value from a compressed data structure, decompressing the subsequent elements cam become significantly easier. Calculating the memory location of the next element may not 
+After locating and decompressing one value from a compressed data structure, decompressing the subsequent elements can become significantly easier. Calculating the memory location of the next element may not 
 be needed if the next compressed value is located next to the previously fetched element. This is especially beneficial to the select-based VByte decoding, where calculating the start 
 byte location takes majority of the runtime. In addition to this, the length of the next compressed integer is very fast to calculate because the required data is already in memory and immediately local to the last point of access.
 
@@ -717,7 +717,7 @@ The content of the datasets were chosen in order to see how different implementa
 \begin{tabular}{l|l} 
 Dataset & Explanation \\
  \hline 
-all (5M)   & all integers randomly 1-4 bytes long \\
+all   & all integers randomly 1-4 bytes long \\
 twolarge   & one eighth of integers 4 bytes long, one eighth 2 bytes long, rest 1 byte \\
 onelarge    & one eighth of integers 2 bytes long, rest 4 bits or less \\
 onlysmall    & all integers 4 bits or less \\
@@ -755,7 +755,7 @@ onlysmall (500M)   & \textbf{34.10}  & 56.00 & 35.00 & 63.10 & 297.90 & 293.80 \
 
 The results show that the proposed $select$ method outperforms $rank$ when the data set contains several integers that are encoded into more than one block. The difference is explained 
 with how $rank$ and $select$ use the data structure. $Select$ is always called once, while $rank$ is called once for each block beyond the first. Figure~\ref{graph:data_comparison} shows average times
-of one million $rank$ and $select$ calls with different average block lengths. The effect of multiple $rank$ calls is visible, as is the single $select$ call behavior, which leads to a much flatter curve.
+of one million $rank$ and $select$ calls with different average integer lengths. The effect of multiple $rank$ calls is visible, as is the single $select$ call behavior, which leads to a much flatter curve.
 
 The 8-bit versions tend to perform better than the 4-bit versions. This is because the 8-bit version stores more data in one block and so less block readings are required. However, the 4-bit versions achieve 
 better compression in data sets containing small integers. The select versions do not depend as much on the block size, because all the blocks in the compressed element are read at the same time. 
@@ -970,7 +970,7 @@ known to be slower, ranging from 50 to 80 machine instructions. Intel's Haswell 
 from its first operand based on the location of 1 bits in the second operand. \textsc{TZCNT} is a machine instruction to count trailing zeros. These two can be used to create a $select_1$ query on 
 a machine word with just 4 instructions \citep{Pan17a}. They have been tested with the $select$ algorithm of the SDSL-library (which is also used in the proposed method of this thesis) 
 and show an improvement of 2-15\% \citep{Pan17b}. Additionally, a trailing zero count function is used to calculate the length of the element. 
-Some improvement in speed may happen if the implementation is changed to use \textsc{TZCNT} machine instruction instead.
+Some improvement in speed may happen if the implementation is changed to use the \textsc{TZCNT} machine instruction instead.
 
 
 One more interesting improvement to VB encoding is to see whether the compressed numbers can be changed. This is trivial until the block length of the compressed number changes. Then an additional data structure or 
